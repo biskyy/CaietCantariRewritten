@@ -37,3 +37,6 @@ yarn-error.*
 
 # prettier
 .prettierrc
+
+# vscode
+*.code-workspace
