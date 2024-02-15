@@ -1,3 +1,3 @@
-# Cartea de Cantari Chitila
+# Caietul de Cantari Chitila
 
-Cartea de Cantari Chitila. Rescrisa.
+Caietul de Cantari Chitila. Rescrisa.
