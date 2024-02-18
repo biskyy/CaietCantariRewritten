@@ -9,15 +9,17 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#000000"
     },
-    "assetBundlePatterns": ["node_modules/@expo/vector-icons/**/*"],
+    "assetBundlePatterns": [
+      "node_modules/@expo/vector-icons/**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "package": "com.biskyy.caietcantarirewritten",
-      "versionCode": 1, //The android.versionCode distinguish different binaries of your app. Make sure to increment these for each build you upload to the App Store or Google Play Store.
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -25,6 +27,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-font"
+    ]
   }
 }
