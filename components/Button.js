@@ -1,11 +1,13 @@
 import { memo } from "react";
 import { Text, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import React from "react";
 
 function Button({
   text = undefined,
   icon = undefined,
   textStyle,
+  iconStyle = undefined,
   touchableStyle,
   onPress,
 }) {
@@ -19,12 +21,19 @@ function Button({
       }
       style={touchableStyle}
     >
-      {icon ? (
-        <MaterialIcons name={icon} style={textStyle} />
-      ) : (
+      {icon && text ? (
+        <>
+          <MaterialIcons name={icon} style={iconStyle} />
+          <Text numberOfLines={1} style={textStyle}>
+            {text}
+          </Text>
+        </>
+      ) : text ? (
         <Text numberOfLines={1} style={textStyle}>
           {text}
         </Text>
+      ) : (
+        <MaterialIcons name={icon} style={textStyle} />
       )}
     </TouchableOpacity>
   );
