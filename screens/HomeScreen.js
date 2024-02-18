@@ -2,9 +2,9 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import SongList from "../components/SongList";
 import Navbar from "../components/Navbar";
 import Button from "../components/Button";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { useAtom } from "jotai";
-import { songsAtom, themeAtom } from "../components/State";
+import { isLoadingAtom, songsAtom, themeAtom } from "../components/State";
 import ThemeColors from "../components/ColorScheme";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Separator from "../components/Separator";
@@ -13,7 +13,8 @@ const Drawer = createDrawerNavigator();
 
 const CustomDrawerMenu = (props) => {
   const [theme] = useAtom(themeAtom);
-  const [songs, setSongs] = useAtom(songsAtom);
+  const [, setSongs] = useAtom(songsAtom);
+  const [, setIsLoading] = useAtom(isLoadingAtom);
 
   const insets = useSafeAreaInsets();
 
@@ -29,11 +30,17 @@ const CustomDrawerMenu = (props) => {
   });
 
   const fetchSongs = async () => {
-    await fetch("http://192.168.1.59:3000/songs")
-      .then((data) => data.json())
-      .then((jsonData) => setSongs(jsonData))
-      .then(() => console.log("Changed songs"))
-      .catch((error) => console.log(error));
+    setIsLoading(1);
+    try {
+      const response = await fetch("http://192.168.1.59:3000/songs");
+      const jsonData = await response.json();
+      setSongs(jsonData);
+      console.log("Changed songs");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(2);
+    }
   };
 
   return (
