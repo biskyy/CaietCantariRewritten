@@ -1,14 +1,14 @@
 import { StyleSheet, View } from "react-native";
 import { useAtom } from "jotai";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { themeAtom } from "./State";
+import { songsAtom, themeAtom } from "./State";
 import ThemeColors from "./ColorScheme";
 import Button from "./Button";
-import Cantari from "../assets/Cantari.json";
 import { FlashList } from "@shopify/flash-list";
 
 export default function SongList() {
   const [theme] = useAtom(themeAtom);
+  const [songs] = useAtom(songsAtom);
 
   const route = useRoute();
   const navigation = useNavigation();
@@ -37,7 +37,7 @@ export default function SongList() {
   // get the filter
   const bookIDFilter = bookIDMappings[route.name] || null;
 
-  const data = Cantari.filter(
+  const data = songs.filter(
     (song) => bookIDFilter === null || song.book_id === bookIDFilter
   );
 

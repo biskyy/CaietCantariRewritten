@@ -2,9 +2,9 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import SongList from "../components/SongList";
 import Navbar from "../components/Navbar";
 import Button from "../components/Button";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 import { useAtom } from "jotai";
-import { themeAtom } from "../components/State";
+import { songsAtom, themeAtom } from "../components/State";
 import ThemeColors from "../components/ColorScheme";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Separator from "../components/Separator";
@@ -13,6 +13,9 @@ const Drawer = createDrawerNavigator();
 
 const CustomDrawerMenu = (props) => {
   const [theme] = useAtom(themeAtom);
+  const [songs, setSongs] = useAtom(songsAtom);
+
+  const insets = useSafeAreaInsets();
 
   const themeStyle = StyleSheet.create({
     bgColor: {
@@ -25,7 +28,13 @@ const CustomDrawerMenu = (props) => {
     },
   });
 
-  const insets = useSafeAreaInsets();
+  const fetchSongs = async () => {
+    await fetch("http://192.168.1.59:3000/songs")
+      .then((data) => data.json())
+      .then((jsonData) => setSongs(jsonData))
+      .then(() => console.log("Changed songs"))
+      .catch((error) => console.log(error));
+  };
 
   return (
     <>
@@ -65,6 +74,18 @@ const CustomDrawerMenu = (props) => {
             touchableStyle={[themeStyle.bgColor, styles.drawerMenuButton]}
           />
         ))}
+        <Button
+          text="Actualizeaza cantarile"
+          icon="refresh"
+          textStyle={[themeStyle.txtColor, styles.drawerMenuButtonText]}
+          iconStyle={[themeStyle.txtColor, styles.drawerMenuRefreshButtonIcon]}
+          touchableStyle={[
+            themeStyle.bgColor,
+            styles.drawerMenuButton,
+            styles.drawerMenuRefreshButton,
+          ]}
+          onPress={fetchSongs}
+        />
       </View>
     </>
   );
@@ -130,13 +151,21 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   drawerMenuButton: {
-    justifyContent: "center",
     marginVertical: 4,
     overflow: "hidden",
     padding: 16,
     paddingHorizontal: 20,
   },
   drawerMenuButtonText: {
+    fontSize: 16,
     fontWeight: "500",
+  },
+  drawerMenuRefreshButton: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  drawerMenuRefreshButtonIcon: {
+    fontSize: 20,
+    marginRight: 10,
   },
 });
