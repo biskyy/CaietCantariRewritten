@@ -9,11 +9,9 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#000000"
+      "backgroundColor": "#0a0d0c"
     },
-    "assetBundlePatterns": [
-      "node_modules/@expo/vector-icons/**/*"
-    ],
+    "assetBundlePatterns": ["node_modules/@expo/vector-icons/**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -28,8 +26,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "expo-font"
-    ]
+    "plugins": ["expo-font"]
   }
 }
