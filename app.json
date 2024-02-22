@@ -5,27 +5,48 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#0a0d0c"
-    },
+    "userInterfaceStyle": "automatic",
     "assetBundlePatterns": ["node_modules/@expo/vector-icons/**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "splash": {
+        "image": "./assets/light-splash.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#f0f4fa",
+        "dark": {
+          "image": "./assets/dark-splash.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#0a0d0c"
+        }
+      },
+      "bundleIdentifier": "com.biskyy.caietcantarirewritten"
     },
     "android": {
       "package": "com.biskyy.caietcantarirewritten",
       "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#0a0d0c"
+      },
+      "splash": {
+        "image": "./assets/light-splash.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#f0f4fa",
+        "dark": {
+          "image": "./assets/dark-splash.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#0a0d0c"
+        }
       }
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": ["expo-font"]
+    "plugins": ["expo-font"],
+    "extra": {
+      "eas": {
+        "projectId": "c9a5c62b-fdc5-4d63-9b9d-2e0284dc48ac"
+      }
+    }
   }
 }
