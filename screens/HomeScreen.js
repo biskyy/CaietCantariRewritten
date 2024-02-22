@@ -4,7 +4,12 @@ import Navbar from "../components/Navbar";
 import Button from "../components/Button";
 import { StyleSheet, Text, View } from "react-native";
 import { useAtom } from "jotai";
-import { isLoadingAtom, songsAtom, themeAtom } from "../components/State";
+import {
+  checkInternetConnection,
+  isLoadingAtom,
+  songsAtom,
+  useTheme,
+} from "../components/State";
 import ThemeColors from "../components/ColorScheme";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Separator from "../components/Separator";
@@ -12,7 +17,7 @@ import Separator from "../components/Separator";
 const Drawer = createDrawerNavigator();
 
 const CustomDrawerMenu = (props) => {
-  const [theme] = useAtom(themeAtom);
+  const [theme] = useTheme();
   const [, setSongs] = useAtom(songsAtom);
   const [, setIsLoading] = useAtom(isLoadingAtom);
 
@@ -20,16 +25,17 @@ const CustomDrawerMenu = (props) => {
 
   const themeStyle = StyleSheet.create({
     bgColor: {
-      backgroundColor: theme
+      backgroundColor: theme.data
         ? ThemeColors.darkBgColor
         : ThemeColors.lightBgColor,
     },
     txtColor: {
-      color: theme ? ThemeColors.darkTxtColor : ThemeColors.lightTxtColor,
+      color: theme.data ? ThemeColors.darkTxtColor : ThemeColors.lightTxtColor,
     },
   });
 
   const fetchSongs = async () => {
+    checkInternetConnection();
     setIsLoading(1);
     try {
       const response = await fetch("http://192.168.1.59:3000/songs");
@@ -99,16 +105,16 @@ const CustomDrawerMenu = (props) => {
 };
 
 export default function HomeScreen({ navigation, route }) {
-  const [theme] = useAtom(themeAtom);
+  const [theme] = useTheme();
 
   const themeStyle = StyleSheet.create({
     bgColor: {
-      backgroundColor: theme
+      backgroundColor: theme.data
         ? ThemeColors.darkBgColor
         : ThemeColors.lightBgColor,
     },
     txtColor: {
-      color: theme ? ThemeColors.darkTxtColor : ThemeColors.lightTxtColor,
+      color: theme.data ? ThemeColors.darkTxtColor : ThemeColors.lightTxtColor,
     },
   });
 

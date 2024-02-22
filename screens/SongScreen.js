@@ -1,19 +1,19 @@
 import { useAtom } from "jotai";
 import { View, StyleSheet } from "react-native";
-import { themeAtom } from "../components/State";
+import { useTheme } from "../components/State";
 import ThemeColors from "../components/ColorScheme";
 
 export default function SongScreen() {
-  const [theme] = useAtom(themeAtom);
+  const [theme] = useTheme();
 
   const themeStyle = StyleSheet.create({
     bgColor: {
-      backgroundColor: theme
+      backgroundColor: theme.data
         ? ThemeColors.darkBgColor
         : ThemeColors.lightBgColor,
     },
     txtColor: {
-      color: theme ? ThemeColors.darkTxtColor : ThemeColors.lightTxtColor,
+      color: theme.data ? ThemeColors.darkTxtColor : ThemeColors.lightTxtColor,
     },
   });
   return (

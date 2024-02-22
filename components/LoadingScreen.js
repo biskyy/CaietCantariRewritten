@@ -7,23 +7,23 @@ import Animated, {
 } from "react-native-reanimated";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useAtom } from "jotai";
-import { isLoadingAtom, themeAtom } from "./State";
+import { isLoadingAtom, useTheme } from "./State";
 import ThemeColors from "./ColorScheme";
 
 const LoadingScreen = () => {
-  const [theme] = useAtom(themeAtom);
+  const [theme] = useTheme();
   const [isLoading, setIsLoading] = useAtom(isLoadingAtom);
 
   const opacity = useSharedValue(0);
 
   const themeStyle = StyleSheet.create({
     bgColor: {
-      backgroundColor: theme
+      backgroundColor: theme.data
         ? ThemeColors.darkBgColor
         : ThemeColors.lightBgColor,
     },
     txtColor: {
-      color: theme ? ThemeColors.darkTxtColor : ThemeColors.lightTxtColor,
+      color: theme.data ? ThemeColors.darkTxtColor : ThemeColors.lightTxtColor,
     },
   });
 

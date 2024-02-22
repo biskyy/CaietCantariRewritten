@@ -2,14 +2,14 @@ import { memo } from "react";
 import { StyleSheet, View } from "react-native";
 import { useAtom } from "jotai";
 import ThemeColors from "./ColorScheme";
-import { themeAtom } from "./State";
+import { useTheme } from "./State";
 
 function Separator() {
-  const [theme] = useAtom(themeAtom);
+  const [theme] = useTheme();
 
   const themeStyle = StyleSheet.create({
     bgColor: {
-      backgroundColor: !theme
+      backgroundColor: !theme.data
         ? ThemeColors.darkBgColor
         : ThemeColors.lightBgColor,
     },
