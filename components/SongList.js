@@ -1,13 +1,13 @@
 import { StyleSheet, View } from "react-native";
 import { useAtom } from "jotai";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { songsAtom, themeAtom } from "./State";
+import { songsAtom, useTheme } from "./State";
 import ThemeColors from "./ColorScheme";
 import Button from "./Button";
 import { FlashList } from "@shopify/flash-list";
 
 export default function SongList() {
-  const [theme] = useAtom(themeAtom);
+  const [theme] = useTheme();
   const [songs] = useAtom(songsAtom);
 
   const route = useRoute();
@@ -15,12 +15,12 @@ export default function SongList() {
 
   const themeStyle = StyleSheet.create({
     bgColor: {
-      backgroundColor: theme
+      backgroundColor: theme.data
         ? ThemeColors.darkBgColor
         : ThemeColors.lightBgColor,
     },
     txtColor: {
-      color: theme ? ThemeColors.darkTxtColor : ThemeColors.lightTxtColor,
+      color: theme.data ? ThemeColors.darkTxtColor : ThemeColors.lightTxtColor,
     },
   });
 
@@ -59,7 +59,7 @@ export default function SongList() {
           extraData={[theme, styles]} // update the list on theme change
           estimatedItemSize={48}
           estimatedListSize={{ height: 794, width: 414 }} // faster render
-          indicatorStyle={theme ? "white" : "black"} // change the color of the scroll bar on theme change
+          indicatorStyle={theme.data ? "white" : "black"} // change the color of the scroll bar on theme change
         />
       </View>
     </>

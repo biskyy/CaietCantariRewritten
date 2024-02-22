@@ -3,23 +3,23 @@ import { StyleSheet, Text, View } from "react-native";
 import { useAtom } from "jotai";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import ThemeColors from "./ColorScheme";
-import { themeAtom } from "./State";
+import { useTheme } from "./State";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import Separator from "./Separator";
 import Button from "./Button";
 
 function Navbar() {
-  const [theme, setTheme] = useAtom(themeAtom);
+  const [theme, setTheme] = useTheme();
 
   const themeStyle = StyleSheet.create({
     bgColor: {
-      backgroundColor: theme
+      backgroundColor: theme.data
         ? ThemeColors.darkBgColor
         : ThemeColors.lightBgColor,
     },
     txtColor: {
-      color: theme ? ThemeColors.darkTxtColor : ThemeColors.lightTxtColor,
+      color: theme.data ? ThemeColors.darkTxtColor : ThemeColors.lightTxtColor,
     },
   });
 
@@ -31,7 +31,7 @@ function Navbar() {
 
   return (
     <>
-      <StatusBar style={theme ? "light" : "dark"} />
+      <StatusBar style={theme.data ? "light" : "dark"} />
       <View
         style={{
           ...themeStyle.bgColor,
@@ -39,7 +39,10 @@ function Navbar() {
           paddingTop: insets.top,
         }}
       >
-        {route.name != "Settings" && route.name != "Song" ? (
+        {route.name != "Settings" &&
+        route.name != "Song" &&
+        route.name != "Login" &&
+        route.name != "EditSong" ? (
           <Button
             icon="menu"
             textStyle={[styles.navbarIcon, themeStyle.txtColor]}
@@ -59,12 +62,20 @@ function Navbar() {
             {route.name}
           </Text>
         </View>
+        {/* <Button
+          icon="edit"
+          textStyle={[styles.navbarIcon, themeStyle.txtColor]}
+          touchableStyle={styles.navbarMenuIcon}
+          onPress={() => {
+            setTheme("not set");
+          }}
+        /> */}
         <Button
           icon="contrast"
           textStyle={[styles.navbarIcon, themeStyle.txtColor]}
           touchableStyle={styles.navbarMenuIcon}
           onPress={() => {
-            setTheme(!theme);
+            setTheme(!theme.data);
           }}
         />
       </View>
