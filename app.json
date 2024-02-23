@@ -2,11 +2,13 @@
   "expo": {
     "name": "CaietDeCantari",
     "slug": "CaietDeCantari",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
-    "assetBundlePatterns": ["node_modules/@expo/vector-icons/**/*"],
+    "assetBundlePatterns": [
+      "node_modules/@expo/vector-icons/**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "splash": {
@@ -19,7 +21,8 @@
           "backgroundColor": "#0a0d0c"
         }
       },
-      "bundleIdentifier": "com.biskyy.caietcantarirewritten"
+      "bundleIdentifier": "com.biskyy.caietcantarirewritten",
+      "buildNumber": "0.1.0"
     },
     "android": {
       "package": "com.biskyy.caietcantarirewritten",
@@ -42,11 +45,19 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": ["expo-font"],
+    "plugins": [
+      "expo-font"
+    ],
     "extra": {
       "eas": {
         "projectId": "c9a5c62b-fdc5-4d63-9b9d-2e0284dc48ac"
       }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/c9a5c62b-fdc5-4d63-9b9d-2e0284dc48ac"
     }
   }
 }
