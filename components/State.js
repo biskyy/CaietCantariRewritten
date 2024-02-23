@@ -12,9 +12,6 @@ import ThemeColors from "./ColorScheme";
 export const serverApi = "http://192.168.1.59:3000";
 
 const storage = createJSONStorage(() => AsyncStorage);
-export const themeAtom = atomWithStorage("theme", "not set", storage, {
-  getOnInit: true,
-});
 export const songsAtom = atomWithStorage("songs", Cantari, storage);
 export const loadingScreenAtom = atom({ state: 0, message: "" });
 export const userAtom = atomWithStorage(
@@ -22,6 +19,10 @@ export const userAtom = atomWithStorage(
   { loggedIn: false, token: "" },
   storage
 );
+
+export const themeAtom = atomWithStorage("theme", "not set", storage, {
+  getOnInit: true,
+});
 
 const readOnlyLoadableThemeAtom = loadable(themeAtom);
 
@@ -31,7 +32,7 @@ const writeableLoadableThemeAtom = atom(
 );
 
 /**
- * @returns {Object}
+ * @returns {[{data?: boolean | string, state: string}, (arg: boolean) => void]}
  */
 export const useTheme = () => {
   const [theme, setTheme] = useAtom(writeableLoadableThemeAtom);
@@ -67,75 +68,80 @@ export const useThemeStyle = () => {
   return themeStyle;
 };
 
+/**
+ * @returns boolean
+ */
 export const isInternetConnected = async () => {
   const internet = await NetInfo.fetch();
   if (!internet.isConnected)
     Alert.alert(
       "Nu exista conexiune la internet",
-      "Este necesare o conexiune la internet pentru a actualiza cantarile."
+      "Este necesare o conexiune la internet pentru a realiza o cerere."
     );
   return internet.isConnected;
 };
 
+/**
+ *
+ * @param {Object} config
+ * @returns {Promise<{data: any, status: number}>}
+ */
 export const fetchSongsRequest = async (config) => {
   if (!(await isInternetConnected())) return { data: undefined, status: 400 };
-  const response = await axios
-    .get(`${serverApi}/songs`, {
+
+  try {
+    const response = await axios.get(`${serverApi}/songs`, {
       timeout: 5000,
       ...config,
-    })
-    .catch((error) => {
-      if (error.response) {
-        Alert.alert(
-          `Ceva nu a mers bine: eroare ${error.response.status}`,
-          `${error.response.data.message}\n\nVorbeste cu developer-ul.`
-        );
-        return { data: undefined, status: error.response.status };
-      } else if (error.request) {
-        Alert.alert(
-          "Serverul este offline",
-          "Nu s-au putut actualiza cantarile deoarece serverul este offline."
-        );
-        return { data: undefined, status: 500 };
-      } else {
-        Alert.alert(
-          "Cererea nu este buna",
-          `${error.message}\n\nVorbeste cu developer-ul.`
-        );
-        return { data: undefined, status: 400 };
-      }
     });
-  return { data: response.data, status: response.status };
+    return { data: response.data, status: response.status };
+  } catch (error) {
+    return handleErrorResponse(error);
+  }
 };
 
+/**
+ *
+ * @param {string} username
+ * @param {string} password
+ * @returns {Promise<{data: Object, status: number}>}
+ */
 export const loginRequest = async (username, password) => {
   if (!(await isInternetConnected())) return;
-  const response = await axios
-    .post(
-      `${serverApi}/login`,
-      {
-        username,
-        password,
-      },
-      { timeout: 5000 }
-    )
-    .catch((error) => {
-      if (error.response) {
-        Alert.alert(error.response.data.message);
-        return error.response;
-      } else if (error.request) {
-        Alert.alert(
-          "Serverul este offline",
-          "Nu s-a putut realiza o cerere de logare deoarece serverul este offline."
-        );
-        return { message: "Server offline" };
-      } else {
-        Alert.alert("Cererea nu este buna", error.message);
-        return { message: "Bad request" };
-      }
-    });
 
-  if (response.data) return response.data;
+  try {
+    const response = await axios.post(
+      `${serverApi}/login`,
+      { username, password },
+      { timeout: 5000 }
+    );
+    return { data: response.data, status: response.status };
+  } catch (error) {
+    return handleErrorResponse(error);
+  }
 };
 
-export const cacheFonts = (fonts) => fonts.map((font) => Font.loadAsync(font)); // cache fonts method
+const handleErrorResponse = (error) => {
+  if (error.response) {
+    Alert.alert(
+      `Eroare: ${error.response.status}`,
+      `${error.response.data.message}`
+    );
+    return { data: undefined, status: error.response.status };
+  } else if (error.request) {
+    Alert.alert(
+      "Serverul este offline",
+      "Nu s-a putut efectua cererea deoarece serverul nu este online."
+    );
+    return { data: undefined, status: 500 };
+  } else {
+    Alert.alert(
+      "Cererea este invalida",
+      `${error.message}\n\nTrimite un screenshot la developer ;)`
+    );
+    return { data: undefined, status: 400 };
+  }
+};
+
+export const cacheFontsAndIcons = (fonts) =>
+  fonts.map((font) => Font.loadAsync(font)); // cache fonts method
