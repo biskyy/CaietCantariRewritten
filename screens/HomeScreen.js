@@ -5,8 +5,8 @@ import Button from "../components/Button";
 import { Alert, StyleSheet, Text, View } from "react-native";
 import { useAtom } from "jotai";
 import {
-  fetchSongs,
-  isLoadingAtom,
+  fetchSongsRequest,
+  loadingScreenAtom,
   songsAtom,
   useTheme,
   useThemeStyle,
@@ -20,23 +20,20 @@ const Drawer = createDrawerNavigator();
 const CustomDrawerMenu = (props) => {
   const themeStyle = useThemeStyle();
   const [, setSongs] = useAtom(songsAtom);
-  const [, setIsLoading] = useAtom(isLoadingAtom);
+  const [, setLoadingScreen] = useAtom(loadingScreenAtom);
 
   const insets = useSafeAreaInsets();
 
   const refreshSongs = async () => {
-    try {
-      setIsLoading(1);
-      const fetchedSongs = await fetchSongs("http://192.168.1.59:3000/songs/");
-      if (fetchedSongs.status === 200) {
-        setSongs(fetchedSongs.data);
-        Alert.alert(
-          "S-au actualizat cantarile",
-          "Cantarile au fost actualizate cu succes."
-        );
-      }
-    } finally {
-      setIsLoading(2);
+    setLoadingScreen({ state: 1, message: "Se actualizeaza cantarile" });
+    const fetchedSongs = await fetchSongsRequest();
+    setLoadingScreen({ state: 2, message: "Se actualizeaza cantarile" });
+    if (fetchedSongs.status === 200) {
+      setSongs(fetchedSongs.data);
+      Alert.alert(
+        "S-au actualizat cantarile",
+        "Cantarile au fost actualizate cu succes."
+      );
     }
   };
 
@@ -97,17 +94,7 @@ const CustomDrawerMenu = (props) => {
 
 export default function HomeScreen({ navigation, route }) {
   const [theme] = useTheme();
-
-  const themeStyle = StyleSheet.create({
-    bgColor: {
-      backgroundColor: theme.data
-        ? ThemeColors.darkBgColor
-        : ThemeColors.lightBgColor,
-    },
-    txtColor: {
-      color: theme.data ? ThemeColors.darkTxtColor : ThemeColors.lightTxtColor,
-    },
-  });
+  const themeStyle = useThemeStyle();
 
   return (
     <Drawer.Navigator

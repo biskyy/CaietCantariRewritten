@@ -7,26 +7,27 @@ import Animated, {
 } from "react-native-reanimated";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useAtom } from "jotai";
-import { isLoadingAtom, useThemeStyle } from "./State";
+import { loadingScreenAtom, useThemeStyle } from "./State";
 
 const LoadingScreen = () => {
   const themeStyle = useThemeStyle();
-  const [isLoading, setIsLoading] = useAtom(isLoadingAtom);
+  const [loadingScreen, setLoadingScreen] = useAtom(loadingScreenAtom);
 
   const opacity = useSharedValue(0);
 
   useEffect(() => {
-    if (isLoading == 1) opacity.value = withTiming(1, { duration: 500 });
-    else if (isLoading == 2)
+    if (loadingScreen.state == 1)
+      opacity.value = withTiming(1, { duration: 500 });
+    else if (loadingScreen.state == 2)
       opacity.value = withTiming(0, { duration: 500 }, () =>
-        runOnJS(setIsLoading)(0)
+        runOnJS(setLoadingScreen)({ state: 0, message: "" })
       );
-  }, [isLoading]);
+  }, [loadingScreen]);
 
   return (
     <Animated.View
       style={{
-        zIndex: isLoading ? 1 : -1,
+        zIndex: loadingScreen.state ? 1 : -1,
         opacity,
         ...styles.loadingScreenDiv,
         ...themeStyle.bgColor,
@@ -37,7 +38,7 @@ const LoadingScreen = () => {
         style={[themeStyle.txtColor, styles.iconStyle]}
       />
       <Text style={[themeStyle.txtColor, styles.textStyle]}>
-        Se actualizează cântările
+        {loadingScreen.message}
       </Text>
     </Animated.View>
   );
