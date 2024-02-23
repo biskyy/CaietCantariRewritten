@@ -1,25 +1,12 @@
-import { Text, StyleSheet, View } from "react-native";
-import ThemeColors from "../components/ColorScheme";
-import { useTheme } from "../components/State";
-import { useAtom } from "jotai";
+import { StyleSheet, View } from "react-native";
+import { useThemeStyle } from "../components/State";
 import Button from "../components/Button";
 import { useNavigation } from "@react-navigation/native";
 
 export default function SettingsScreen() {
-  const [theme] = useTheme();
+  const themeStyle = useThemeStyle();
 
   const navigation = useNavigation();
-
-  const themeStyle = StyleSheet.create({
-    bgColor: {
-      backgroundColor: theme.data
-        ? ThemeColors.darkBgColor
-        : ThemeColors.lightBgColor,
-    },
-    txtColor: {
-      color: theme.data ? ThemeColors.darkTxtColor : ThemeColors.lightTxtColor,
-    },
-  });
 
   return (
     <>

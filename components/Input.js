@@ -1,28 +1,12 @@
-import { forwardRef, useRef, useState } from "react";
+import { forwardRef } from "react";
 import { View, StyleSheet, TextInput } from "react-native";
-import { useAtom } from "jotai";
-import { useTheme } from "./State";
+import { useTheme, useThemeStyle } from "./State";
 import ThemeColors from "./ColorScheme";
 import Button from "./Button";
 
 const Input = forwardRef((props, ref) => {
   const [theme] = useTheme();
-
-  const themeStyle = StyleSheet.create({
-    bgColor: {
-      backgroundColor: theme.data
-        ? ThemeColors.darkBgColor
-        : ThemeColors.lightBgColor,
-    },
-    txtColor: {
-      color: theme.data ? ThemeColors.darkTxtColor : ThemeColors.lightTxtColor,
-    },
-    borderColor: {
-      borderColor: theme.data
-        ? ThemeColors.darkTxtColor
-        : ThemeColors.lightTxtColor,
-    },
-  });
+  const themeStyle = useThemeStyle();
 
   return (
     <View style={{ ...styles.textInputDiv, ...themeStyle.borderColor }}>

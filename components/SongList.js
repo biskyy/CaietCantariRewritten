@@ -1,28 +1,17 @@
 import { StyleSheet, View } from "react-native";
 import { useAtom } from "jotai";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { songsAtom, useTheme } from "./State";
-import ThemeColors from "./ColorScheme";
+import { songsAtom, useTheme, useThemeStyle } from "./State";
 import Button from "./Button";
 import { FlashList } from "@shopify/flash-list";
 
 export default function SongList() {
   const [theme] = useTheme();
+  const themeStyle = useThemeStyle();
   const [songs] = useAtom(songsAtom);
 
   const route = useRoute();
   const navigation = useNavigation();
-
-  const themeStyle = StyleSheet.create({
-    bgColor: {
-      backgroundColor: theme.data
-        ? ThemeColors.darkBgColor
-        : ThemeColors.lightBgColor,
-    },
-    txtColor: {
-      color: theme.data ? ThemeColors.darkTxtColor : ThemeColors.lightTxtColor,
-    },
-  });
 
   // get corresponding book_id for route name
   const bookIDMappings = {

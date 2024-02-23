@@ -1,42 +1,22 @@
-import { View, StyleSheet, Alert, Keyboard, ScrollView } from "react-native";
-import ThemeColors from "../components/ColorScheme";
+import { StyleSheet, Alert, ScrollView } from "react-native";
 import { useAtom } from "jotai";
 import {
   userAtom,
-  useTheme,
   checkInternetConnection,
+  useThemeStyle,
 } from "../components/State";
 import Input from "../components/Input";
 import { useRef, useState } from "react";
 import Button from "../components/Button";
 
 const LoginScreen = () => {
-  const [theme] = useTheme();
+  const themeStyle = useThemeStyle();
   const [user, setUser] = useAtom(userAtom);
 
   const [usernameText, setUsernameText] = useState("");
   const [passwordText, setPasswordText] = useState("");
 
   const passwordInputRef = useRef();
-
-  const themeStyle = StyleSheet.create({
-    bgColor: {
-      backgroundColor: theme.data
-        ? ThemeColors.darkBgColor
-        : ThemeColors.lightBgColor,
-    },
-    txtColor: {
-      color: theme.data ? ThemeColors.darkTxtColor : ThemeColors.lightTxtColor,
-    },
-    inverseBgColor: {
-      backgroundColor: theme.data
-        ? ThemeColors.lightBgColor
-        : ThemeColors.darkBgColor,
-    },
-    inverseTxtColor: {
-      color: theme.data ? ThemeColors.lightTxtColor : ThemeColors.darkTxtColor,
-    },
-  });
 
   const loginRequest = async (username, password) => {
     checkInternetConnection();

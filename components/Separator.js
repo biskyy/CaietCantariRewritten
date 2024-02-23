@@ -1,19 +1,9 @@
 import { memo } from "react";
 import { StyleSheet, View } from "react-native";
-import { useAtom } from "jotai";
-import ThemeColors from "./ColorScheme";
-import { useTheme } from "./State";
+import { useThemeStyle } from "./State";
 
 function Separator() {
-  const [theme] = useTheme();
-
-  const themeStyle = StyleSheet.create({
-    bgColor: {
-      backgroundColor: !theme.data
-        ? ThemeColors.darkBgColor
-        : ThemeColors.lightBgColor,
-    },
-  });
+  const themeStyle = useThemeStyle();
 
   return <View style={[styles.separator, themeStyle.bgColor]} />;
 }

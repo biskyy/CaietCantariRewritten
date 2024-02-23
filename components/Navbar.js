@@ -1,9 +1,7 @@
 import { memo } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { useAtom } from "jotai";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import ThemeColors from "./ColorScheme";
-import { useTheme } from "./State";
+import { useTheme, useThemeStyle } from "./State";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import Separator from "./Separator";
@@ -11,17 +9,7 @@ import Button from "./Button";
 
 function Navbar() {
   const [theme, setTheme] = useTheme();
-
-  const themeStyle = StyleSheet.create({
-    bgColor: {
-      backgroundColor: theme.data
-        ? ThemeColors.darkBgColor
-        : ThemeColors.lightBgColor,
-    },
-    txtColor: {
-      color: theme.data ? ThemeColors.darkTxtColor : ThemeColors.lightTxtColor,
-    },
-  });
+  const themeStyle = useThemeStyle();
 
   const route = useRoute();
   // @ts-ignore
