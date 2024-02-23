@@ -1,9 +1,10 @@
-import { StyleSheet, Alert, ScrollView } from "react-native";
+import { StyleSheet, Alert, ScrollView, Keyboard } from "react-native";
 import { useAtom } from "jotai";
 import {
   userAtom,
-  checkInternetConnection,
   useThemeStyle,
+  loginRequest,
+  loadingScreenAtom,
 } from "../components/State";
 import Input from "../components/Input";
 import { useRef, useState } from "react";
@@ -11,40 +12,32 @@ import Button from "../components/Button";
 
 const LoginScreen = () => {
   const themeStyle = useThemeStyle();
-  const [user, setUser] = useAtom(userAtom);
+  const [, setUser] = useAtom(userAtom);
+  const [, setLoadingScreen] = useAtom(loadingScreenAtom);
 
   const [usernameText, setUsernameText] = useState("");
   const [passwordText, setPasswordText] = useState("");
 
   const passwordInputRef = useRef();
 
-  const loginRequest = async (username, password) => {
-    checkInternetConnection();
-    try {
-      const response = await fetch("http://192.168.1.59:3000/login", {
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify({ username, password }),
-      });
-      const { message, token } = await response.json();
-      if (message === "Logged in") {
-        setUser({ loggedIn: true, token });
-        setUsernameText("");
-        setPasswordText("");
-        // Keyboard.dismiss();
-        Alert.alert("Logged in", "You have successfully logged in.");
-      } else Alert.alert(message);
-    } catch (error) {
-      console.log(error);
+  const handleLoginButton = async () => {
+    setLoadingScreen({ state: 1, message: "Se incarca" });
+    const response = await loginRequest(usernameText, passwordText);
+    setLoadingScreen({ state: 2, message: "Se incarca" });
+    if (response?.message === "Logged in") {
+      Alert.alert("Logged in", "You have successfully logged in.");
+      setUsernameText("");
+      setPasswordText("");
+      Keyboard.dismiss();
+      setUser({ loggedIn: true, token: response.token });
     }
   };
 
   return (
     <ScrollView
       style={[themeStyle.bgColor, styles.loginDiv]}
+      scrollEnabled={false}
+      keyboardShouldPersistTaps="handled" // reason for using ScrollView
       contentContainerStyle={{ alignItems: "center" }}
     >
       <Input
@@ -65,16 +58,14 @@ const LoginScreen = () => {
         ref={passwordInputRef}
         onChangeText={setPasswordText}
         blurOnSubmit={false}
-        onSubmitEditing={async () =>
-          await loginRequest(usernameText, passwordText)
-        }
+        onSubmitEditing={handleLoginButton}
         returnKeyType="done"
       />
       <Button
         textStyle={[themeStyle.inverseTxtColor, styles.loginButtonText]}
         touchableStyle={[themeStyle.inverseBgColor, styles.loginButton]}
         text="Login"
-        onPress={async () => await loginRequest(usernameText, passwordText)}
+        onPress={handleLoginButton}
       />
     </ScrollView>
   );
@@ -83,7 +74,6 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   loginDiv: {
     height: "100%",
-    // alignItems: "center",
   },
   loginButton: {
     marginTop: 30,

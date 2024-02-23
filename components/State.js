@@ -9,12 +9,14 @@ import axios from "axios";
 import { StyleSheet } from "react-native";
 import ThemeColors from "./ColorScheme";
 
+export const serverApi = "http://192.168.1.59:3000";
+
 const storage = createJSONStorage(() => AsyncStorage);
 export const themeAtom = atomWithStorage("theme", "not set", storage, {
   getOnInit: true,
 });
 export const songsAtom = atomWithStorage("songs", Cantari, storage);
-export const isLoadingAtom = atom(0);
+export const loadingScreenAtom = atom({ state: 0, message: "" });
 export const userAtom = atomWithStorage(
   "user",
   { loggedIn: false, token: "" },
@@ -75,13 +77,10 @@ export const isInternetConnected = async () => {
   return internet.isConnected;
 };
 
-/**
- * @returns {Promise}
- */
-export const fetchSongs = async (url, config) => {
+export const fetchSongsRequest = async (config) => {
   if (!(await isInternetConnected())) return { data: undefined, status: 400 };
   const response = await axios
-    .get(url, {
+    .get(`${serverApi}/songs`, {
       timeout: 5000,
       ...config,
     })
@@ -107,6 +106,36 @@ export const fetchSongs = async (url, config) => {
       }
     });
   return { data: response.data, status: response.status };
+};
+
+export const loginRequest = async (username, password) => {
+  if (!(await isInternetConnected())) return;
+  const response = await axios
+    .post(
+      `${serverApi}/login`,
+      {
+        username,
+        password,
+      },
+      { timeout: 5000 }
+    )
+    .catch((error) => {
+      if (error.response) {
+        Alert.alert(error.response.data.message);
+        return error.response;
+      } else if (error.request) {
+        Alert.alert(
+          "Serverul este offline",
+          "Nu s-a putut realiza o cerere de logare deoarece serverul este offline."
+        );
+        return { message: "Server offline" };
+      } else {
+        Alert.alert("Cererea nu este buna", error.message);
+        return { message: "Bad request" };
+      }
+    });
+
+  if (response.data) return response.data;
 };
 
 export const cacheFonts = (fonts) => fonts.map((font) => Font.loadAsync(font)); // cache fonts method
