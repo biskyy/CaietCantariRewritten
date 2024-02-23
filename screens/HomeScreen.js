@@ -6,9 +6,11 @@ import { StyleSheet, Text, View } from "react-native";
 import { useAtom } from "jotai";
 import {
   checkInternetConnection,
+  fetchSongs,
   isLoadingAtom,
   songsAtom,
   useTheme,
+  useThemeStyle,
 } from "../components/State";
 import ThemeColors from "../components/ColorScheme";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -17,37 +19,11 @@ import Separator from "../components/Separator";
 const Drawer = createDrawerNavigator();
 
 const CustomDrawerMenu = (props) => {
-  const [theme] = useTheme();
+  const themeStyle = useThemeStyle();
   const [, setSongs] = useAtom(songsAtom);
   const [, setIsLoading] = useAtom(isLoadingAtom);
 
   const insets = useSafeAreaInsets();
-
-  const themeStyle = StyleSheet.create({
-    bgColor: {
-      backgroundColor: theme.data
-        ? ThemeColors.darkBgColor
-        : ThemeColors.lightBgColor,
-    },
-    txtColor: {
-      color: theme.data ? ThemeColors.darkTxtColor : ThemeColors.lightTxtColor,
-    },
-  });
-
-  const fetchSongs = async () => {
-    checkInternetConnection();
-    setIsLoading(1);
-    try {
-      const response = await fetch("http://192.168.1.59:3000/songs");
-      const jsonData = await response.json();
-      setSongs(jsonData);
-      console.log("Changed songs");
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(2);
-    }
-  };
 
   return (
     <>
@@ -97,7 +73,18 @@ const CustomDrawerMenu = (props) => {
             styles.drawerMenuButton,
             styles.drawerMenuRefreshButton,
           ]}
-          onPress={fetchSongs}
+          onPress={async () => {
+            checkInternetConnection();
+            try {
+              setIsLoading(1);
+              const fetchedSongs = await fetchSongs(
+                "http://192.168.1.59:3000/songs/"
+              );
+              if (fetchedSongs.status === 200) setSongs(fetchedSongs.data);
+            } finally {
+              setIsLoading(2);
+            }
+          }}
         />
       </View>
     </>
