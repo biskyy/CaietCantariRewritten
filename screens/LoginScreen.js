@@ -24,12 +24,12 @@ const LoginScreen = () => {
     setLoadingScreen({ state: 1, message: "Se incarca" });
     const response = await loginRequest(usernameText, passwordText);
     setLoadingScreen({ state: 2, message: "Se incarca" });
-    if (response?.message === "Logged in") {
+    if (response.status === 200) {
       Alert.alert("Logged in", "You have successfully logged in.");
       setUsernameText("");
       setPasswordText("");
       Keyboard.dismiss();
-      setUser({ loggedIn: true, token: response.token });
+      setUser({ loggedIn: true, token: response.data.token });
     }
   };
 
@@ -60,6 +60,7 @@ const LoginScreen = () => {
         blurOnSubmit={false}
         onSubmitEditing={handleLoginButton}
         returnKeyType="done"
+        secureTextEntry
       />
       <Button
         textStyle={[themeStyle.inverseTxtColor, styles.loginButtonText]}

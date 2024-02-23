@@ -11,7 +11,6 @@ import {
   useTheme,
   useThemeStyle,
 } from "../components/State";
-import ThemeColors from "../components/ColorScheme";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Separator from "../components/Separator";
 
@@ -26,10 +25,10 @@ const CustomDrawerMenu = (props) => {
 
   const refreshSongs = async () => {
     setLoadingScreen({ state: 1, message: "Se actualizeaza cantarile" });
-    const fetchedSongs = await fetchSongsRequest();
+    const response = await fetchSongsRequest();
     setLoadingScreen({ state: 2, message: "Se actualizeaza cantarile" });
-    if (fetchedSongs.status === 200) {
-      setSongs(fetchedSongs.data);
+    if (response.status === 200) {
+      setSongs(response.data);
       Alert.alert(
         "S-au actualizat cantarile",
         "Cantarile au fost actualizate cu succes."
@@ -92,30 +91,6 @@ const CustomDrawerMenu = (props) => {
   );
 };
 
-export default function HomeScreen({ navigation, route }) {
-  const [theme] = useTheme();
-  const themeStyle = useThemeStyle();
-
-  return (
-    <Drawer.Navigator
-      screenOptions={{
-        header: () => <Navbar />,
-        drawerType: "front",
-        swipeEdgeWidth: 25,
-      }}
-      drawerContent={(props) => <CustomDrawerMenu {...props} />}
-    >
-      <Drawer.Screen name="Toate Cantarile" component={SongList} />
-      <Drawer.Screen name="Caiet de Cantari" component={SongList} />
-      <Drawer.Screen name="Cantari BER" component={SongList} />
-      <Drawer.Screen name="Jubilate" component={SongList} />
-      <Drawer.Screen name="Cartea de Tineret" component={SongList} />
-      <Drawer.Screen name="Cor" component={SongList} />
-      <Drawer.Screen name="Cantari favorite" component={SongList} />
-    </Drawer.Navigator>
-  );
-}
-
 const styles = StyleSheet.create({
   drawerMenuHeaderDiv: {
     flexDirection: "row",
@@ -160,3 +135,24 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
 });
+
+export default function HomeScreen() {
+  return (
+    <Drawer.Navigator
+      screenOptions={{
+        header: () => <Navbar />,
+        drawerType: "front",
+        swipeEdgeWidth: 25,
+      }}
+      drawerContent={(props) => <CustomDrawerMenu {...props} />}
+    >
+      <Drawer.Screen name="Toate Cantarile" component={SongList} />
+      <Drawer.Screen name="Caiet de Cantari" component={SongList} />
+      <Drawer.Screen name="Cantari BER" component={SongList} />
+      <Drawer.Screen name="Jubilate" component={SongList} />
+      <Drawer.Screen name="Cartea de Tineret" component={SongList} />
+      <Drawer.Screen name="Cor" component={SongList} />
+      <Drawer.Screen name="Cantari favorite" component={SongList} />
+    </Drawer.Navigator>
+  );
+}

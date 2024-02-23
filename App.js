@@ -17,8 +17,8 @@ import Navbar from "./components/Navbar";
 import { MaterialIcons } from "@expo/vector-icons";
 import LoginScreen from "./screens/LoginScreen";
 import EditSongScreen from "./screens/EditSong";
-import { View, useColorScheme } from "react-native";
-import { cacheFonts, useTheme } from "./components/State";
+import { useColorScheme } from "react-native";
+import { cacheFontsAndIcons, useTheme } from "./components/State";
 const Stack = createStackNavigator();
 
 SplashScreen.preventAutoHideAsync();
@@ -29,28 +29,21 @@ export default function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const preloadFonts = async () => {
-      try {
-        await Promise.all(cacheFonts([MaterialIcons.font]));
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
+    const preloadFontsAndIcons = async () => {
+      await Promise.all(cacheFontsAndIcons([MaterialIcons.font]));
+      setLoading(false);
     };
 
-    preloadFonts();
+    preloadFontsAndIcons();
   }, []);
 
   useEffect(() => {
-    if (theme.state !== "loading" && theme.data === "not set")
-      if (colorScheme === "light") setTheme(false);
-      else setTheme(true);
-  }, [theme]);
-
-  useEffect(() => {
-    if (theme.state !== "loading" && theme.data !== "not set" && !loading)
-      SplashScreen.hideAsync();
+    if (theme.state !== "loading") {
+      if (theme.data === "not set")
+        if (colorScheme === "light") setTheme(false);
+        else setTheme(true);
+      else if (theme.data !== "not set" && !loading) SplashScreen.hideAsync();
+    }
   }, [theme, loading]);
 
   return (
