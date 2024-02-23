@@ -21,38 +21,6 @@ export const userAtom = atomWithStorage(
   storage
 );
 
-export const checkInternetConnection = () => {
-  NetInfo.fetch().then((internet) => {
-    if (!internet.isConnected)
-      Alert.alert(
-        "Nu exista conexiune la internet",
-        "Conecteaza-te la internet"
-      );
-  });
-};
-
-/**
- * @returns {Promise}
- */
-
-export const fetchSongs = async (url, config) => {
-  const response = await axios
-    .get(url, {
-      headers: {
-        "Connection": "Keep-Alive",
-      },
-    })
-    .catch((error) => {
-      console.log(error.toJSON());
-      if (error.response) return error.response.data;
-      else if (error.request) Alert.alert("Serverul este offline");
-      else return error.message;
-    });
-  return { data: response.data, status: response.status };
-};
-
-export const cacheFonts = (fonts) => fonts.map((font) => Font.loadAsync(font)); // cache fonts method
-
 const readOnlyLoadableThemeAtom = loadable(themeAtom);
 
 const writeableLoadableThemeAtom = atom(
@@ -96,3 +64,49 @@ export const useThemeStyle = () => {
 
   return themeStyle;
 };
+
+export const isInternetConnected = async () => {
+  const internet = await NetInfo.fetch();
+  if (!internet.isConnected)
+    Alert.alert(
+      "Nu exista conexiune la internet",
+      "Este necesare o conexiune la internet pentru a actualiza cantarile."
+    );
+  return internet.isConnected;
+};
+
+/**
+ * @returns {Promise}
+ */
+export const fetchSongs = async (url, config) => {
+  if (!(await isInternetConnected())) return { data: undefined, status: 400 };
+  const response = await axios
+    .get(url, {
+      timeout: 5000,
+      ...config,
+    })
+    .catch((error) => {
+      if (error.response) {
+        Alert.alert(
+          `Ceva nu a mers bine: eroare ${error.response.status}`,
+          `${error.response.data.message}\n\nVorbeste cu developer-ul.`
+        );
+        return { data: undefined, status: error.response.status };
+      } else if (error.request) {
+        Alert.alert(
+          "Serverul este offline",
+          "Nu s-au putut actualiza cantarile deoarece serverul este offline."
+        );
+        return { data: undefined, status: 500 };
+      } else {
+        Alert.alert(
+          "Cererea nu este buna",
+          `${error.message}\n\nVorbeste cu developer-ul.`
+        );
+        return { data: undefined, status: 400 };
+      }
+    });
+  return { data: response.data, status: response.status };
+};
+
+export const cacheFonts = (fonts) => fonts.map((font) => Font.loadAsync(font)); // cache fonts method

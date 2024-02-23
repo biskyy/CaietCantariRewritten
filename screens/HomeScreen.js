@@ -2,10 +2,9 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import SongList from "../components/SongList";
 import Navbar from "../components/Navbar";
 import Button from "../components/Button";
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import { useAtom } from "jotai";
 import {
-  checkInternetConnection,
   fetchSongs,
   isLoadingAtom,
   songsAtom,
@@ -24,6 +23,22 @@ const CustomDrawerMenu = (props) => {
   const [, setIsLoading] = useAtom(isLoadingAtom);
 
   const insets = useSafeAreaInsets();
+
+  const refreshSongs = async () => {
+    try {
+      setIsLoading(1);
+      const fetchedSongs = await fetchSongs("http://192.168.1.59:3000/songs/");
+      if (fetchedSongs.status === 200) {
+        setSongs(fetchedSongs.data);
+        Alert.alert(
+          "S-au actualizat cantarile",
+          "Cantarile au fost actualizate cu succes."
+        );
+      }
+    } finally {
+      setIsLoading(2);
+    }
+  };
 
   return (
     <>
@@ -73,18 +88,7 @@ const CustomDrawerMenu = (props) => {
             styles.drawerMenuButton,
             styles.drawerMenuRefreshButton,
           ]}
-          onPress={async () => {
-            checkInternetConnection();
-            try {
-              setIsLoading(1);
-              const fetchedSongs = await fetchSongs(
-                "http://192.168.1.59:3000/songs/"
-              );
-              if (fetchedSongs.status === 200) setSongs(fetchedSongs.data);
-            } finally {
-              setIsLoading(2);
-            }
-          }}
+          onPress={refreshSongs}
         />
       </View>
     </>
