@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Platform, StyleSheet, Text, View } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useTheme, useThemeStyle } from "./State";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -17,6 +17,8 @@ function Navbar() {
 
   const insets = useSafeAreaInsets();
 
+  const test = insets.top;
+
   return (
     <>
       <StatusBar style={theme.data ? "light" : "dark"} />
@@ -25,6 +27,10 @@ function Navbar() {
           ...themeStyle.bgColor,
           ...styles.navbarDiv,
           paddingTop: insets.top,
+          height:
+            Platform.OS === "ios" // change 100 to whatever you want the total height of the navbar to be
+              ? insets.top + (100 - insets.top) // on ios, height = element height + padding + margin(probably)
+              : 100 - insets.top, //on android, height = element height(the element height is always what you set it to regardless of padding and margin)
         }}
       >
         {route.name != "Settings" &&
@@ -75,8 +81,7 @@ function Navbar() {
 const styles = StyleSheet.create({
   navbarDiv: {
     flexDirection: "row",
-    height: 100,
-    paddingBottom: 10,
+    // height: 148,
   },
   navbarIcon: {
     fontSize: 32,
