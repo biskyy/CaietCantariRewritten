@@ -13,12 +13,34 @@ export const serverApi = "http://192.168.1.59:3000";
 
 const storage = createJSONStorage(() => AsyncStorage);
 export const songsAtom = atomWithStorage("songs", Cantari, storage);
-export const loadingScreenAtom = atom({ state: 0, message: "" });
 export const userAtom = atomWithStorage(
   "user",
   { loggedIn: false, token: "" },
   storage
 );
+
+export const loadingScreenAtom = atom({
+  state: 0,
+  message: "",
+  callback: () => {},
+});
+
+/**
+ * @typedef {Object} LoadingScreenObject
+ * @property {number} state
+ * @property {string} message
+ * @property {(...args: any[]) => void} callback
+ *
+ * @returns {[LoadingScreenObject, Function: (object: Partial<LoadingScreenObject>) => void]}
+ */
+
+export const useLoadingScreen = () => {
+  const [loadingScreen, setLoadingScreen] = useAtom(loadingScreenAtom);
+  const _setLoadingScreen = (newKey) => {
+    setLoadingScreen((prevObject) => ({ ...prevObject, ...newKey }));
+  };
+  return [loadingScreen, _setLoadingScreen];
+};
 
 export const themeAtom = atomWithStorage("theme", "not set", storage, {
   getOnInit: true,
