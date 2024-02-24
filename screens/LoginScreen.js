@@ -4,7 +4,7 @@ import {
   userAtom,
   useThemeStyle,
   loginRequest,
-  loadingScreenAtom,
+  useLoadingScreen,
 } from "../components/State";
 import Input from "../components/Input";
 import { useRef, useState } from "react";
@@ -13,7 +13,7 @@ import Button from "../components/Button";
 const LoginScreen = () => {
   const themeStyle = useThemeStyle();
   const [, setUser] = useAtom(userAtom);
-  const [, setLoadingScreen] = useAtom(loadingScreenAtom);
+  const [, setLoadingScreen] = useLoadingScreen();
 
   const [usernameText, setUsernameText] = useState("");
   const [passwordText, setPasswordText] = useState("");
@@ -23,9 +23,15 @@ const LoginScreen = () => {
   const handleLoginButton = async () => {
     setLoadingScreen({ state: 1, message: "Se incarca" });
     const response = await loginRequest(usernameText, passwordText);
-    setLoadingScreen({ state: 2, message: "Se incarca" });
+    setLoadingScreen({
+      state: 2,
+      callback: () => {
+        const status = response.status; // i think this is the only way to pass arguments (i think)
+        if (status === 200)
+          Alert.alert("Logged in", "You have successfully logged in.");
+      },
+    });
     if (response.status === 200) {
-      Alert.alert("Logged in", "You have successfully logged in.");
       setUsernameText("");
       setPasswordText("");
       Keyboard.dismiss();
