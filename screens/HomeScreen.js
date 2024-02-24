@@ -108,7 +108,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    paddingBottom: 10,
   },
   drawerMenuTitle: {
     flexGrow: 9,
