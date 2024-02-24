@@ -2,13 +2,12 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import SongList from "../components/SongList";
 import Navbar from "../components/Navbar";
 import Button from "../components/Button";
-import { Alert, StyleSheet, Text, View } from "react-native";
+import { Alert, Platform, StyleSheet, Text, View } from "react-native";
 import { useAtom } from "jotai";
 import {
   fetchSongsRequest,
-  loadingScreenAtom,
   songsAtom,
-  useTheme,
+  useLoadingScreen,
   useThemeStyle,
 } from "../components/State";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -19,20 +18,29 @@ const Drawer = createDrawerNavigator();
 const CustomDrawerMenu = (props) => {
   const themeStyle = useThemeStyle();
   const [, setSongs] = useAtom(songsAtom);
-  const [, setLoadingScreen] = useAtom(loadingScreenAtom);
+  const [, setLoadingScreen] = useLoadingScreen();
 
   const insets = useSafeAreaInsets();
 
   const refreshSongs = async () => {
-    setLoadingScreen({ state: 1, message: "Se actualizeaza cantarile" });
+    setLoadingScreen({
+      state: 1,
+      message: "Se actualizeaza cantarile",
+    });
     const response = await fetchSongsRequest();
-    setLoadingScreen({ state: 2, message: "Se actualizeaza cantarile" });
+    setLoadingScreen({
+      state: 2,
+      callback: () => {
+        const status = response.status;
+        if (status === 200)
+          Alert.alert(
+            "S-au actualizat cantarile",
+            "Cantarile au fost actualizate cu succes."
+          );
+      },
+    });
     if (response.status === 200) {
       setSongs(response.data);
-      Alert.alert(
-        "S-au actualizat cantarile",
-        "Cantarile au fost actualizate cu succes."
-      );
     }
   };
 
@@ -43,6 +51,10 @@ const CustomDrawerMenu = (props) => {
           ...themeStyle.bgColor,
           ...styles.drawerMenuHeaderDiv,
           paddingTop: insets.top,
+          height:
+            Platform.OS === "ios" // see Navbar.js for details
+              ? insets.top + (100 - insets.top)
+              : 100 - insets.top,
         }}
       >
         <Text
@@ -96,7 +108,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    height: 100,
     paddingBottom: 10,
   },
   drawerMenuTitle: {
