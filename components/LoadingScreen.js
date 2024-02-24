@@ -6,12 +6,11 @@ import Animated, {
   runOnJS,
 } from "react-native-reanimated";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useAtom } from "jotai";
-import { loadingScreenAtom, useThemeStyle } from "./State";
+import { useLoadingScreen, useThemeStyle } from "./State";
 
 const LoadingScreen = () => {
   const themeStyle = useThemeStyle();
-  const [loadingScreen, setLoadingScreen] = useAtom(loadingScreenAtom);
+  const [loadingScreen, setLoadingScreen] = useLoadingScreen();
 
   const opacity = useSharedValue(0);
 
@@ -19,16 +18,21 @@ const LoadingScreen = () => {
     if (loadingScreen.state == 1)
       opacity.value = withTiming(1, { duration: 500 });
     else if (loadingScreen.state == 2)
-      opacity.value = withTiming(0, { duration: 500 }, () =>
-        runOnJS(setLoadingScreen)({ state: 0, message: "" })
-      );
+      opacity.value = withTiming(0, { duration: 500 }, () => {
+        runOnJS(setLoadingScreen)({
+          state: 0,
+          message: "",
+        });
+        runOnJS(loadingScreen.callback)();
+      });
   }, [loadingScreen]);
 
   return (
     <Animated.View
       style={{
-        zIndex: loadingScreen.state ? 1 : -1,
         opacity,
+        zIndex: loadingScreen.state ? 1 : -1,
+        elevation: loadingScreen.state ? 1 : -1, // stupid android
         ...styles.loadingScreenDiv,
         ...themeStyle.bgColor,
       }}
