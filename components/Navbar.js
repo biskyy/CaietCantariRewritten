@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { Platform, StyleSheet, Text, View } from "react-native";
+import { Keyboard, Platform, StyleSheet, Text, View } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useTheme, useThemeStyle } from "./State";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -42,6 +42,7 @@ function Navbar() {
             textStyle={[styles.navbarIcon, themeStyle.txtColor]}
             touchableStyle={styles.navbarMenuIcon}
             onPress={() => {
+              Keyboard.dismiss();
               toggleDrawer();
             }}
           />
