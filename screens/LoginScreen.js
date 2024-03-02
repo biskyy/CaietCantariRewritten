@@ -48,13 +48,16 @@ const LoginScreen = () => {
     >
       <Input
         // @ts-ignore
-        placeholder="User"
+        placeholder="Username"
         value={usernameText}
         onChangeText={setUsernameText}
         returnKeyType="next"
         blurOnSubmit={false}
-        // @ts-ignore
-        onSubmitEditing={() => passwordInputRef.current.focus()}
+        onSubmitEditing={() => {
+          // @ts-ignore
+          if (usernameText !== "") passwordInputRef.current.focus();
+          else Keyboard.dismiss();
+        }}
       />
 
       <Input
@@ -64,7 +67,10 @@ const LoginScreen = () => {
         ref={passwordInputRef}
         onChangeText={setPasswordText}
         blurOnSubmit={false}
-        onSubmitEditing={handleLoginButton}
+        onSubmitEditing={() => {
+          if (passwordText !== "") handleLoginButton();
+          else Keyboard.dismiss();
+        }}
         returnKeyType="done"
         secureTextEntry
       />
