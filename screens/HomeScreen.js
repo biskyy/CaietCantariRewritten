@@ -54,7 +54,7 @@ const CustomDrawerMenu = (props) => {
           height:
             Platform.OS === "ios" // see Navbar.js for details
               ? insets.top + (100 - insets.top)
-              : 100 - insets.top,
+              : 100,
         }}
       >
         <Text
