@@ -126,12 +126,12 @@ const SongList = () => {
       )}
       <KeyboardAvoidingView
         style={{
-          marginBottom: insets.bottom,
+          marginBottom: Platform.OS === "ios" ? insets.bottom : 5,
           ...themeStyle.bgColor,
           ...styles.keyboardAvoidingViewDiv,
         }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={110}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 110 : 0}
       >
         <Input
           scrollEnabled={false}
