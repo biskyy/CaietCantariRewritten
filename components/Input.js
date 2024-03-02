@@ -1,28 +1,39 @@
-import { forwardRef } from "react";
+import { forwardRef, memo } from "react";
 import { View, StyleSheet, TextInput } from "react-native";
 import { useTheme, useThemeStyle } from "./State";
 import ThemeColors from "./ColorScheme";
 import Button from "./Button";
 
-const Input = forwardRef((props, ref) => {
-  const [theme] = useTheme();
-  const themeStyle = useThemeStyle();
+const Input = forwardRef(
+  /** @param {Object} props */
+  (props, ref) => {
+    const [theme] = useTheme();
+    const themeStyle = useThemeStyle();
 
-  return (
-    <View style={{ ...styles.textInputDiv, ...themeStyle.borderColor }}>
-      <TextInput
-        {...props}
-        ref={ref}
-        style={[themeStyle.txtColor, styles.textInput]}
-        placeholderTextColor={
-          theme.data ? ThemeColors.darkTxtColor : ThemeColors.lightTxtColor
-        }
-        autoCorrect={false}
-        autoCapitalize="none"
-      />
-      {
-        // @ts-ignore
-        props.value != "" && (
+    const { textInputDivStyle, textInputStyle } = props;
+
+    return (
+      <View
+        style={{
+          ...styles.textInputDiv,
+          ...themeStyle.borderColor,
+          ...themeStyle.bgColor,
+          ...textInputDivStyle,
+        }}
+      >
+        <TextInput
+          {...props}
+          ref={ref}
+          style={[themeStyle.txtColor, styles.textInput, textInputStyle]}
+          placeholderTextColor={
+            theme.data
+              ? ThemeColors.darkPlaceholderTxtColor
+              : ThemeColors.lightPlaceholderTxtColor
+          }
+          autoCorrect={false}
+          autoCapitalize="none"
+        />
+        {props.value != "" && (
           <Button
             icon="clear"
             textStyle={[themeStyle.txtColor, styles.clearButtonIcon]}
@@ -30,20 +41,19 @@ const Input = forwardRef((props, ref) => {
             // @ts-ignore
             onPress={() => props.onChangeText("")}
           />
-        )
-      }
-    </View>
-  );
-});
+        )}
+      </View>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   textInputDiv: {
     // alignItems: "center",
     // justifyContent: "center",
-    marginTop: 20,
     borderWidth: 2,
     borderRadius: 10,
-    height: 64,
+    height: 54,
     width: "95%",
     flexDirection: "row",
   },
@@ -66,4 +76,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Input;
+export default memo(Input);
