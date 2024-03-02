@@ -177,36 +177,6 @@ const handleErrorResponse = (error) => {
 export const cacheFontsAndIcons = (fonts) =>
   fonts.map((font) => Font.loadAsync(font)); // cache fonts method
 
-// export function useKeyboardHeight() {
-//   const [keyboardHeight, setKeyboardHeight] = useState(0);
-
-//   function onKeyboardShow(event) {
-//     setKeyboardHeight(event.endCoordinates.height);
-//   }
-
-//   function onKeyboardHide() {
-//     setKeyboardHeight(0);
-//   }
-
-//   useEffect(() => {
-//     const onDidShow = Keyboard.addListener("keyboardDidShow", onKeyboardShow);
-//     const onDidHide = Keyboard.addListener("keyboardDidHide", onKeyboardHide);
-//     const onWillShow = Keyboard.addListener("keyboardWillShow", onKeyboardShow);
-//     const onWillHide = Keyboard.addListener("keyboardWillHide", onKeyboardHide);
-
-//     return () => {
-//       onDidShow.remove();
-//       onDidHide.remove();
-//       onWillShow.remove();
-//       onWillHide.remove();
-//     };
-//   }, []);
-
-//   return keyboardHeight;
-// }
-
-// ^ Leaving this here in case KeyboardAvoidingView starts acting up
-
 export const debounce = (func, delay, immediate = false) => {
   let timeoutId;
 

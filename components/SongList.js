@@ -1,24 +1,12 @@
-import {
-  FlatList,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  View,
-} from "react-native";
+import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
 import { useAtom } from "jotai";
 import { useRoute } from "@react-navigation/native";
-import { debounce, songsAtom, useTheme, useThemeStyle } from "./State";
+import { songsAtom, useTheme, useThemeStyle } from "./State";
 import Button from "./Button";
 import { FlashList } from "@shopify/flash-list";
 import Input from "./Input";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { memo, useCallback, useEffect, useMemo, useState } from "react";
-// import Animated, {
-//   Easing,
-//   useSharedValue,
-//   withTiming,
-// } from "react-native-reanimated";
-// import { useEffect } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 
 const SongList = () => {
   const [theme] = useTheme();
@@ -48,22 +36,6 @@ const SongList = () => {
   );
 
   const [filteredSongs, setFilteredSongs] = useState(_data);
-
-  // const keyboardHeight = useKeyboardHeight();
-
-  // const keyboardHeightSharedValue = useSharedValue(0);
-
-  // useEffect(() => {
-  //   keyboardHeightSharedValue.value = withTiming(
-  //     Platform.OS === "ios" ? keyboardHeight - insets.bottom : null,
-  //     {
-  //       duration: 300,
-  //       easing: Easing.out(Easing.poly(2.2)),
-  //     }
-  //   );
-  // }, [keyboardHeight, Keyboard.isVisible]);
-
-  // ^ Leaving this here in case KeyboardAvoidingView starts acting up
 
   const format = (text) => {
     return text
@@ -159,16 +131,6 @@ const SongList = () => {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={110}
       >
-        {/* <Animated.View
-          style={{
-            paddingBottom: keyboardHeightSharedValue,
-            bottom: insets.bottom,
-            alignItems: "center",
-          }}
-        > */}
-        {/*           
-           ^ Leaving this here in case KeyboardAvoidingView starts acting up
-          */}
         <Input
           scrollEnabled={false}
           textInputDivStyle={{}}
@@ -182,7 +144,6 @@ const SongList = () => {
             handleFilteredList(str);
           }}
         />
-        {/* </Animated.View> */}
       </KeyboardAvoidingView>
     </View>
   );
