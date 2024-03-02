@@ -35,7 +35,9 @@ const SongList = () => {
     (song) => bookIDFilter === null || song.book_id === bookIDFilter
   );
 
-  const [filteredSongs, setFilteredSongs] = useState(_data);
+  const data = useMemo(() => _data, [theme]);
+
+  const [filteredSongs, setFilteredSongs] = useState(data);
 
   const format = (text) => {
     return text
@@ -58,7 +60,7 @@ const SongList = () => {
         prevSearchQuery.length >= trimmedFormattedQuery.length ||
         formattedQuery.length - prevSearchQuery.length > 1 // handle keyboard correcting words
       ) {
-        return _data.filter((song) => {
+        return data.filter((song) => {
           return (
             song.searchable_title.includes(trimmedFormattedQuery) ||
             song.searchable_content.includes(trimmedFormattedQuery)
@@ -75,7 +77,6 @@ const SongList = () => {
   };
 
   // everything is memoized to prevent stupid rerenders from occuring
-  const data = useMemo(() => _data, [theme]);
   const estimatedListSize = useMemo(() => {
     return { height: 794, width: 414 };
   }, [theme]);
@@ -115,6 +116,7 @@ const SongList = () => {
           <FlashList
             renderItem={renderItem}
             data={filteredSongs}
+            extraData={theme}
             estimatedItemSize={48}
             estimatedListSize={estimatedListSize}
             indicatorStyle={theme.data ? "white" : "black"}
