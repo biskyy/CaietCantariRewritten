@@ -1,3 +1,5 @@
+import { useEffect, useMemo, useState } from "react";
+import { Keyboard } from "react-native";
 import { atom, useAtom } from "jotai";
 import { atomWithStorage, createJSONStorage, loadable } from "jotai/utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -8,6 +10,13 @@ import * as Font from "expo-font";
 import axios from "axios";
 import { StyleSheet } from "react-native";
 import ThemeColors from "./ColorScheme";
+import { useCallback } from "react";
+import {
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
 export const serverApi = "http://192.168.1.59:3000";
 
@@ -167,3 +176,52 @@ const handleErrorResponse = (error) => {
 
 export const cacheFontsAndIcons = (fonts) =>
   fonts.map((font) => Font.loadAsync(font)); // cache fonts method
+
+// export function useKeyboardHeight() {
+//   const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+//   function onKeyboardShow(event) {
+//     setKeyboardHeight(event.endCoordinates.height);
+//   }
+
+//   function onKeyboardHide() {
+//     setKeyboardHeight(0);
+//   }
+
+//   useEffect(() => {
+//     const onDidShow = Keyboard.addListener("keyboardDidShow", onKeyboardShow);
+//     const onDidHide = Keyboard.addListener("keyboardDidHide", onKeyboardHide);
+//     const onWillShow = Keyboard.addListener("keyboardWillShow", onKeyboardShow);
+//     const onWillHide = Keyboard.addListener("keyboardWillHide", onKeyboardHide);
+
+//     return () => {
+//       onDidShow.remove();
+//       onDidHide.remove();
+//       onWillShow.remove();
+//       onWillHide.remove();
+//     };
+//   }, []);
+
+//   return keyboardHeight;
+// }
+
+// ^ Leaving this here in case KeyboardAvoidingView starts acting up
+
+export const debounce = (func, delay, immediate = false) => {
+  let timeoutId;
+
+  return function (...args) {
+    const later = () => {
+      timeoutId = null;
+      if (!immediate) func.apply(this, args);
+    };
+
+    const callNow = immediate && !timeoutId;
+
+    clearTimeout(timeoutId);
+
+    timeoutId = setTimeout(later, delay);
+
+    if (callNow) func.apply(this, args);
+  };
+};
