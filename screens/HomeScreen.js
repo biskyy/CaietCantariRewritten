@@ -3,11 +3,10 @@ import SongList from "../components/SongList";
 import Navbar from "../components/Navbar";
 import Button from "../components/Button";
 import { Alert, Platform, StyleSheet, Text, View } from "react-native";
-import { useAtom } from "jotai";
 import {
   fetchSongsRequest,
-  songsAtom,
   useLoadingScreen,
+  useSongs,
   useThemeStyle,
 } from "../components/State";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -17,7 +16,7 @@ const Drawer = createDrawerNavigator();
 
 const CustomDrawerMenu = (props) => {
   const themeStyle = useThemeStyle();
-  const [, setSongs] = useAtom(songsAtom);
+  const [, setSongs] = useSongs();
   const [, setLoadingScreen] = useLoadingScreen();
 
   const insets = useSafeAreaInsets();
@@ -113,7 +112,7 @@ const styles = StyleSheet.create({
     flexGrow: 9,
     flexBasis: 0,
     marginHorizontal: 15,
-    fontSize: 32,
+    fontSize: 34,
     fontWeight: "700",
   },
   drawerMenuSettingsButtonDiv: {
