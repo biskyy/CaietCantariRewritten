@@ -86,8 +86,13 @@ const SongList = () => {
   }, [theme]);
 
   const itemOnPressProp = useCallback(
-    // @ts-ignore
-    (item) => navigation.navigate("Cantare", { index: item.index }),
+    (item, index) =>
+      // @ts-ignore
+      navigation.navigate("Cantare", {
+        index: item.index,
+        listFirstIndex: data[0].index,
+        listLastIndex: data.at(-1).index,
+      }),
     []
   );
   const itemStylesProp = useMemo(() => {
@@ -98,12 +103,12 @@ const SongList = () => {
   }, [theme]);
 
   const renderItem = useCallback(
-    ({ item }) => (
+    ({ item, index }) => (
       <Button
         text={item.title}
         textStyle={itemStylesProp.textStyle}
         touchableStyle={itemStylesProp.touchableStyle}
-        onPress={() => itemOnPressProp(item)}
+        onPress={() => itemOnPressProp(item, index)}
       />
     ),
     [theme]

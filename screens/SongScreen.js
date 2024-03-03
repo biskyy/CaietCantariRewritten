@@ -9,7 +9,6 @@ import { useAtom } from "jotai";
 import Separator from "../components/Separator";
 import Button from "../components/Button";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useRoute } from "@react-navigation/native";
 import { useMemo, useState } from "react";
 
 export default function SongScreen({ route, navigation }) {
@@ -18,14 +17,12 @@ export default function SongScreen({ route, navigation }) {
   const [fontSize, setFontSize] = useAtom(fontSizeAtom);
   const [songs, , setFavorite] = useSongs();
   const insets = useSafeAreaInsets();
-  const [indexModifier, setIndexModifier] = useState(0);
 
-  const { index } = route.params;
+  const [songIndex, setSongIndex] = useState(route.params.index);
 
-  const song = useMemo(
-    () => songs[index + indexModifier],
-    [songs, indexModifier]
-  );
+  const { listFirstIndex, listLastIndex } = route.params;
+
+  const song = useMemo(() => songs[songIndex], [songs, songIndex]);
 
   const handleFontSizeChange = (sign) => {
     if (sign === "+") setFontSize(fontSize + 1);
@@ -41,14 +38,16 @@ export default function SongScreen({ route, navigation }) {
       <View style={[themeStyle.bgColor, styles.songDiv]}>
         <View style={styles.titleDiv}>
           <Button
-            icon="keyboard-arrow-left"
+            icon={songIndex > listFirstIndex && "keyboard-arrow-left"}
             textStyle={{
               ...themeStyle.txtColor,
               ...styles.icon,
               marginHorizontal: 15,
             }}
             touchableStyle={styles.titleArrow}
-            onPress={() => setIndexModifier(indexModifier - 1)}
+            onPress={() =>
+              songIndex > listFirstIndex && setSongIndex(songIndex - 1)
+            }
           />
           <Text
             numberOfLines={1}
@@ -61,14 +60,16 @@ export default function SongScreen({ route, navigation }) {
             {song.title}
           </Text>
           <Button
-            icon="keyboard-arrow-right"
+            icon={songIndex < listLastIndex - 1 && "keyboard-arrow-right"}
             textStyle={{
               ...themeStyle.txtColor,
               ...styles.icon,
               marginHorizontal: 15,
             }}
             touchableStyle={styles.titleArrow}
-            onPress={() => setIndexModifier(indexModifier + 1)}
+            onPress={() =>
+              songIndex < listLastIndex - 1 && setSongIndex(songIndex + 1)
+            }
           />
         </View>
         <Separator />
