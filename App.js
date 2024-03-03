@@ -75,7 +75,7 @@ export default function App() {
               component={HomeScreen}
               options={{ header: () => <></> }}
             />
-            <Stack.Screen name="Song" component={SongScreen} />
+            <Stack.Screen name="Cantare" component={SongScreen} />
             <Stack.Screen name="Settings" component={SettingsScreen} />
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="EditSong" component={EditSongScreen} />
