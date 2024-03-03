@@ -87,7 +87,7 @@ const SongList = () => {
 
   const itemOnPressProp = useCallback(
     // @ts-ignore
-    (item) => navigation.navigate("Cantare", { song: item }),
+    (item) => navigation.navigate("Cantare", { index: item.index }),
     []
   );
   const itemStylesProp = useMemo(() => {
