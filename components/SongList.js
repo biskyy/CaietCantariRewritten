@@ -1,7 +1,6 @@
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
-import { useAtom } from "jotai";
-import { useRoute } from "@react-navigation/native";
-import { songsAtom, useTheme, useThemeStyle } from "./State";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { useSongs, useTheme, useThemeStyle } from "./State";
 import Button from "./Button";
 import { FlashList } from "@shopify/flash-list";
 import Input from "./Input";
@@ -11,12 +10,13 @@ import { memo, useCallback, useMemo, useState } from "react";
 const SongList = () => {
   const [theme] = useTheme();
   const themeStyle = useThemeStyle();
-  const [songs] = useAtom(songsAtom);
+  const [songs] = useSongs();
   const [searchQuery, setSearchQuery] = useState("");
 
   const insets = useSafeAreaInsets();
 
   const route = useRoute();
+  const navigation = useNavigation();
 
   // get corresponding book_id for route name
   const bookIDMappings = {
@@ -26,16 +26,20 @@ const SongList = () => {
     "Jubilate": "J",
     "Cartea de Tineret": "CT",
     "Cor": "Cor",
+    "Cantari favorite": "CF",
   };
 
   // get the filter
   const bookIDFilter = bookIDMappings[route.name] || null;
 
-  const _data = songs.filter(
-    (song) => bookIDFilter === null || song.book_id === bookIDFilter
+  const data = useMemo(
+    () =>
+      songs.filter((song) => {
+        if (bookIDFilter === "CF") return song.favorite === true;
+        return bookIDFilter === null || song.book_id === bookIDFilter;
+      }),
+    [theme, songs]
   );
-
-  const data = useMemo(() => _data, [theme]);
 
   const [filteredSongs, setFilteredSongs] = useState(data);
 
@@ -81,7 +85,11 @@ const SongList = () => {
     return { height: 794, width: 414 };
   }, [theme]);
 
-  const itemOnPressProp = useCallback((item) => console.log(item), []);
+  const itemOnPressProp = useCallback(
+    // @ts-ignore
+    (item) => navigation.navigate("Cantare", { song: item }),
+    []
+  );
   const itemStylesProp = useMemo(() => {
     return {
       textStyle: [themeStyle.txtColor, styles.textStyle],
