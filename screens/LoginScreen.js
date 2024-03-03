@@ -23,6 +23,12 @@ const LoginScreen = () => {
   const handleLoginButton = async () => {
     setLoadingScreen({ state: 1, message: "Se incarca" });
     const response = await loginRequest(usernameText, passwordText);
+    if (response.status === 200) {
+      setUsernameText("");
+      setPasswordText("");
+      Keyboard.dismiss();
+      setUser({ loggedIn: true, token: response.data.token });
+    }
     setLoadingScreen({
       state: 2,
       callback: () => {
@@ -31,12 +37,6 @@ const LoginScreen = () => {
           Alert.alert("Logged in", "You have successfully logged in.");
       },
     });
-    if (response.status === 200) {
-      setUsernameText("");
-      setPasswordText("");
-      Keyboard.dismiss();
-      setUser({ loggedIn: true, token: response.data.token });
-    }
   };
 
   return (

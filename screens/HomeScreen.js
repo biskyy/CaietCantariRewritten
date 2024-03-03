@@ -27,6 +27,9 @@ const CustomDrawerMenu = (props) => {
       message: "Se actualizeaza cantarile",
     });
     const response = await fetchSongsRequest();
+    if (response.status === 200) {
+      setSongs(response.data);
+    }
     setLoadingScreen({
       state: 2,
       callback: () => {
@@ -38,9 +41,6 @@ const CustomDrawerMenu = (props) => {
           );
       },
     });
-    if (response.status === 200) {
-      setSongs(response.data);
-    }
   };
 
   return (
