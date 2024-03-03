@@ -9,15 +9,23 @@ import { useAtom } from "jotai";
 import Separator from "../components/Separator";
 import Button from "../components/Button";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useRoute } from "@react-navigation/native";
+import { useMemo, useState } from "react";
 
 export default function SongScreen({ route, navigation }) {
   const [theme] = useTheme();
   const themeStyle = useThemeStyle();
   const [fontSize, setFontSize] = useAtom(fontSizeAtom);
-  const [, , setFavorite] = useSongs();
+  const [songs, , setFavorite] = useSongs();
   const insets = useSafeAreaInsets();
+  const [indexModifier, setIndexModifier] = useState(0);
 
-  const { song } = route.params;
+  const { index } = route.params;
+
+  const song = useMemo(
+    () => songs[index + indexModifier],
+    [songs, indexModifier]
+  );
 
   const handleFontSizeChange = (sign) => {
     if (sign === "+") setFontSize(fontSize + 1);
@@ -40,7 +48,7 @@ export default function SongScreen({ route, navigation }) {
               marginHorizontal: 15,
             }}
             touchableStyle={styles.titleArrow}
-            onPress={() => {}}
+            onPress={() => setIndexModifier(indexModifier - 1)}
           />
           <Text
             numberOfLines={1}
@@ -60,7 +68,7 @@ export default function SongScreen({ route, navigation }) {
               marginHorizontal: 15,
             }}
             touchableStyle={styles.titleArrow}
-            onPress={() => {}}
+            onPress={() => setIndexModifier(indexModifier + 1)}
           />
         </View>
         <Separator />
