@@ -34,7 +34,7 @@ function Navbar() {
         }}
       >
         {route.name != "Settings" &&
-        route.name != "Song" &&
+        route.name != "Cantare" &&
         route.name != "Login" &&
         route.name != "EditSong" ? (
           <Button
@@ -57,14 +57,6 @@ function Navbar() {
             {route.name}
           </Text>
         </View>
-        {/* <Button
-          icon="edit"
-          textStyle={[styles.navbarIcon, themeStyle.txtColor]}
-          touchableStyle={styles.navbarMenuIcon}
-          onPress={() => {
-            setTheme("not set");
-          }}
-        /> */}
         <Button
           icon="contrast"
           textStyle={[styles.navbarIcon, themeStyle.txtColor]}
@@ -94,8 +86,8 @@ const styles = StyleSheet.create({
     flexBasis: 0,
   },
   navbarTitle: {
-    fontSize: 32,
-    fontWeight: "700",
+    fontSize: 34,
+    fontWeight: "bold",
   },
   navbarTitleContainer: {
     justifyContent: "center",
