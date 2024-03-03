@@ -1,5 +1,3 @@
-import { useEffect, useMemo, useState } from "react";
-import { Keyboard } from "react-native";
 import { atom, useAtom } from "jotai";
 import { atomWithStorage, createJSONStorage, loadable } from "jotai/utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -10,23 +8,42 @@ import * as Font from "expo-font";
 import axios from "axios";
 import { StyleSheet } from "react-native";
 import ThemeColors from "./ColorScheme";
-import { useCallback } from "react";
-import {
-  Easing,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from "react-native-reanimated";
 
 export const serverApi = "http://192.168.1.59:3000";
 
 const storage = createJSONStorage(() => AsyncStorage);
 export const songsAtom = atomWithStorage("songs", Cantari, storage);
+export const fontSizeAtom = atomWithStorage("fontSize", 20, storage);
 export const userAtom = atomWithStorage(
   "user",
   { loggedIn: false, token: "" },
   storage
 );
+
+export const useSongs = () => {
+  const [songs, _setSongs] = useAtom(songsAtom);
+
+  const setSongs = (newArr) => {
+    _setSongs(
+      newArr.map((song, index) => {
+        song.favorite = songs[index].favorite;
+        return song;
+      })
+    );
+  };
+
+  const setFavorite = (indexOfSongToBeFavorited) => {
+    _setSongs(
+      songs.map((song) => {
+        if (song.index === indexOfSongToBeFavorited)
+          song.favorite = !song.favorite;
+        return song;
+      })
+    );
+  };
+
+  return [songs, setSongs, setFavorite];
+};
 
 export const loadingScreenAtom = atom({
   state: 0,
