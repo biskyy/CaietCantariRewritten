@@ -1,7 +1,19 @@
 import { memo } from "react";
-import { Keyboard, Platform, StyleSheet, Text, View } from "react-native";
+import {
+  Keyboard,
+  Platform,
+  Share,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { useTheme, useThemeStyle } from "./State";
+import {
+  useDisplayedSongInfo,
+  useSongs,
+  useTheme,
+  useThemeStyle,
+} from "./State";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import Separator from "./Separator";
@@ -10,14 +22,15 @@ import Button from "./Button";
 function Navbar() {
   const [theme, setTheme] = useTheme();
   const themeStyle = useThemeStyle();
+  const [displayedSongInfo] = useDisplayedSongInfo();
+  const [songs] = useSongs();
 
   const route = useRoute();
+
   // @ts-ignore
   const { toggleDrawer } = useNavigation();
 
   const insets = useSafeAreaInsets();
-
-  const test = insets.top;
 
   return (
     <>
@@ -49,7 +62,12 @@ function Navbar() {
         ) : (
           <View style={styles.navbarMenuIcon} />
         )}
-        <View style={styles.navbarTitleContainer}>
+        <View
+          style={[
+            styles.navbarTitleContainer,
+            { flexGrow: route.name === "Cantare" ? 5 : 6 },
+          ]}
+        >
           <Text
             numberOfLines={1}
             style={[styles.navbarTitle, themeStyle.txtColor]}
@@ -57,6 +75,20 @@ function Navbar() {
             {route.name}
           </Text>
         </View>
+        {route.name === "Cantare" && (
+          <Button
+            icon="share"
+            textStyle={[styles.navbarIcon, themeStyle.txtColor]}
+            touchableStyle={styles.navbarMenuIcon}
+            onPress={() => {
+              Share.share({
+                message: songs[displayedSongInfo.index].content,
+                title: songs[displayedSongInfo.index].title,
+                url: songs[displayedSongInfo.index].title,
+              });
+            }}
+          />
+        )}
         <Button
           icon="contrast"
           textStyle={[styles.navbarIcon, themeStyle.txtColor]}
@@ -74,7 +106,6 @@ function Navbar() {
 const styles = StyleSheet.create({
   navbarDiv: {
     flexDirection: "row",
-    // height: 148,
   },
   navbarIcon: {
     fontSize: 32,
@@ -91,7 +122,6 @@ const styles = StyleSheet.create({
   },
   navbarTitleContainer: {
     justifyContent: "center",
-    flexGrow: 6,
     flexBasis: 0,
   },
   navbarThemeIcon: {},
