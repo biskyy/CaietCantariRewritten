@@ -61,11 +61,41 @@ export const loadingScreenAtom = atom({
  */
 
 export const useLoadingScreen = () => {
-  const [loadingScreen, setLoadingScreen] = useAtom(loadingScreenAtom);
-  const _setLoadingScreen = (newKey) => {
-    setLoadingScreen((prevObject) => ({ ...prevObject, ...newKey }));
+  const [loadingScreen, _setLoadingScreen] = useAtom(loadingScreenAtom);
+  const setLoadingScreen = (newKey) => {
+    _setLoadingScreen((prevObject) => ({ ...prevObject, ...newKey }));
   };
-  return [loadingScreen, _setLoadingScreen];
+  return [loadingScreen, setLoadingScreen];
+};
+
+const dispalyedSongInfoAtom = atom({
+  index: 0,
+  listFirstIndex: 0,
+  listLastIndex: 0,
+});
+
+/**
+ * @typedef {Object} DisplayedSongInfo
+ * @property {number} index
+ * @property {number} listFirstIndex
+ * @property {number} listLastIndex
+ *
+ * @returns {[DisplayedSongInfo, Function: (object: Partial<DisplayedSongInfo>) => void]}
+ */
+
+export const useDisplayedSongInfo = () => {
+  const [displayedSongInfo, _setDispalyedSongInfo] = useAtom(
+    dispalyedSongInfoAtom
+  );
+
+  const setDispalyedSongInfo = (newKeys) => {
+    _setDispalyedSongInfo((prevObject) => ({
+      ...prevObject,
+      ...newKeys,
+    }));
+  };
+
+  return [displayedSongInfo, setDispalyedSongInfo];
 };
 
 export const themeAtom = atomWithStorage("theme", "not set", storage, {
