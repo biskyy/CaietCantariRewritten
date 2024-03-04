@@ -149,7 +149,6 @@ const SongList = () => {
       >
         <Input
           scrollEnabled={false}
-          textInputDivStyle={{}}
           placeholder="Cauta o cantare"
           value={searchQuery}
           onChangeText={(str) => {
