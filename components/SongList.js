@@ -90,8 +90,9 @@ const SongList = () => {
       // @ts-ignore
       navigation.navigate("Cantare", {
         index: item.index,
-        listFirstIndex: data[0].index,
-        listLastIndex: data.at(-1).index,
+        listFirstIndex: bookIDFilter !== "CF" ? data[0].index : 0,
+        listLastIndex:
+          bookIDFilter !== "CF" ? data.at(-1).index : songs.at(-1).index,
       }),
     []
   );
