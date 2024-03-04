@@ -1,6 +1,11 @@
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { useSongs, useTheme, useThemeStyle } from "./State";
+import {
+  useDisplayedSongInfo,
+  useSongs,
+  useTheme,
+  useThemeStyle,
+} from "./State";
 import Button from "./Button";
 import { FlashList } from "@shopify/flash-list";
 import Input from "./Input";
@@ -12,6 +17,8 @@ const SongList = () => {
   const themeStyle = useThemeStyle();
   const [songs] = useSongs();
   const [searchQuery, setSearchQuery] = useState("");
+
+  const [, setDispalyedSongInfo] = useDisplayedSongInfo();
 
   const insets = useSafeAreaInsets();
 
@@ -85,17 +92,16 @@ const SongList = () => {
     return { height: 794, width: 414 };
   }, [theme]);
 
-  const itemOnPressProp = useCallback(
-    (item, index) =>
-      // @ts-ignore
-      navigation.navigate("Cantare", {
-        index: item.index,
-        listFirstIndex: bookIDFilter !== "CF" ? data[0].index : 0,
-        listLastIndex:
-          bookIDFilter !== "CF" ? data.at(-1).index : songs.at(-1).index,
-      }),
-    []
-  );
+  const itemOnPressProp = useCallback((item, index) => {
+    setDispalyedSongInfo({
+      index: item.index,
+      listFirstIndex: bookIDFilter !== "CF" ? data[0].index : 0,
+      listLastIndex:
+        bookIDFilter !== "CF" ? data.at(-1).index : songs.at(-1).index,
+    });
+    // @ts-ignore
+    navigation.navigate("Cantare");
+  }, []);
   const itemStylesProp = useMemo(() => {
     return {
       textStyle: [themeStyle.txtColor, styles.textStyle],
