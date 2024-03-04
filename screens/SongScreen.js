@@ -1,6 +1,7 @@
 import { View, StyleSheet, Text, ScrollView, Platform } from "react-native";
 import {
   fontSizeAtom,
+  useDisplayedSongInfo,
   useSongs,
   useTheme,
   useThemeStyle,
@@ -18,11 +19,14 @@ export default function SongScreen({ route, navigation }) {
   const [songs, , setFavorite] = useSongs();
   const insets = useSafeAreaInsets();
 
-  const [songIndex, setSongIndex] = useState(route.params.index);
+  const [displayedSongInfo, setDispalyedSongInfo] = useDisplayedSongInfo();
 
-  const { listFirstIndex, listLastIndex } = route.params;
+  const { listFirstIndex, listLastIndex } = displayedSongInfo;
 
-  const song = useMemo(() => songs[songIndex], [songs, songIndex]);
+  const song = useMemo(
+    () => songs[displayedSongInfo.index],
+    [songs, displayedSongInfo]
+  );
 
   const handleFontSizeChange = (sign) => {
     if (sign === "+") setFontSize(fontSize + 1);
@@ -38,7 +42,9 @@ export default function SongScreen({ route, navigation }) {
       <View style={[themeStyle.bgColor, styles.songDiv]}>
         <View style={styles.titleDiv}>
           <Button
-            icon={songIndex > listFirstIndex && "keyboard-arrow-left"}
+            icon={
+              displayedSongInfo.index > listFirstIndex && "keyboard-arrow-left"
+            }
             textStyle={{
               ...themeStyle.txtColor,
               ...styles.icon,
@@ -46,7 +52,8 @@ export default function SongScreen({ route, navigation }) {
             }}
             touchableStyle={styles.titleArrow}
             onPress={() =>
-              songIndex > listFirstIndex && setSongIndex(songIndex - 1)
+              displayedSongInfo.index > listFirstIndex &&
+              setDispalyedSongInfo({ index: displayedSongInfo.index - 1 })
             }
           />
           <Text
@@ -60,7 +67,10 @@ export default function SongScreen({ route, navigation }) {
             {song.title}
           </Text>
           <Button
-            icon={songIndex < listLastIndex - 1 && "keyboard-arrow-right"}
+            icon={
+              displayedSongInfo.index < listLastIndex - 1 &&
+              "keyboard-arrow-right"
+            }
             textStyle={{
               ...themeStyle.txtColor,
               ...styles.icon,
@@ -68,7 +78,8 @@ export default function SongScreen({ route, navigation }) {
             }}
             touchableStyle={styles.titleArrow}
             onPress={() =>
-              songIndex < listLastIndex - 1 && setSongIndex(songIndex + 1)
+              displayedSongInfo.index < listLastIndex - 1 &&
+              setDispalyedSongInfo({ index: displayedSongInfo.index + 1 })
             }
           />
         </View>
