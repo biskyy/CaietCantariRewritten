@@ -13,11 +13,13 @@ import {
   useSongs,
   useTheme,
   useThemeStyle,
+  userAtom,
 } from "./State";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import Separator from "./Separator";
 import Button from "./Button";
+import { useAtom } from "jotai";
 
 function Navbar() {
   const [theme, setTheme] = useTheme();
@@ -25,10 +27,11 @@ function Navbar() {
   const [displayedSongInfo] = useDisplayedSongInfo();
   const [songs] = useSongs();
 
+  const [user] = useAtom(userAtom);
+
   const route = useRoute();
 
-  // @ts-ignore
-  const { toggleDrawer } = useNavigation();
+  const navigation = useNavigation();
 
   const insets = useSafeAreaInsets();
 
@@ -56,7 +59,8 @@ function Navbar() {
             touchableStyle={styles.navbarMenuIcon}
             onPress={() => {
               Keyboard.dismiss();
-              toggleDrawer();
+              // @ts-ignore
+              navigation.toggleDrawer();
             }}
           />
         ) : (
@@ -65,7 +69,7 @@ function Navbar() {
         <View
           style={[
             styles.navbarTitleContainer,
-            { flexGrow: route.name === "Cantare" ? 5 : 6 },
+            { flexGrow: route.name === "Cantare" ? 4 : 6 },
           ]}
         >
           <Text
@@ -75,6 +79,31 @@ function Navbar() {
             {route.name}
           </Text>
         </View>
+        {route.name === "Cantare" && user.loggedIn ? (
+          <Button
+            icon="edit"
+            textStyle={[styles.navbarIcon, themeStyle.txtColor]}
+            touchableStyle={styles.navbarMenuIcon}
+            // @ts-ignore
+            onPress={() => navigation.navigate("EditSong")}
+          />
+        ) : (
+          route.name === "Cantare" &&
+          !user.loggedIn && (
+            <Button
+              icon="share"
+              textStyle={[styles.navbarIcon, themeStyle.txtColor]}
+              touchableStyle={styles.navbarMenuIcon}
+              onPress={() => {
+                Share.share({
+                  message: songs[displayedSongInfo.index].content,
+                  title: songs[displayedSongInfo.index].title,
+                  url: songs[displayedSongInfo.index].title,
+                });
+              }}
+            />
+          )
+        )}
         {route.name === "Cantare" && (
           <Button
             icon="share"
