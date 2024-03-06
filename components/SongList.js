@@ -157,6 +157,7 @@ const SongList = () => {
           scrollEnabled={false}
           placeholder="Cauta o cantare"
           value={searchQuery}
+          clearShortcut
           onChangeText={(str) => {
             setSearchQuery((prev) => {
               prevSearchQuery = prev;

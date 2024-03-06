@@ -53,6 +53,7 @@ const LoginScreen = () => {
         onChangeText={setUsernameText}
         returnKeyType="next"
         blurOnSubmit={false}
+        clearShortcut
         textInputDivStyle={{ marginTop: 20 }}
         onSubmitEditing={() => {
           // @ts-ignore
@@ -68,6 +69,7 @@ const LoginScreen = () => {
         ref={passwordInputRef}
         onChangeText={setPasswordText}
         blurOnSubmit={false}
+        clearShortcut
         textInputDivStyle={{ marginTop: 20 }}
         onSubmitEditing={() => {
           if (passwordText !== "") handleLoginButton();
