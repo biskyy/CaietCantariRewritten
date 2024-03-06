@@ -33,7 +33,7 @@ const Input = forwardRef(
           autoCorrect={false}
           autoCapitalize="none"
         />
-        {props.value != "" && (
+        {props.value != "" && props.clearShortcut && (
           <Button
             icon="clear"
             textStyle={[themeStyle.txtColor, styles.clearButtonIcon]}
@@ -49,21 +49,17 @@ const Input = forwardRef(
 
 const styles = StyleSheet.create({
   textInputDiv: {
-    // alignItems: "center",
-    // justifyContent: "center",
     borderWidth: 2,
     borderRadius: 10,
-    height: 54,
-    width: "95%",
+    // width: "95%",
     flexDirection: "row",
   },
   textInput: {
     height: "100%",
-    paddingHorizontal: 15,
+    padding: 15,
     flexGrow: 19,
     flexBasis: 0,
     fontSize: 16,
-    fontWeight: "500",
   },
   clearButton: {
     alignItems: "center",
