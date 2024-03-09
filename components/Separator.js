@@ -5,7 +5,7 @@ import { useThemeStyle } from "./State";
 function Separator() {
   const themeStyle = useThemeStyle();
 
-  return <View style={[styles.separator, themeStyle.inverseBgColor]} />;
+  return <View style={[styles.separator, themeStyle.separatorColor]} />;
 }
 
 const styles = StyleSheet.create({
