@@ -17,7 +17,7 @@ import LoadingScreen from "./components/LoadingScreen";
 import Navbar from "./components/Navbar";
 import { MaterialIcons } from "@expo/vector-icons";
 import LoginScreen from "./screens/LoginScreen";
-import EditSongScreen from "./screens/EditSong";
+import UpdateSongScreen from "./screens/UpdateSongScreen";
 import { View, useColorScheme } from "react-native";
 import { cacheFontsAndIcons, useTheme } from "./components/State";
 import * as SystemUI from "expo-system-ui";
@@ -78,7 +78,7 @@ export default function App() {
             <Stack.Screen name="Cantare" component={SongScreen} />
             <Stack.Screen name="Settings" component={SettingsScreen} />
             <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="EditSong" component={EditSongScreen} />
+            <Stack.Screen name="UpdateSong" component={UpdateSongScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </>
