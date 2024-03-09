@@ -1,31 +1,30 @@
-import { View, StyleSheet, Text, ScrollView, Platform } from "react-native";
+import { View, StyleSheet, Text, ScrollView } from "react-native";
 import {
+  favoriteSongsAtom,
   fontSizeAtom,
+  songsAtom,
   useDisplayedSongInfo,
-  useSongs,
   useTheme,
   useThemeStyle,
 } from "../components/State";
 import { useAtom } from "jotai";
 import Separator from "../components/Separator";
 import Button from "../components/Button";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useMemo, useState } from "react";
+import { useEffect } from "react";
+import BottomBar from "../components/BottomBar";
 
 export default function SongScreen({ route, navigation }) {
   const [theme] = useTheme();
   const themeStyle = useThemeStyle();
   const [fontSize, setFontSize] = useAtom(fontSizeAtom);
-  const [songs, , setFavorite] = useSongs();
-  const insets = useSafeAreaInsets();
+  const [songs] = useAtom(songsAtom);
+  const [favoriteSongs, setFavoriteSongs] = useAtom(favoriteSongsAtom);
 
   const [displayedSongInfo, setDispalyedSongInfo] = useDisplayedSongInfo();
 
-  const { listFirstIndex, listLastIndex } = displayedSongInfo;
-
-  const song = useMemo(
-    () => songs[displayedSongInfo.index],
-    [songs, displayedSongInfo]
+  useEffect(
+    () => setDispalyedSongInfo({ song: songs[displayedSongInfo.index] }),
+    [songs, displayedSongInfo.index]
   );
 
   const handleFontSizeChange = (sign) => {
@@ -34,8 +33,14 @@ export default function SongScreen({ route, navigation }) {
   };
 
   function addSongToFavorites() {
-    setFavorite(song.index);
+    if (favoriteSongs.includes(displayedSongInfo.index))
+      setFavoriteSongs(
+        favoriteSongs.filter((song) => song !== displayedSongInfo.index)
+      );
+    else setFavoriteSongs([displayedSongInfo.index, ...favoriteSongs]);
   }
+
+  console.log(favoriteSongs);
 
   return (
     <>
@@ -43,7 +48,8 @@ export default function SongScreen({ route, navigation }) {
         <View style={styles.titleDiv}>
           <Button
             icon={
-              displayedSongInfo.index > listFirstIndex && "keyboard-arrow-left"
+              displayedSongInfo.index > displayedSongInfo.listFirstIndex &&
+              "keyboard-arrow-left"
             }
             textStyle={{
               ...themeStyle.txtColor,
@@ -52,7 +58,7 @@ export default function SongScreen({ route, navigation }) {
             }}
             touchableStyle={styles.titleArrow}
             onPress={() =>
-              displayedSongInfo.index > listFirstIndex &&
+              displayedSongInfo.index > displayedSongInfo.listFirstIndex &&
               setDispalyedSongInfo({ index: displayedSongInfo.index - 1 })
             }
           />
@@ -64,11 +70,11 @@ export default function SongScreen({ route, navigation }) {
               { flexGrow: 5, flexBasis: 0 },
             ]}
           >
-            {song.title}
+            {displayedSongInfo.song.title}
           </Text>
           <Button
             icon={
-              displayedSongInfo.index < listLastIndex - 1 &&
+              displayedSongInfo.index < displayedSongInfo.listLastIndex - 1 &&
               "keyboard-arrow-right"
             }
             textStyle={{
@@ -78,7 +84,7 @@ export default function SongScreen({ route, navigation }) {
             }}
             touchableStyle={styles.titleArrow}
             onPress={() =>
-              displayedSongInfo.index < listLastIndex - 1 &&
+              displayedSongInfo.index < displayedSongInfo.listLastIndex - 1 &&
               setDispalyedSongInfo({ index: displayedSongInfo.index + 1 })
             }
           />
@@ -89,20 +95,10 @@ export default function SongScreen({ route, navigation }) {
           contentContainerStyle={{ alignItems: "center" }}
         >
           <Text style={{ ...themeStyle.txtColor, fontSize }}>
-            {song.content}
+            {displayedSongInfo.song.content}
           </Text>
         </ScrollView>
-        <Separator />
-        <View
-          style={{
-            paddingBottom: insets.bottom,
-            ...themeStyle.bgColor,
-            height: Platform.OS === "ios" ? insets.bottom + 64 : 64,
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
+        <BottomBar>
           <Button
             icon="zoom-out"
             textStyle={{
@@ -122,7 +118,11 @@ export default function SongScreen({ route, navigation }) {
             onPress={() => handleFontSizeChange("+")}
           />
           <Button
-            icon={song.favorite ? "star" : "star-border"}
+            icon={
+              favoriteSongs.includes(displayedSongInfo.index)
+                ? "star"
+                : "star-border"
+            }
             textStyle={{
               ...themeStyle.txtColor,
               ...styles.icon,
@@ -139,7 +139,7 @@ export default function SongScreen({ route, navigation }) {
             touchableStyle={styles.bottomBarButtonDiv}
             onPress={() => navigation.goBack()}
           />
-        </View>
+        </BottomBar>
       </View>
     </>
   );
