@@ -9,42 +9,17 @@ import axios from "axios";
 import { StyleSheet } from "react-native";
 import ThemeColors from "./ColorScheme";
 
-export const serverApi = "http://192.168.1.59:3000";
+export const serverApi = "https://caiet-de-cantari.biskyys-api.net";
 
 const storage = createJSONStorage(() => AsyncStorage);
 export const songsAtom = atomWithStorage("songs", Cantari, storage);
+export const favoriteSongsAtom = atomWithStorage("favoriteSongs", [], storage);
 export const fontSizeAtom = atomWithStorage("fontSize", 20, storage);
 export const userAtom = atomWithStorage(
   "user",
   { loggedIn: false, token: "" },
   storage
 );
-
-export const useSongs = () => {
-  const [songs, _setSongs] = useAtom(songsAtom);
-
-  const setSongs = (newArr) => {
-    _setSongs(
-      newArr.map((song, index) => {
-        song.favorite = songs[index].favorite;
-        return song;
-      })
-    );
-  };
-
-  const setFavorite = (indexOfSongToBeFavorited) => {
-    _setSongs(
-      songs.map((song) => {
-        if (song.index === indexOfSongToBeFavorited)
-          song.favorite = !song.favorite;
-        return song;
-      })
-    );
-  };
-
-  return [songs, setSongs, setFavorite];
-};
-
 export const loadingScreenAtom = atom({
   state: 0,
   message: "",
@@ -69,13 +44,26 @@ export const useLoadingScreen = () => {
 };
 
 const dispalyedSongInfoAtom = atom({
+  song: {},
   index: 0,
   listFirstIndex: 0,
   listLastIndex: 0,
 });
 
 /**
+ * @typedef {Object} SongObject
+ * @property {string} title
+ * @property {string} content
+ * @property {string} book_id
+ * @property {number} id
+ * @property {number} index
+ * @property {Array<string>} tags
+ */
+
+/**
+ *
  * @typedef {Object} DisplayedSongInfo
+ * @property {Partial<SongObject>} song
  * @property {number} index
  * @property {number} listFirstIndex
  * @property {number} listLastIndex
@@ -133,13 +121,18 @@ export const useThemeStyle = () => {
         ? ThemeColors.lightBgColor
         : ThemeColors.darkBgColor,
     },
+    separatorColor: {
+      backgroundColor: theme.data
+        ? ThemeColors.lightPlaceholderTxtColor
+        : ThemeColors.darkPlaceholderTxtColor,
+    },
     inverseTxtColor: {
       color: theme.data ? ThemeColors.lightTxtColor : ThemeColors.darkTxtColor,
     },
     borderColor: {
       borderColor: theme.data
-        ? ThemeColors.darkTxtColor
-        : ThemeColors.lightTxtColor,
+        ? ThemeColors.lightPlaceholderTxtColor
+        : ThemeColors.darkPlaceholderTxtColor,
     },
   });
 
@@ -154,7 +147,7 @@ export const isInternetConnected = async () => {
   if (!internet.isConnected)
     Alert.alert(
       "Nu exista conexiune la internet",
-      "Este necesare o conexiune la internet pentru a realiza o cerere."
+      "Este necesara o conexiune la internet pentru a realiza o cerere."
     );
   return internet.isConnected;
 };
@@ -185,7 +178,7 @@ export const fetchSongsRequest = async (config) => {
  * @returns {Promise<{data: Object, status: number}>}
  */
 export const loginRequest = async (username, password) => {
-  if (!(await isInternetConnected())) return;
+  if (!(await isInternetConnected())) return { data: undefined, status: 400 };
 
   try {
     const response = await axios.post(
@@ -193,6 +186,26 @@ export const loginRequest = async (username, password) => {
       { username, password },
       { timeout: 5000 }
     );
+    return { data: response.data, status: response.status };
+  } catch (error) {
+    return handleErrorResponse(error);
+  }
+};
+
+/**
+ * @param {SongObject} updatedSong
+ */
+
+export const updateSongRequest = async (updatedSong, token) => {
+  if (!(await isInternetConnected())) return { data: undefined, status: 400 };
+
+  try {
+    const response = await axios.put(`${serverApi}/song`, updatedSong, {
+      headers: {
+        authorization: token,
+      },
+      timeout: 5000,
+    });
     return { data: response.data, status: response.status };
   } catch (error) {
     return handleErrorResponse(error);
@@ -223,22 +236,3 @@ const handleErrorResponse = (error) => {
 
 export const cacheFontsAndIcons = (fonts) =>
   fonts.map((font) => Font.loadAsync(font)); // cache fonts method
-
-export const debounce = (func, delay, immediate = false) => {
-  let timeoutId;
-
-  return function (...args) {
-    const later = () => {
-      timeoutId = null;
-      if (!immediate) func.apply(this, args);
-    };
-
-    const callNow = immediate && !timeoutId;
-
-    clearTimeout(timeoutId);
-
-    timeoutId = setTimeout(later, delay);
-
-    if (callNow) func.apply(this, args);
-  };
-};
