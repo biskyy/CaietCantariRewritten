@@ -5,19 +5,20 @@ import Button from "../components/Button";
 import { Alert, Platform, StyleSheet, Text, View } from "react-native";
 import {
   fetchSongsRequest,
+  songsAtom,
   useLoadingScreen,
-  useSongs,
   useThemeStyle,
 } from "../components/State";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Separator from "../components/Separator";
+import { useAtom } from "jotai";
 
 const Drawer = createDrawerNavigator();
 
 const CustomDrawerMenu = (props) => {
   const themeStyle = useThemeStyle();
-  const [, setSongs] = useSongs();
   const [, setLoadingScreen] = useLoadingScreen();
+  const [, setSongs] = useAtom(songsAtom);
 
   const insets = useSafeAreaInsets();
 
@@ -29,18 +30,15 @@ const CustomDrawerMenu = (props) => {
     const response = await fetchSongsRequest();
     if (response.status === 200) {
       setSongs(response.data);
-    }
-    setLoadingScreen({
-      state: 2,
-      callback: () => {
-        const status = response.status;
-        if (status === 200)
+      setLoadingScreen({
+        callback: () =>
           Alert.alert(
             "S-au actualizat cantarile",
             "Cantarile au fost actualizate cu succes."
-          );
-      },
-    });
+          ),
+      });
+    }
+    setLoadingScreen({ state: 2 });
   };
 
   return (
