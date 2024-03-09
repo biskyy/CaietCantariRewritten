@@ -10,7 +10,6 @@ import {
 import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   useDisplayedSongInfo,
-  useSongs,
   useTheme,
   useThemeStyle,
   userAtom,
@@ -25,7 +24,6 @@ function Navbar() {
   const [theme, setTheme] = useTheme();
   const themeStyle = useThemeStyle();
   const [displayedSongInfo] = useDisplayedSongInfo();
-  const [songs] = useSongs();
 
   const [user] = useAtom(userAtom);
 
@@ -34,6 +32,10 @@ function Navbar() {
   const navigation = useNavigation();
 
   const insets = useSafeAreaInsets();
+
+  function reportSong() {
+    throw new Error("Function not implemented.");
+  }
 
   return (
     <>
@@ -52,7 +54,7 @@ function Navbar() {
         {route.name != "Settings" &&
         route.name != "Cantare" &&
         route.name != "Login" &&
-        route.name != "EditSong" ? (
+        route.name != "UpdateSong" ? (
           <Button
             icon="menu"
             textStyle={[styles.navbarIcon, themeStyle.txtColor]}
@@ -85,21 +87,17 @@ function Navbar() {
             textStyle={[styles.navbarIcon, themeStyle.txtColor]}
             touchableStyle={styles.navbarMenuIcon}
             // @ts-ignore
-            onPress={() => navigation.navigate("EditSong")}
+            onPress={() => navigation.navigate("UpdateSong")}
           />
         ) : (
           route.name === "Cantare" &&
           !user.loggedIn && (
             <Button
-              icon="share"
+              icon="report-gmailerrorred"
               textStyle={[styles.navbarIcon, themeStyle.txtColor]}
               touchableStyle={styles.navbarMenuIcon}
               onPress={() => {
-                Share.share({
-                  message: songs[displayedSongInfo.index].content,
-                  title: songs[displayedSongInfo.index].title,
-                  url: songs[displayedSongInfo.index].title,
-                });
+                reportSong();
               }}
             />
           )
@@ -111,9 +109,9 @@ function Navbar() {
             touchableStyle={styles.navbarMenuIcon}
             onPress={() => {
               Share.share({
-                message: songs[displayedSongInfo.index].content,
-                title: songs[displayedSongInfo.index].title,
-                url: songs[displayedSongInfo.index].title,
+                message: displayedSongInfo.song.content,
+                title: displayedSongInfo.song.title,
+                url: displayedSongInfo.song.title,
               });
             }}
           />
