@@ -1,8 +1,9 @@
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import {
+  favoriteSongsAtom,
+  songsAtom,
   useDisplayedSongInfo,
-  useSongs,
   useTheme,
   useThemeStyle,
 } from "./State";
@@ -11,12 +12,14 @@ import { FlashList } from "@shopify/flash-list";
 import Input from "./Input";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { memo, useCallback, useMemo, useState } from "react";
+import { useAtom } from "jotai";
 
 const SongList = () => {
   const [theme] = useTheme();
   const themeStyle = useThemeStyle();
-  const [songs] = useSongs();
+  const [songs] = useAtom(songsAtom);
   const [searchQuery, setSearchQuery] = useState("");
+  const [favoriteSongs, setFavoriteSongs] = useAtom(favoriteSongsAtom);
 
   const [, setDispalyedSongInfo] = useDisplayedSongInfo();
 
@@ -42,10 +45,10 @@ const SongList = () => {
   const data = useMemo(
     () =>
       songs.filter((song) => {
-        if (bookIDFilter === "CF") return song.favorite === true;
+        if (bookIDFilter === "CF") return favoriteSongs.includes(song.index);
         return bookIDFilter === null || song.book_id === bookIDFilter;
       }),
-    [theme, songs]
+    [theme, songs, favoriteSongs]
   );
 
   const [filteredSongs, setFilteredSongs] = useState(data);
@@ -92,8 +95,9 @@ const SongList = () => {
     return { height: 794, width: 414 };
   }, [theme]);
 
-  const itemOnPressProp = useCallback((item, index) => {
+  const itemOnPressProp = useCallback((item) => {
     setDispalyedSongInfo({
+      song: item,
       index: item.index,
       listFirstIndex: bookIDFilter !== "CF" ? data[0].index : 0,
       listLastIndex:
@@ -110,12 +114,12 @@ const SongList = () => {
   }, [theme]);
 
   const renderItem = useCallback(
-    ({ item, index }) => (
+    ({ item }) => (
       <Button
         text={item.title}
         textStyle={itemStylesProp.textStyle}
         touchableStyle={itemStylesProp.touchableStyle}
-        onPress={() => itemOnPressProp(item, index)}
+        onPress={() => itemOnPressProp(item)}
       />
     ),
     [theme]
