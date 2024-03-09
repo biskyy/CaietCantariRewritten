@@ -2,7 +2,7 @@
   "expo": {
     "name": "Caiet de Cantari",
     "slug": "CaietDeCantari",
-    "version": "0.3.1",
+    "version": "0.4.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -22,11 +22,11 @@
         }
       },
       "bundleIdentifier": "com.biskyy.caietcantarirewritten",
-      "buildNumber": "0.3.1"
+      "buildNumber": "0.4.0"
     },
     "android": {
       "package": "com.biskyy.caietcantarirewritten",
-      "versionCode": 7,
+      "versionCode": 8,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0a0d0c"
