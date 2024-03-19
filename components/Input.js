@@ -1,8 +1,8 @@
 import { forwardRef, memo } from "react";
 import { View, StyleSheet, TextInput } from "react-native";
-import { useTheme, useThemeStyle } from "./State";
 import ThemeColors from "./ColorScheme";
 import Button from "./Button";
+import { useTheme, useThemeStyle } from "./Hooks";
 
 const Input = forwardRef(
   /** @param {Object} props */
@@ -51,7 +51,6 @@ const styles = StyleSheet.create({
   textInputDiv: {
     borderWidth: 2,
     borderRadius: 10,
-    // width: "95%",
     flexDirection: "row",
   },
   textInput: {

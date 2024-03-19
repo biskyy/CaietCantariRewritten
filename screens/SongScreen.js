@@ -3,15 +3,17 @@ import {
   favoriteSongsAtom,
   fontSizeAtom,
   songsAtom,
-  useDisplayedSongInfo,
-  useTheme,
-  useThemeStyle,
 } from "../components/State";
 import { useAtom } from "jotai";
 import Separator from "../components/Separator";
 import Button from "../components/Button";
 import { useEffect } from "react";
 import BottomBar from "../components/BottomBar";
+import {
+  useDisplayedSongInfo,
+  useTheme,
+  useThemeStyle,
+} from "../components/Hooks";
 
 export default function SongScreen({ route, navigation }) {
   const [theme] = useTheme();

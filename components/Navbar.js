@@ -8,17 +8,13 @@ import {
   View,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import {
-  useDisplayedSongInfo,
-  useTheme,
-  useThemeStyle,
-  userAtom,
-} from "./State";
+import { userAtom } from "./State";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import Separator from "./Separator";
 import Button from "./Button";
 import { useAtom } from "jotai";
+import { useDisplayedSongInfo, useTheme, useThemeStyle } from "./Hooks";
 
 function Navbar() {
   const [theme, setTheme] = useTheme();

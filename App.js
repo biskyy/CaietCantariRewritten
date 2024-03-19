@@ -19,8 +19,9 @@ import { MaterialIcons } from "@expo/vector-icons";
 import LoginScreen from "./screens/LoginScreen";
 import UpdateSongScreen from "./screens/UpdateSongScreen";
 import { View, useColorScheme } from "react-native";
-import { cacheFontsAndIcons, useTheme } from "./components/State";
 import * as SystemUI from "expo-system-ui";
+import { useTheme } from "./components/Hooks";
+import { cacheFontsAndIcons } from "./components/Utils";
 
 const Stack = createStackNavigator();
 

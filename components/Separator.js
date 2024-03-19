@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { StyleSheet, View } from "react-native";
-import { useThemeStyle } from "./State";
+import { useThemeStyle } from "./Hooks";
 
 function Separator() {
   const themeStyle = useThemeStyle();

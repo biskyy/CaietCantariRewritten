@@ -3,15 +3,12 @@ import SongList from "../components/SongList";
 import Navbar from "../components/Navbar";
 import Button from "../components/Button";
 import { Alert, Platform, StyleSheet, Text, View } from "react-native";
-import {
-  fetchSongsRequest,
-  songsAtom,
-  useLoadingScreen,
-  useThemeStyle,
-} from "../components/State";
+import { songsAtom } from "../components/State";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Separator from "../components/Separator";
 import { useAtom } from "jotai";
+import { useLoadingScreen, useThemeStyle } from "../components/Hooks";
+import { fetchSongsRequest } from "../components/Utils";
 
 const Drawer = createDrawerNavigator();
 

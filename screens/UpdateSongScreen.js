@@ -1,17 +1,17 @@
 import { Alert, ScrollView, StyleSheet, View } from "react-native";
 import Input from "../components/Input";
-import {
-  updateSongRequest,
-  useDisplayedSongInfo,
-  useLoadingScreen,
-  useThemeStyle,
-  userAtom,
-} from "../components/State";
+import { userAtom } from "../components/State";
 import { useReducer, useState } from "react";
 import BottomBar from "../components/BottomBar";
 import Button from "../components/Button";
 import { useAtom } from "jotai";
 import { useNavigation } from "@react-navigation/native";
+import {
+  useDisplayedSongInfo,
+  useLoadingScreen,
+  useThemeStyle,
+} from "../components/Hooks";
+import { updateSongRequest } from "../components/Utils";
 
 const reducer = (currentState, action) => {
   switch (action.type) {

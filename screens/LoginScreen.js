@@ -1,14 +1,11 @@
 import { StyleSheet, Alert, ScrollView, Keyboard } from "react-native";
 import { useAtom } from "jotai";
-import {
-  userAtom,
-  useThemeStyle,
-  loginRequest,
-  useLoadingScreen,
-} from "../components/State";
+import { userAtom } from "../components/State";
 import Input from "../components/Input";
 import { useRef, useState } from "react";
 import Button from "../components/Button";
+import { useLoadingScreen, useThemeStyle } from "../components/Hooks";
+import { loginRequest } from "../components/Utils";
 
 const LoginScreen = () => {
   const themeStyle = useThemeStyle();

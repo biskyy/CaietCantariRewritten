@@ -1,8 +1,8 @@
 import { memo } from "react";
 import Separator from "./Separator";
 import { Platform, View } from "react-native";
-import { useThemeStyle } from "./State";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useThemeStyle } from "./Hooks";
 
 const BottomBar = (props) => {
   const themeStyle = useThemeStyle();

@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
-import { useThemeStyle } from "../components/State";
 import Button from "../components/Button";
 import { useNavigation } from "@react-navigation/native";
+import { useThemeStyle } from "../components/Hooks";
 
 export default function SettingsScreen() {
   const themeStyle = useThemeStyle();
