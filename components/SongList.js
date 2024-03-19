@@ -1,18 +1,13 @@
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import {
-  favoriteSongsAtom,
-  songsAtom,
-  useDisplayedSongInfo,
-  useTheme,
-  useThemeStyle,
-} from "./State";
+import { favoriteSongsAtom, songsAtom } from "./State";
 import Button from "./Button";
 import { FlashList } from "@shopify/flash-list";
 import Input from "./Input";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { memo, useCallback, useMemo, useState } from "react";
 import { useAtom } from "jotai";
+import { useThemeStyle, useDisplayedSongInfo, useTheme } from "./Hooks";
 
 const SongList = () => {
   const [theme] = useTheme();
@@ -159,6 +154,7 @@ const SongList = () => {
       >
         <Input
           scrollEnabled={false}
+          textInputDivStyle={{ width: "95%" }}
           placeholder="Cauta o cantare"
           value={searchQuery}
           clearShortcut
