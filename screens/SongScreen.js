@@ -14,6 +14,7 @@ import {
   useTheme,
   useThemeStyle,
 } from "../components/Hooks";
+import { useKeepAwake } from "expo-keep-awake";
 
 export default function SongScreen({ route, navigation }) {
   const [theme] = useTheme();
@@ -21,6 +22,8 @@ export default function SongScreen({ route, navigation }) {
   const [fontSize, setFontSize] = useAtom(fontSizeAtom);
   const [songs] = useAtom(songsAtom);
   const [favoriteSongs, setFavoriteSongs] = useAtom(favoriteSongsAtom);
+
+  useKeepAwake();
 
   const [displayedSongInfo, setDispalyedSongInfo] = useDisplayedSongInfo();
 
