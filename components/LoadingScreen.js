@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { StyleSheet, Text } from "react-native";
+import { Platform, StyleSheet, Text } from "react-native";
 import Animated, {
   useSharedValue,
   withTiming,
@@ -60,7 +60,9 @@ const styles = StyleSheet.create({
     fontSize: 200,
   },
   textStyle: {
-    fontSize: 32,
+    fontSize: Platform.OS === "ios" ? 32 : 24,
+    textAlign: "center",
+    fontWeight: "normal",
   },
 });
 
