@@ -6,7 +6,9 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
-    "assetBundlePatterns": ["node_modules/@expo/vector-icons/**/*"],
+    "assetBundlePatterns": [
+      "node_modules/@expo/vector-icons/**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "splash": {
@@ -24,7 +26,7 @@
     },
     "android": {
       "package": "com.biskyy.caietcantarirewritten",
-      "versionCode": 8,
+      "versionCode": 9,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0a0d0c"
@@ -43,7 +45,9 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": ["expo-font"],
+    "plugins": [
+      "expo-font"
+    ],
     "extra": {
       "eas": {
         "projectId": "c9a5c62b-fdc5-4d63-9b9d-2e0284dc48ac"
