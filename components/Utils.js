@@ -78,7 +78,6 @@ export const updateSongRequest = async (updatedSong, token) => {
 };
 
 const handleErrorResponse = (error) => {
-  console.log(error.request);
   if (error.response) {
     Alert.alert(
       `Eroare: ${error.response.status}`,
