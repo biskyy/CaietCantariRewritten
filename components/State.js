@@ -4,6 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Cantari from "../assets/Cantari.json";
 
 export const apiUrl = "https://caiet-de-cantari.biskyys-api.net";
+// export const apiUrl = "http://192.168.1.59:3000";
 
 const storage = createJSONStorage(() => AsyncStorage);
 export const songsAtom = atomWithStorage("songs", Cantari, storage);
@@ -11,7 +12,7 @@ export const favoriteSongsAtom = atomWithStorage("favoriteSongs", [], storage);
 export const fontSizeAtom = atomWithStorage("fontSize", 20, storage);
 export const userAtom = atomWithStorage(
   "user",
-  { loggedIn: false, token: "" },
+  { loggedIn: false, token: "", showCategories: true },
   storage
 );
 export const loadingScreenAtom = atom({
