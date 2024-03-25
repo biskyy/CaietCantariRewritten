@@ -17,7 +17,7 @@ const BottomBar = (props) => {
           ...themeStyle.bgColor,
           height: Platform.OS === "ios" ? insets.bottom + 64 : 64,
           flexDirection: "row",
-          justifyContent: "center",
+          justifyContent: "space-evenly",
           alignItems: "center",
         }}
       >
