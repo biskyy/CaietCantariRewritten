@@ -1,8 +1,9 @@
 import { forwardRef, memo } from "react";
 import { View, StyleSheet, TextInput } from "react-native";
-import ThemeColors from "./ColorScheme";
-import Button from "./Button";
+import Colors from "./Colors";
+import Button from "./Buttons/Button";
 import { useTheme, useThemeStyle } from "./Hooks";
+import IconButton from "./Buttons/IconButton";
 
 const Input = forwardRef(
   /** @param {Object} props */
@@ -14,30 +15,26 @@ const Input = forwardRef(
 
     return (
       <View
-        style={{
-          ...styles.textInputDiv,
-          ...themeStyle.borderColor,
-          ...themeStyle.bgColor,
-          ...textInputDivStyle,
-        }}
+        style={[
+          styles.textInputDiv,
+          themeStyle.borderColor,
+          themeStyle.bgColor,
+          textInputDivStyle,
+        ]}
       >
         <TextInput
           {...props}
           ref={ref}
           style={[themeStyle.txtColor, styles.textInput, textInputStyle]}
-          placeholderTextColor={
-            theme.data
-              ? ThemeColors.darkPlaceholderTxtColor
-              : ThemeColors.lightPlaceholderTxtColor
-          }
+          placeholderTextColor={theme.data ? Colors[500] : Colors[500]}
           autoCorrect={false}
           autoCapitalize="none"
         />
         {props.value != "" && props.clearShortcut && (
-          <Button
+          <IconButton
             icon="clear"
-            textStyle={[themeStyle.txtColor, styles.clearButtonIcon]}
-            touchableStyle={[themeStyle.bgColor, styles.clearButton]}
+            size={32}
+            touchableStyle={[styles.clearButton]}
             // @ts-ignore
             onPress={() => props.onChangeText("")}
           />
@@ -49,13 +46,17 @@ const Input = forwardRef(
 
 const styles = StyleSheet.create({
   textInputDiv: {
-    borderWidth: 2,
-    borderRadius: 10,
+    borderWidth: 1,
+    borderRadius: 6,
     flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
   textInput: {
+    paddingHorizontal: 16,
+    paddingTop: 12, // paddingVertical doesn't work
+    paddingBottom: 12,
     height: "100%",
-    padding: 15,
     flexGrow: 19,
     flexBasis: 0,
     fontSize: 16,
@@ -65,9 +66,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexGrow: 1,
     borderRadius: 10,
-  },
-  clearButtonIcon: {
-    fontSize: 32,
   },
 });
 
