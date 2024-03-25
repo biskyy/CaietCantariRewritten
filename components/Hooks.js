@@ -5,7 +5,7 @@ import {
   loadingScreenAtom,
   writeableLoadableThemeAtom,
 } from "./State";
-import ThemeColors from "./ColorScheme";
+import Colors from "./Colors";
 
 /**
  * @typedef {Object} LoadingScreenObject
@@ -70,30 +70,34 @@ export const useThemeStyle = () => {
   const [theme] = useTheme();
   const themeStyle = StyleSheet.create({
     bgColor: {
-      backgroundColor: theme.data
-        ? ThemeColors.darkBgColor
-        : ThemeColors.lightBgColor,
+      backgroundColor: theme.data ? Colors[800] : Colors[200],
     },
     txtColor: {
-      color: theme.data ? ThemeColors.darkTxtColor : ThemeColors.lightTxtColor,
+      color: theme.data ? Colors[200] : Colors[800],
     },
     inverseBgColor: {
-      backgroundColor: theme.data
-        ? ThemeColors.lightBgColor
-        : ThemeColors.darkBgColor,
+      backgroundColor: theme.data ? Colors[200] : Colors[800],
     },
     separatorColor: {
-      backgroundColor: theme.data
-        ? ThemeColors.lightPlaceholderTxtColor
-        : ThemeColors.darkPlaceholderTxtColor,
+      backgroundColor: theme.data ? Colors[600] : Colors[600],
     },
     inverseTxtColor: {
-      color: theme.data ? ThemeColors.lightTxtColor : ThemeColors.darkTxtColor,
+      color: theme.data ? Colors[800] : Colors[200],
     },
     borderColor: {
-      borderColor: theme.data
-        ? ThemeColors.lightPlaceholderTxtColor
-        : ThemeColors.darkPlaceholderTxtColor,
+      borderColor: theme.data ? Colors[600] : Colors[600],
+    },
+    title: {
+      fontSize: 28,
+      fontWeight: "bold",
+    },
+    subtitle: {
+      fontSize: 22,
+      fontWeight: "bold",
+    },
+    text: {
+      fontSize: 16,
+      fontWeight: "normal",
     },
   });
 
