@@ -1,10 +1,16 @@
-import { memo } from "react";
+import { memo, useState } from "react";
 import {
   Keyboard,
+  KeyboardAvoidingView,
+  Modal,
   Platform,
+  ScrollView,
   Share,
   StyleSheet,
   Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  // TouchableWithoutFeedbackComponent,
   View,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -12,9 +18,12 @@ import { userAtom } from "./State";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import Separator from "./Separator";
-import Button from "./Button";
+import Button from "./Buttons/Button";
 import { useAtom } from "jotai";
 import { useDisplayedSongInfo, useTheme, useThemeStyle } from "./Hooks";
+import { createReport } from "./Utils";
+import Input from "./Input";
+import IconButton from "./Buttons/IconButton";
 
 function Navbar() {
   const [theme, setTheme] = useTheme();
@@ -22,6 +31,7 @@ function Navbar() {
   const [displayedSongInfo] = useDisplayedSongInfo();
 
   const [user] = useAtom(userAtom);
+  const [modalVisibility, setModalVisible] = useState(false);
 
   const route = useRoute();
 
@@ -29,9 +39,9 @@ function Navbar() {
 
   const insets = useSafeAreaInsets();
 
-  function reportSong() {
-    throw new Error("Function not implemented.");
-  }
+  const reportSong = () => {
+    // createReport(displayedSongInfo.index);
+  };
 
   return (
     <>
@@ -51,9 +61,9 @@ function Navbar() {
         route.name != "Cantare" &&
         route.name != "Login" &&
         route.name != "UpdateSong" ? (
-          <Button
+          <IconButton
             icon="menu"
-            textStyle={[styles.navbarIcon, themeStyle.txtColor]}
+            size={32}
             touchableStyle={styles.navbarMenuIcon}
             onPress={() => {
               Keyboard.dismiss();
@@ -78,9 +88,9 @@ function Navbar() {
           </Text>
         </View>
         {route.name === "Cantare" && user.loggedIn ? (
-          <Button
+          <IconButton
             icon="edit"
-            textStyle={[styles.navbarIcon, themeStyle.txtColor]}
+            size={32}
             touchableStyle={styles.navbarMenuIcon}
             // @ts-ignore
             onPress={() => navigation.navigate("UpdateSong")}
@@ -88,33 +98,31 @@ function Navbar() {
         ) : (
           route.name === "Cantare" &&
           !user.loggedIn && (
-            <Button
+            <IconButton
               icon="report-gmailerrorred"
-              textStyle={[styles.navbarIcon, themeStyle.txtColor]}
+              size={32}
               touchableStyle={styles.navbarMenuIcon}
-              onPress={() => {
-                reportSong();
-              }}
+              onPress={() => setModalVisible(true)}
             />
           )
         )}
         {route.name === "Cantare" && (
-          <Button
+          <IconButton
             icon="share"
-            textStyle={[styles.navbarIcon, themeStyle.txtColor]}
+            size={32}
             touchableStyle={styles.navbarMenuIcon}
-            onPress={() => {
+            onPress={() =>
               Share.share({
                 message: displayedSongInfo.song.content,
                 title: displayedSongInfo.song.title,
                 url: displayedSongInfo.song.title,
-              });
-            }}
+              })
+            }
           />
         )}
-        <Button
+        <IconButton
           icon="contrast"
-          textStyle={[styles.navbarIcon, themeStyle.txtColor]}
+          size={32}
           touchableStyle={styles.navbarMenuIcon}
           onPress={() => {
             setTheme(!theme.data);
@@ -122,6 +130,109 @@ function Navbar() {
         />
       </View>
       <Separator />
+      <Modal
+        visible={modalVisibility}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+          <View style={{ flex: 1 }}>
+            <ScrollView
+              style={{
+                backgroundColor: "rgba(0,0,0,0.5)",
+              }}
+              scrollEnabled={false}
+              keyboardShouldPersistTaps="handled"
+              contentContainerStyle={{
+                flexGrow: 1,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <TouchableWithoutFeedback>
+                <KeyboardAvoidingView
+                  behavior={Platform.OS === "ios" ? "padding" : "height"}
+                >
+                  <View
+                    style={[
+                      themeStyle.borderColor,
+                      themeStyle.bgColor,
+                      {
+                        borderWidth: 1,
+                        padding: 16,
+                        borderRadius: 6,
+                        width: "80%",
+                      },
+                    ]}
+                  >
+                    <ScrollView
+                      scrollEnabled={false}
+                      keyboardShouldPersistTaps="handled"
+                    >
+                      <Text
+                        style={[
+                          themeStyle.txtColor,
+                          themeStyle.title,
+                          { marginBottom: 10 },
+                        ]}
+                      >
+                        Raporteaza o greseala
+                      </Text>
+                      <Text
+                        style={[
+                          themeStyle.txtColor,
+                          themeStyle.text,
+                          { marginBottom: 10 },
+                        ]}
+                      >
+                        Doresti sa raportezi o greseala pentru cantarea “
+                        {displayedSongInfo.song.title}”?
+                      </Text>
+                      <Text
+                        style={[
+                          themeStyle.txtColor,
+                          themeStyle.subtitle,
+                          { marginBottom: 10 },
+                        ]}
+                      >
+                        Adauga detalii suplimentare (optional)
+                      </Text>
+                      <Input
+                        textInputStyle={{}}
+                        textInputDivStyle={{ marginBottom: 10, height: 150 }}
+                        placeholder="Scrie aici cum ar trebuii sa corectam cantarea"
+                        multiline
+                      />
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Button
+                          onPress={() => setModalVisible(false)}
+                          text="Inchide"
+                          textStyle={[{ textAlign: "center" }]}
+                          touchableStyle={[]}
+                          secondary
+                        />
+                        <Button
+                          onPress={() => setModalVisible(false)}
+                          text="Trimite"
+                          textStyle={[{ textAlign: "center" }]}
+                          touchableStyle={[]}
+                          primary
+                        />
+                      </View>
+                    </ScrollView>
+                  </View>
+                </KeyboardAvoidingView>
+              </TouchableWithoutFeedback>
+            </ScrollView>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
     </>
   );
 }
