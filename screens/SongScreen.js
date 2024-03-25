@@ -6,7 +6,7 @@ import {
 } from "../components/State";
 import { useAtom } from "jotai";
 import Separator from "../components/Separator";
-import Button from "../components/Button";
+import Button from "../components/Buttons/Button";
 import { useEffect } from "react";
 import BottomBar from "../components/BottomBar";
 import {
@@ -15,6 +15,7 @@ import {
   useThemeStyle,
 } from "../components/Hooks";
 import { useKeepAwake } from "expo-keep-awake";
+import IconButton from "../components/Buttons/IconButton";
 
 export default function SongScreen({ route, navigation }) {
   const [theme] = useTheme();
@@ -45,22 +46,17 @@ export default function SongScreen({ route, navigation }) {
     else setFavoriteSongs([displayedSongInfo.index, ...favoriteSongs]);
   }
 
-  console.log(favoriteSongs);
-
   return (
     <>
       <View style={[themeStyle.bgColor, styles.songDiv]}>
         <View style={styles.titleDiv}>
-          <Button
+          <IconButton
             icon={
               displayedSongInfo.index > displayedSongInfo.listFirstIndex &&
               "keyboard-arrow-left"
             }
-            textStyle={{
-              ...themeStyle.txtColor,
-              ...styles.icon,
-              marginHorizontal: 15,
-            }}
+            size={32}
+            textStyle={{ marginHorizontal: 15 }}
             touchableStyle={styles.titleArrow}
             onPress={() =>
               displayedSongInfo.index > displayedSongInfo.listFirstIndex &&
@@ -71,22 +67,20 @@ export default function SongScreen({ route, navigation }) {
             numberOfLines={1}
             style={[
               themeStyle.txtColor,
+              themeStyle.title,
               styles.title,
               { flexGrow: 5, flexBasis: 0 },
             ]}
           >
             {displayedSongInfo.song.title}
           </Text>
-          <Button
+          <IconButton
             icon={
               displayedSongInfo.index < displayedSongInfo.listLastIndex - 1 &&
               "keyboard-arrow-right"
             }
-            textStyle={{
-              ...themeStyle.txtColor,
-              ...styles.icon,
-              marginHorizontal: 15,
-            }}
+            size={32}
+            textStyle={{ marginHorizontal: 15 }}
             touchableStyle={styles.titleArrow}
             onPress={() =>
               displayedSongInfo.index < displayedSongInfo.listLastIndex - 1 &&
@@ -104,43 +98,31 @@ export default function SongScreen({ route, navigation }) {
           </Text>
         </ScrollView>
         <BottomBar>
-          <Button
+          <IconButton
             icon="zoom-out"
-            textStyle={{
-              ...themeStyle.txtColor,
-              ...styles.icon,
-            }}
+            size={32}
             touchableStyle={styles.bottomBarButtonDiv}
             onPress={() => handleFontSizeChange("-")}
           />
-          <Button
+          <IconButton
             icon="zoom-in"
-            textStyle={{
-              ...themeStyle.txtColor,
-              ...styles.icon,
-            }}
+            size={32}
             touchableStyle={styles.bottomBarButtonDiv}
             onPress={() => handleFontSizeChange("+")}
           />
-          <Button
+          <IconButton
             icon={
               favoriteSongs.includes(displayedSongInfo.index)
                 ? "star"
                 : "star-border"
             }
-            textStyle={{
-              ...themeStyle.txtColor,
-              ...styles.icon,
-            }}
+            size={32}
             touchableStyle={styles.bottomBarButtonDiv}
             onPress={() => addSongToFavorites()}
           />
-          <Button
+          <IconButton
             icon="arrow-back"
-            textStyle={{
-              ...themeStyle.txtColor,
-              ...styles.icon,
-            }}
+            size={32}
             touchableStyle={styles.bottomBarButtonDiv}
             onPress={() => navigation.goBack()}
           />
@@ -161,20 +143,20 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   titleArrow: {
-    alignItems: "center",
-    justifyContent: "center",
+    // alignItems: "center",
+    // justifyContent: "center",
     flexGrow: 1,
     flexBasis: 0,
   },
   titleDiv: {
-    alignItems: "center",
-    justifyContent: "center",
-    marginVertical: 7,
+    height: 50,
+    // alignItems: "center",
+    // justifyContent: "space-evenly",
+    // marginVertical: 7,
     flexDirection: "row",
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
+    alignSelf: "center",
     textAlign: "center",
   },
   icon: {

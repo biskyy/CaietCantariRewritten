@@ -3,7 +3,7 @@ import Input from "../components/Input";
 import { userAtom } from "../components/State";
 import { useReducer, useState } from "react";
 import BottomBar from "../components/BottomBar";
-import Button from "../components/Button";
+import Button from "../components/Buttons/Button";
 import { useAtom } from "jotai";
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -12,6 +12,7 @@ import {
   useThemeStyle,
 } from "../components/Hooks";
 import { updateSongRequest } from "../components/Utils";
+import IconButton from "../components/Buttons/IconButton";
 
 const reducer = (currentState, action) => {
   switch (action.type) {
@@ -143,15 +144,10 @@ const UpdateSongScreen = () => {
       </ScrollView>
       <BottomBar>
         <View style={{ flex: 3 }} />
-        {/* <View style={{ flex: 1 }} />
-        <View style={{ flex: 1 }} /> */}
-        <Button
+        <IconButton
           icon="save"
-          textStyle={{
-            ...themeStyle.txtColor,
-            ...styles.icon,
-          }}
-          touchableStyle={styles.bottomBarButtonDiv}
+          size={32}
+          touchableStyle={{ flex: 1 }}
           onPress={() => submitChanges()}
         />
       </BottomBar>

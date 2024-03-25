@@ -1,14 +1,22 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import SongList from "../components/SongList";
 import Navbar from "../components/Navbar";
-import Button from "../components/Button";
-import { Alert, Platform, StyleSheet, Text, View } from "react-native";
+import Button from "../components/Buttons/Button";
+import {
+  Alert,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { songsAtom } from "../components/State";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Separator from "../components/Separator";
 import { useAtom } from "jotai";
 import { useLoadingScreen, useThemeStyle } from "../components/Hooks";
 import { fetchSongsRequest } from "../components/Utils";
+import IconButton from "../components/Buttons/IconButton";
 
 const Drawer = createDrawerNavigator();
 
@@ -57,27 +65,29 @@ const CustomDrawerMenu = (props) => {
         >
           Meniu
         </Text>
-        <Button
+        <IconButton
           icon="settings"
+          size={32}
           onPress={() => {
             props.navigation.navigate("Settings");
           }}
-          textStyle={[themeStyle.txtColor, styles.drawerMenuSettingsButton]}
-          touchableStyle={[
-            themeStyle.bgColor,
-            styles.drawerMenuSettingsButtonDiv,
-          ]}
+          touchableStyle={[styles.drawerMenuSettingsButtonDiv]}
         />
       </View>
       <Separator />
-      <View style={[themeStyle.bgColor, styles.drawerMenuButtonDiv]}>
-        {props.state.routeNames.map((name) => (
+      <ScrollView
+        style={[themeStyle.bgColor, styles.drawerMenuButtonDiv]}
+        contentContainerStyle={{ padding: 10 }}
+      >
+        {props.state.routeNames.map((name, index) => (
           <Button
             text={name}
             key={name}
             onPress={() => props.navigation.navigate(name)}
             textStyle={[themeStyle.txtColor, styles.drawerMenuButtonText]}
             touchableStyle={[themeStyle.bgColor, styles.drawerMenuButton]}
+            primary={props.state.index === index}
+            secondary={props.state.index !== index}
           />
         ))}
         <Button
@@ -91,8 +101,9 @@ const CustomDrawerMenu = (props) => {
             styles.drawerMenuRefreshButton,
           ]}
           onPress={refreshSongs}
+          secondary
         />
-      </View>
+      </ScrollView>
     </>
   );
 };
@@ -111,7 +122,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   drawerMenuSettingsButtonDiv: {
-    marginHorizontal: 10,
+    padding: 10,
   },
   drawerMenuSettingsButton: {
     justifyContent: "center",
@@ -122,9 +133,8 @@ const styles = StyleSheet.create({
   },
   drawerMenuButton: {
     marginVertical: 4,
-    overflow: "hidden",
-    padding: 16,
-    paddingHorizontal: 20,
+    justifyContent: "center",
+    height: 50,
   },
   drawerMenuButtonText: {
     fontSize: 16,
@@ -132,11 +142,13 @@ const styles = StyleSheet.create({
   },
   drawerMenuRefreshButton: {
     flexDirection: "row",
+    justifyContent: "flex-start",
     alignItems: "center",
   },
   drawerMenuRefreshButtonIcon: {
     fontSize: 20,
     marginRight: 10,
+    // alignSelf: "center",
   },
 });
 

@@ -3,13 +3,13 @@ import { useAtom } from "jotai";
 import { userAtom } from "../components/State";
 import Input from "../components/Input";
 import { useRef, useState } from "react";
-import Button from "../components/Button";
+import Button from "../components/Buttons/Button";
 import { useLoadingScreen, useThemeStyle } from "../components/Hooks";
 import { loginRequest } from "../components/Utils";
 
 const LoginScreen = () => {
   const themeStyle = useThemeStyle();
-  const [, setUser] = useAtom(userAtom);
+  const [user, setUser] = useAtom(userAtom);
   const [, setLoadingScreen] = useLoadingScreen();
 
   const [usernameText, setUsernameText] = useState("");
@@ -24,7 +24,11 @@ const LoginScreen = () => {
       setUsernameText("");
       setPasswordText("");
       Keyboard.dismiss();
-      setUser({ loggedIn: true, token: response.data.token });
+      setUser({
+        loggedIn: true,
+        token: response.data.token,
+        showCategories: user.showCategories,
+      });
     }
     setLoadingScreen({
       state: 2,
@@ -51,7 +55,7 @@ const LoginScreen = () => {
         returnKeyType="next"
         blurOnSubmit={false}
         clearShortcut
-        textInputDivStyle={{ marginTop: 20 }}
+        textInputDivStyle={{ marginTop: 20, width: "95%" }}
         onSubmitEditing={() => {
           // @ts-ignore
           if (usernameText !== "") passwordInputRef.current.focus();
@@ -67,10 +71,10 @@ const LoginScreen = () => {
         onChangeText={setPasswordText}
         blurOnSubmit={false}
         clearShortcut
-        textInputDivStyle={{ marginTop: 20 }}
+        textInputDivStyle={{ marginTop: 20, width: "95%" }}
         onSubmitEditing={() => {
           if (passwordText !== "") handleLoginButton();
-          else Keyboard.dismiss();
+          Keyboard.dismiss();
         }}
         returnKeyType="done"
         secureTextEntry

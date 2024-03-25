@@ -1,13 +1,14 @@
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { favoriteSongsAtom, songsAtom } from "./State";
-import Button from "./Button";
+import Button from "./Buttons/Button";
 import { FlashList } from "@shopify/flash-list";
 import Input from "./Input";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { memo, useCallback, useMemo, useState } from "react";
 import { useAtom } from "jotai";
 import { useThemeStyle, useDisplayedSongInfo, useTheme } from "./Hooks";
+import SongButton from "./Buttons/SongButton";
 
 const SongList = () => {
   const [theme] = useTheme();
@@ -101,21 +102,10 @@ const SongList = () => {
     // @ts-ignore
     navigation.navigate("Cantare");
   }, []);
-  const itemStylesProp = useMemo(() => {
-    return {
-      textStyle: [themeStyle.txtColor, styles.textStyle],
-      touchableStyle: [styles.touchableStyle],
-    };
-  }, [theme]);
 
   const renderItem = useCallback(
     ({ item }) => (
-      <Button
-        text={item.title}
-        textStyle={itemStylesProp.textStyle}
-        touchableStyle={itemStylesProp.touchableStyle}
-        onPress={() => itemOnPressProp(item)}
-      />
+      <SongButton song={item} onPress={() => itemOnPressProp(item)} />
     ),
     [theme]
   );
@@ -129,6 +119,7 @@ const SongList = () => {
         estimatedListSize={estimatedListSize} // instant render
         indicatorStyle={theme.data ? "white" : "black"}
         keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ padding: 10 }}
       />
       {searchQuery !== "" && (
         <View style={{ ...themeStyle.bgColor, flex: 9999 }}>
@@ -140,6 +131,7 @@ const SongList = () => {
             estimatedListSize={estimatedListSize}
             indicatorStyle={theme.data ? "white" : "black"}
             keyboardShouldPersistTaps="handled"
+            contentContainerStyle={{ padding: 10 }}
           />
         </View>
       )}
@@ -154,7 +146,7 @@ const SongList = () => {
       >
         <Input
           scrollEnabled={false}
-          textInputDivStyle={{ width: "95%" }}
+          textInputDivStyle={{ width: "95%", height: 55 }}
           placeholder="Cauta o cantare"
           value={searchQuery}
           clearShortcut
@@ -177,14 +169,6 @@ const styles = StyleSheet.create({
   },
   keyboardAvoidingViewDiv: {
     alignItems: "center",
-  },
-  touchableStyle: {
-    paddingHorizontal: 16,
-    height: 48,
-    justifyContent: "center",
-  },
-  textStyle: {
-    fontSize: 16,
   },
 });
 
