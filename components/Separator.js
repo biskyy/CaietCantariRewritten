@@ -11,7 +11,7 @@ function Separator() {
 const styles = StyleSheet.create({
   separator: {
     width: "100%",
-    height: 2,
+    height: 1,
   },
 });
 
