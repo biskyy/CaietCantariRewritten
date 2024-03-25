@@ -65,12 +65,26 @@ export const updateSongRequest = async (updatedSong, token) => {
   if (!(await isInternetConnected())) return { data: undefined, status: 400 };
 
   try {
-    const response = await axios.put(`${apiUrl}/song`, updatedSong, {
+    const response = await axios.put(`${apiUrl}/songs`, updatedSong, {
       headers: {
         authorization: token,
       },
       timeout: 10000,
     });
+    return { data: response.data, status: response.status };
+  } catch (error) {
+    return handleErrorResponse(error);
+  }
+};
+
+export const createReport = async (songIndex, additionalDetails) => {
+  if (!(await isInternetConnected())) return { data: undefined, status: 400 };
+  try {
+    const response = await axios.post(
+      `${apiUrl}/reports`,
+      { songIndex, additionalDetails },
+      { timeout: 10000 }
+    );
     return { data: response.data, status: response.status };
   } catch (error) {
     return handleErrorResponse(error);
