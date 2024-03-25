@@ -1,0 +1,51 @@
+import { useAtom } from "jotai";
+import Colors from "../Colors";
+import { userAtom } from "../State";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { useThemeStyle } from "../Hooks";
+
+const SongButton = (props) => {
+  const themeStyle = useThemeStyle();
+
+  const [user] = useAtom(userAtom);
+
+  let prevPageX;
+
+  return (
+    <TouchableOpacity
+      onPressIn={(e) => (prevPageX = e.nativeEvent.pageX)}
+      onPress={(e) =>
+        Math.abs(e.nativeEvent.pageX - prevPageX) >= 50 ? null : props.onPress()
+      }
+      style={[
+        themeStyle.bgColor,
+        themeStyle.borderColor,
+        styles.touchableStyle,
+      ]}
+    >
+      <Text style={[themeStyle.txtColor, themeStyle.text]}>
+        {props.song.title}
+      </Text>
+      {props.song.tags.length !== 0 && user.showCategories && (
+        <Text style={[{ fontSize: 12, color: Colors[500] }]}>
+          {props.song.tags.join(" • ")}
+        </Text>
+      )}
+    </TouchableOpacity>
+  );
+};
+
+const styles = StyleSheet.create({
+  touchableStyle: {
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    height: 55,
+    justifyContent: "space-evenly",
+    alignItems: "flex-start",
+    borderWidth: 1,
+    borderRadius: 6,
+    marginVertical: 2.5,
+  },
+});
+
+export default SongButton;
