@@ -17,7 +17,7 @@ const IconButton = (props) => {
       <MaterialIcons
         name={props.icon}
         size={props.size}
-        style={[themeStyle.txtColor]}
+        style={[themeStyle.txtColor, { fontWeight: "normal" }]}
       />
     </TouchableOpacity>
   );
