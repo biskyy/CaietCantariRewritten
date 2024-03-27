@@ -82,10 +82,16 @@ const CustomDrawerMenu = (props) => {
         {props.state.routeNames.map((name, index) => (
           <Button
             text={name}
+            icon={name === "Cantari favorite" ? "star" : undefined}
+            iconSize={20}
+            iconStyle={{ marginRight: 10 }}
             key={name}
             onPress={() => props.navigation.navigate(name)}
-            textStyle={[themeStyle.txtColor, styles.drawerMenuButtonText]}
-            touchableStyle={[themeStyle.bgColor, styles.drawerMenuButton]}
+            textStyle={[styles.drawerMenuButtonText]}
+            touchableStyle={[
+              styles.drawerMenuButton,
+              name === "Cantari favorite" && styles.drawerMenuRefreshButton,
+            ]}
             primary={props.state.index === index}
             secondary={props.state.index !== index}
           />
@@ -93,10 +99,10 @@ const CustomDrawerMenu = (props) => {
         <Button
           text="Actualizeaza cantarile"
           icon="refresh"
-          textStyle={[themeStyle.txtColor, styles.drawerMenuButtonText]}
-          iconStyle={[themeStyle.txtColor, styles.drawerMenuRefreshButtonIcon]}
+          iconSize={20}
+          iconStyle={{ marginRight: 10 }}
+          textStyle={[styles.drawerMenuButtonText]}
           touchableStyle={[
-            themeStyle.bgColor,
             styles.drawerMenuButton,
             styles.drawerMenuRefreshButton,
           ]}
@@ -144,11 +150,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "center",
-  },
-  drawerMenuRefreshButtonIcon: {
-    fontSize: 20,
-    marginRight: 10,
-    // alignSelf: "center",
   },
 });
 
