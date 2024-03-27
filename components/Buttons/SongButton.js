@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   touchableStyle: {
     paddingHorizontal: 16,
     paddingVertical: 12,
-    height: 55,
+    minHeight: 55,
     justifyContent: "space-evenly",
     alignItems: "flex-start",
     borderWidth: 1,

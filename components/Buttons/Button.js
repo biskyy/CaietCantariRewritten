@@ -38,7 +38,6 @@ const Button = ({
           text && {
             flexDirection: "row",
             alignItems: "center",
-            // justifyContent: "space-evenly",
           },
         { paddingHorizontal: 16, paddingVertical: 12, borderRadius: 6 },
       ]}
@@ -56,7 +55,6 @@ const Button = ({
             ]}
           />
           <Text
-            numberOfLines={1}
             style={[
               themeStyle.text,
               themeStyle.txtColor,
@@ -68,10 +66,7 @@ const Button = ({
           </Text>
         </>
       ) : (
-        <Text
-          numberOfLines={1}
-          style={[themeStyle.txtColor, textStyle, buttonStyleBasedOnType]}
-        >
+        <Text style={[themeStyle.txtColor, textStyle, buttonStyleBasedOnType]}>
           {text}
         </Text>
       )}

@@ -115,7 +115,7 @@ const SongList = () => {
       <FlashList
         renderItem={renderItem}
         data={data}
-        estimatedItemSize={48}
+        estimatedItemSize={55}
         estimatedListSize={estimatedListSize} // instant render
         indicatorStyle={theme.data ? "white" : "black"}
         keyboardShouldPersistTaps="handled"
@@ -146,7 +146,7 @@ const SongList = () => {
       >
         <Input
           scrollEnabled={false}
-          textInputDivStyle={{ width: "95%", height: 55 }}
+          textInputDivStyle={{ width: "95%", minHeight: 55 }}
           placeholder="Cauta o cantare"
           value={searchQuery}
           clearShortcut

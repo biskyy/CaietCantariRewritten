@@ -51,7 +51,7 @@ function Navbar() {
           ...themeStyle.bgColor,
           ...styles.navbarDiv,
           paddingTop: insets.top,
-          height:
+          minHeight:
             Platform.OS === "ios" // change 100 to whatever you want the total height of the navbar to be
               ? insets.top + (100 - insets.top) // on ios, height = element height + padding + margin(probably)
               : 100, //on android, height = element height(the element height is always what you set it to regardless of padding and margin)

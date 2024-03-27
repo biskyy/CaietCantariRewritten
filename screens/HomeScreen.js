@@ -53,7 +53,7 @@ const CustomDrawerMenu = (props) => {
           ...themeStyle.bgColor,
           ...styles.drawerMenuHeaderDiv,
           paddingTop: insets.top,
-          height:
+          minHeight:
             Platform.OS === "ios" // see Navbar.js for details
               ? insets.top + (100 - insets.top)
               : 100,
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
   drawerMenuButton: {
     marginVertical: 4,
     justifyContent: "center",
-    height: 50,
+    minHeight: 50,
   },
   drawerMenuButtonText: {
     fontSize: 16,

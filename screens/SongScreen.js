@@ -147,16 +147,11 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   titleArrow: {
-    // alignItems: "center",
-    // justifyContent: "center",
     flexGrow: 1,
     flexBasis: 0,
   },
   titleDiv: {
-    height: 50,
-    // alignItems: "center",
-    // justifyContent: "space-evenly",
-    // marginVertical: 7,
+    minHeight: 50,
     flexDirection: "row",
   },
   title: {

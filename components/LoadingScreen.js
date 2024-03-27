@@ -39,7 +39,10 @@ const LoadingScreen = () => {
     >
       <MaterialIcons
         name="menu-book"
-        style={[themeStyle.txtColor, styles.iconStyle]}
+        size={200}
+        style={[themeStyle.txtColor, { fontWeight: "normal" }]} // doesnt work, check "not possible" category on trello
+        allowFontScaling={false}
+        maxFontSizeMultiplier={0}
       />
       <Text style={[themeStyle.txtColor, styles.textStyle]}>
         {loadingScreen.message}
@@ -55,9 +58,6 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-  },
-  iconStyle: {
-    fontSize: 200,
   },
   textStyle: {
     fontSize: Platform.OS === "ios" ? 32 : 24,
