@@ -91,7 +91,11 @@ export default function SongScreen({ route, navigation }) {
         <Separator />
         <ScrollView
           indicatorStyle={theme.data ? "white" : "black"}
-          contentContainerStyle={{ alignItems: "center" }}
+          contentContainerStyle={{
+            alignItems: "center",
+            paddingHorizontal: 60,
+            paddingVertical: 30,
+          }}
         >
           <Text style={{ ...themeStyle.txtColor, fontSize }}>
             {displayedSongInfo.song.content}
