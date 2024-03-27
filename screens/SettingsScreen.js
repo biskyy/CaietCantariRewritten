@@ -20,15 +20,18 @@ export default function SettingsScreen() {
           secondary
           iconSize={20}
           iconStyle={{ marginRight: 10 }}
-          touchableStyle={{ width: "100%" }}
+          touchableStyle={{ width: "100%", marginVertical: 2.5 }}
           // @ts-ignore
           onPress={() => navigation.navigate("Login")}
           text="Login"
         />
         {user.loggedIn && (
           <Button
-            textStyle={[themeStyle.txtColor, styles.loginButtonText]}
-            touchableStyle={[themeStyle.bgColor, styles.loginButton]}
+            icon="logout"
+            iconSize={20}
+            iconStyle={{ marginRight: 10 }}
+            touchableStyle={{ width: "100%", marginVertical: 2.5 }}
+            secondary
             // @ts-ignore
             onPress={() =>
               setUser({
