@@ -23,12 +23,14 @@ const SongButton = (props) => {
         styles.touchableStyle,
       ]}
     >
-      <Text style={[themeStyle.txtColor, themeStyle.text]}>
+      <Text style={[themeStyle.txtColor, themeStyle.text]} numberOfLines={1}>
         {props.song.title}
       </Text>
       {props.song.tags.length !== 0 && user.showCategories && (
-        <Text style={[{ fontSize: 12, color: Colors[500] }]}>
-          {props.song.tags.join(" • ")}
+        <Text style={[{ fontSize: 12, color: Colors[500] }]} numberOfLines={1}>
+          {props.song.tags.length > 3
+            ? [...props.song.tags.slice(0, 2), "…"].join(" • ")
+            : props.song.tags.join(" • ")}
         </Text>
       )}
     </TouchableOpacity>
