@@ -93,7 +93,7 @@ export const useThemeStyle = () => {
     },
     subtitle: {
       fontSize: 22,
-      fontWeight: "bold",
+      fontWeight: "600",
     },
     text: {
       fontSize: 16,
