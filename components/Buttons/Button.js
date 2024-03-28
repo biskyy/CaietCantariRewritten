@@ -39,7 +39,11 @@ const Button = ({
             flexDirection: "row",
             alignItems: "center",
           },
-        { paddingHorizontal: 16, paddingVertical: 12, borderRadius: 6 },
+        {
+          paddingHorizontal: 16,
+          paddingVertical: 12,
+          borderRadius: 6,
+        },
       ]}
     >
       {icon && text ? (
@@ -51,7 +55,7 @@ const Button = ({
               themeStyle.txtColor,
               iconStyle,
               buttonStyleBasedOnType,
-              { fontWeight: "normal" },
+              { fontWeight: "normal", marginRight: 10 },
             ]}
           />
           <Text
@@ -60,13 +64,21 @@ const Button = ({
               themeStyle.txtColor,
               textStyle,
               buttonStyleBasedOnType,
+              { flexShrink: 1 },
             ]}
           >
             {text}
           </Text>
         </>
       ) : (
-        <Text style={[themeStyle.txtColor, textStyle, buttonStyleBasedOnType]}>
+        <Text
+          style={[
+            themeStyle.txtColor,
+            textStyle,
+            buttonStyleBasedOnType,
+            { flexShrink: 1 },
+          ]}
+        >
           {text}
         </Text>
       )}
