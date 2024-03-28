@@ -18,6 +18,7 @@ const LoginScreen = () => {
   const passwordInputRef = useRef();
 
   const handleLoginButton = async () => {
+    Keyboard.dismiss();
     setLoadingScreen({ state: 1, message: "Se incarca" });
     const response = await loginRequest(usernameText, passwordText);
     if (response.status === 200) {
@@ -73,8 +74,8 @@ const LoginScreen = () => {
         clearShortcut
         textInputDivStyle={{ marginTop: 20, width: "95%" }}
         onSubmitEditing={() => {
-          if (passwordText !== "") handleLoginButton();
           Keyboard.dismiss();
+          if (passwordText !== "") handleLoginButton();
         }}
         returnKeyType="done"
         secureTextEntry
