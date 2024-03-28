@@ -40,9 +40,7 @@ const LoadingScreen = () => {
       <MaterialIcons
         name="menu-book"
         size={200}
-        style={[themeStyle.txtColor, { fontWeight: "normal" }]} // doesnt work, check "not possible" category on trello
-        allowFontScaling={false}
-        maxFontSizeMultiplier={0}
+        style={[themeStyle.txtColor, { fontWeight: "normal" }]} // doesnt work, check "not possible" category on trellon
       />
       <Text style={[themeStyle.txtColor, styles.textStyle]}>
         {loadingScreen.message}
