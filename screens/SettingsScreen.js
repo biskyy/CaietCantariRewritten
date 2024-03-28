@@ -19,7 +19,6 @@ export default function SettingsScreen() {
           // primary
           secondary
           iconSize={20}
-          iconStyle={{ marginRight: 10 }}
           touchableStyle={{ width: "100%", marginVertical: 2.5 }}
           // @ts-ignore
           onPress={() => navigation.navigate("Login")}
@@ -29,7 +28,6 @@ export default function SettingsScreen() {
           <Button
             icon="logout"
             iconSize={20}
-            iconStyle={{ marginRight: 10 }}
             touchableStyle={{ width: "100%", marginVertical: 2.5 }}
             secondary
             // @ts-ignore
@@ -43,6 +41,21 @@ export default function SettingsScreen() {
             text="Logout"
           />
         )}
+        <Button
+          text="Arata categoriile pe meniul principal"
+          icon={user.showCategories ? "check-box" : "check-box-outline-blank"}
+          iconSize={20}
+          touchableStyle={{ width: "100%", marginVertical: 2.5 }}
+          // @ts-ignore
+          onPress={() => {
+            setUser({
+              loggedIn: user.loggedIn,
+              token: user.token,
+              showCategories: !user.showCategories,
+            });
+          }}
+          secondary
+        />
       </View>
     </>
   );
