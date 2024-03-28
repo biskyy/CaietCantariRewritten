@@ -84,7 +84,6 @@ const CustomDrawerMenu = (props) => {
             text={name}
             icon={name === "Cantari favorite" ? "star" : undefined}
             iconSize={20}
-            iconStyle={{ marginRight: 10 }}
             key={name}
             onPress={() => props.navigation.navigate(name)}
             textStyle={[styles.drawerMenuButtonText]}
@@ -100,7 +99,6 @@ const CustomDrawerMenu = (props) => {
           text="Actualizeaza cantarile"
           icon="refresh"
           iconSize={20}
-          iconStyle={{ marginRight: 10 }}
           textStyle={[styles.drawerMenuButtonText]}
           touchableStyle={[
             styles.drawerMenuButton,
