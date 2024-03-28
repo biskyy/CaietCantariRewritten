@@ -70,22 +70,22 @@ export const useThemeStyle = () => {
   const [theme] = useTheme();
   const themeStyle = StyleSheet.create({
     bgColor: {
-      backgroundColor: theme.data ? Colors[800] : Colors[200],
+      backgroundColor: theme.data ? Colors[800] : Colors[100],
     },
     txtColor: {
       color: theme.data ? Colors[200] : Colors[800],
     },
     inverseBgColor: {
-      backgroundColor: theme.data ? Colors[200] : Colors[800],
+      backgroundColor: theme.data ? Colors[100] : Colors[800],
     },
     separatorColor: {
-      backgroundColor: theme.data ? Colors[600] : Colors[600],
+      backgroundColor: theme.data ? Colors[600] : Colors[300],
     },
     inverseTxtColor: {
       color: theme.data ? Colors[800] : Colors[200],
     },
     borderColor: {
-      borderColor: theme.data ? Colors[600] : Colors[600],
+      borderColor: theme.data ? Colors[600] : Colors[300],
     },
     title: {
       fontSize: 28,
