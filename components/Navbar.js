@@ -212,7 +212,7 @@ function Navbar() {
                       >
                         <Button
                           onPress={() => setModalVisible(false)}
-                          text="Inchide"
+                          text="Anulează"
                           textStyle={[{ textAlign: "center" }]}
                           touchableStyle={[]}
                           secondary
