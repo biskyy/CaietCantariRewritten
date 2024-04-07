@@ -18,9 +18,10 @@ import Navbar from "./components/Navbar";
 import { MaterialIcons } from "@expo/vector-icons";
 import LoginScreen from "./screens/LoginScreen";
 import UpdateSongScreen from "./screens/UpdateSongScreen";
-import { View, useColorScheme } from "react-native";
+import { Platform, View, useColorScheme } from "react-native";
 import * as SystemUI from "expo-system-ui";
-import { useTheme } from "./components/Hooks";
+import * as NavigationBar from "expo-navigation-bar";
+import { useDisplayedSongInfo, useTheme } from "./components/Hooks";
 import { cacheFontsAndIcons } from "./components/Utils";
 
 const Stack = createStackNavigator();
@@ -32,6 +33,9 @@ export default function App() {
   const [theme, setTheme] = useTheme();
   const [loading, setLoading] = useState(true);
 
+  const [displayedSongInfo] = useDisplayedSongInfo();
+  // console.log(displayedSongInfo);
+
   useEffect(() => {
     const preloadFontsAndIcons = async () => {
       await Promise.all(cacheFontsAndIcons([MaterialIcons.font]));
@@ -42,8 +46,22 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (theme.data) SystemUI.setBackgroundColorAsync("#0a0d0c");
-    else SystemUI.setBackgroundColorAsync("#f0f4fa");
+    const updateTheme = async () => {
+      if (theme.data) {
+        if (Platform.OS === "android") {
+          NavigationBar.setButtonStyleAsync("light");
+          await NavigationBar.setBackgroundColorAsync("#0a0d0c");
+        }
+        SystemUI.setBackgroundColorAsync("#0a0d0c");
+      } else {
+        if (Platform.OS === "android") {
+          NavigationBar.setButtonStyleAsync("dark");
+          await NavigationBar.setBackgroundColorAsync("#f0f4fa");
+        }
+        SystemUI.setBackgroundColorAsync("#f0f4fa");
+      }
+    };
+    updateTheme();
   }, [theme.data]);
 
   useEffect(() => {
