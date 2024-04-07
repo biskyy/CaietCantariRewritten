@@ -1,8 +1,9 @@
 import axios from "axios";
 import { Alert } from "react-native";
-import { apiUrl } from "./State";
+import { apiUrl, reportsArrayAtom } from "./State";
 import NetInfo from "@react-native-community/netinfo";
 import * as Font from "expo-font";
+import { useAtom } from "jotai";
 
 /**
  * @returns boolean
@@ -85,6 +86,33 @@ export const createReport = async (songIndex, additionalDetails) => {
       { songIndex, additionalDetails },
       { timeout: 10000 }
     );
+    return { data: response.data, status: response.status };
+  } catch (error) {
+    return handleErrorResponse(error);
+  }
+};
+
+export const fetchReports = async () => {
+  if (!(await isInternetConnected())) return { data: undefined, status: 400 };
+  try {
+    const response = await axios.get(`${apiUrl}/reports`, { timeout: 10000 });
+    return { data: response.data, status: response.status };
+  } catch (error) {
+    return handleErrorResponse(error);
+  }
+};
+
+export const deleteReport = async (report, token) => {
+  if (!(await isInternetConnected())) return { data: undefined, status: 400 };
+
+  try {
+    const response = await axios.delete(`${apiUrl}/reports`, {
+      headers: {
+        authorization: token,
+      },
+      timeout: 10000,
+      data: report,
+    });
     return { data: response.data, status: response.status };
   } catch (error) {
     return handleErrorResponse(error);

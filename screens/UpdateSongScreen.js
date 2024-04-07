@@ -3,7 +3,6 @@ import Input from "../components/Input";
 import { userAtom } from "../components/State";
 import { useReducer, useState } from "react";
 import BottomBar from "../components/BottomBar";
-import Button from "../components/Buttons/Button";
 import { useAtom } from "jotai";
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -11,7 +10,7 @@ import {
   useLoadingScreen,
   useThemeStyle,
 } from "../components/Hooks";
-import { updateSongRequest } from "../components/Utils";
+import { deleteReport, updateSongRequest } from "../components/Utils";
 import IconButton from "../components/Buttons/IconButton";
 
 const reducer = (currentState, action) => {
@@ -38,7 +37,7 @@ const reducer = (currentState, action) => {
 
 const UpdateSongScreen = () => {
   const themeStyle = useThemeStyle();
-  const [displayedSongInfo] = useDisplayedSongInfo();
+  const [displayedSongInfo, setDisplayedSongInfo] = useDisplayedSongInfo();
   const [user] = useAtom(userAtom);
   const [, setLoadingScreen] = useLoadingScreen();
 
@@ -49,19 +48,11 @@ const UpdateSongScreen = () => {
 
   const navigation = useNavigation();
 
-  // const { song } = displayedSongInfo;
-
-  // const [songBookId, setSongBookId] = useState(song.book_id);
-
-  // const [songId, setsongId] = useState(song.id);
-
-  // const [songTitle, setSongTitle] = useState(song.title);
-
-  // const [songContent, setSongContent] = useState(song.content);
-
-  // const [songTags, setSongTags] = useState(song.tags?.join(", "));
-
   const submitChanges = async () => {
+    if (displayedSongInfo.currentReport) {
+      await deleteReport(displayedSongInfo.currentReport, user.token);
+      setDisplayedSongInfo({ currentReport: {} });
+    }
     setLoadingScreen({ state: 1, message: "Se incarca schimbarile" });
     const updateResponse = await updateSongRequest(
       {

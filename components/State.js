@@ -36,7 +36,10 @@ export const dispalyedSongInfoAtom = atom({
   index: 0,
   listFirstIndex: 0,
   listLastIndex: 0,
+  currentReport: {},
 });
+
+export const reportsArrayAtom = atom([]);
 
 export const themeAtom = atomWithStorage("theme", "not set", storage, {
   getOnInit: true,
