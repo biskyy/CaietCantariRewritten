@@ -10,13 +10,14 @@ import {
   Text,
   View,
 } from "react-native";
-import { songsAtom } from "../components/State";
+import { songsAtom, userAtom } from "../components/State";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Separator from "../components/Separator";
 import { useAtom } from "jotai";
 import { useLoadingScreen, useThemeStyle } from "../components/Hooks";
 import { fetchSongsRequest } from "../components/Utils";
 import IconButton from "../components/Buttons/IconButton";
+import ReportsScreen from "./ReportsScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -24,6 +25,7 @@ const CustomDrawerMenu = (props) => {
   const themeStyle = useThemeStyle();
   const [, setLoadingScreen] = useLoadingScreen();
   const [, setSongs] = useAtom(songsAtom);
+  const [user] = useAtom(userAtom);
 
   const insets = useSafeAreaInsets();
 
@@ -79,22 +81,49 @@ const CustomDrawerMenu = (props) => {
         style={[themeStyle.bgColor, styles.drawerMenuButtonDiv]}
         contentContainerStyle={{ padding: 10 }}
       >
-        {props.state.routeNames.map((name, index) => (
+        {props.state.routeNames.slice(0, -2).map((name, index) => (
           <Button
             text={name}
-            icon={name === "Cantari favorite" ? "star" : undefined}
-            iconSize={20}
             key={name}
             onPress={() => props.navigation.navigate(name)}
             textStyle={[styles.drawerMenuButtonText]}
-            touchableStyle={[
-              styles.drawerMenuButton,
-              name === "Cantari favorite" && styles.drawerMenuRefreshButton,
-            ]}
+            touchableStyle={[styles.drawerMenuButton]}
             primary={props.state.index === index}
             secondary={props.state.index !== index}
           />
         ))}
+        <Button
+          text="Cantari favorite"
+          icon="star"
+          iconSize={20}
+          onPress={() => props.navigation.navigate("Cantari favorite")}
+          textStyle={[styles.drawerMenuButtonText]}
+          touchableStyle={[
+            styles.drawerMenuButton,
+            styles.drawerMenuRefreshButton,
+          ]}
+          {...(props.state.index ===
+          props.state.routeNames.indexOf("Cantari favorite")
+            ? { primary: true }
+            : { secondary: true })}
+        />
+        {user.loggedIn && (
+          <Button
+            text="Rapoarte"
+            icon="bug-report"
+            iconSize={20}
+            textStyle={[styles.drawerMenuButtonText]}
+            touchableStyle={[
+              styles.drawerMenuButton,
+              styles.drawerMenuRefreshButton,
+            ]}
+            onPress={() => props.navigation.navigate("Rapoarte")}
+            {...(props.state.index ===
+            props.state.routeNames.indexOf("Rapoarte")
+              ? { primary: true }
+              : { secondary: true })}
+          />
+        )}
         <Button
           text="Actualizeaza cantarile"
           icon="refresh"
@@ -168,6 +197,7 @@ export default function HomeScreen() {
       <Drawer.Screen name="Cartea de Tineret" component={SongList} />
       <Drawer.Screen name="Cor" component={SongList} />
       <Drawer.Screen name="Cantari favorite" component={SongList} />
+      <Drawer.Screen name="Rapoarte" component={ReportsScreen} />
     </Drawer.Navigator>
   );
 }
