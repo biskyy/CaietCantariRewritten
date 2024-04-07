@@ -40,22 +40,23 @@ export const useLoadingScreen = () => {
  * @property {number} index
  * @property {number} listFirstIndex
  * @property {number} listLastIndex
+ * @property {object} currentReport
  *
  * @returns {[DisplayedSongInfo, Function: (object: Partial<DisplayedSongInfo>) => void]}
  */
 export const useDisplayedSongInfo = () => {
-  const [displayedSongInfo, _setDispalyedSongInfo] = useAtom(
+  const [displayedSongInfo, _setDisplayedSongInfo] = useAtom(
     dispalyedSongInfoAtom
   );
 
-  const setDispalyedSongInfo = (newKeys) => {
-    _setDispalyedSongInfo((prevObject) => ({
+  const setDisplayedSongInfo = (newKeys) => {
+    _setDisplayedSongInfo((prevObject) => ({
       ...prevObject,
       ...newKeys,
     }));
   };
 
-  return [displayedSongInfo, setDispalyedSongInfo];
+  return [displayedSongInfo, setDisplayedSongInfo];
 };
 
 /**
