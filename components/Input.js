@@ -1,7 +1,6 @@
 import { forwardRef, memo } from "react";
 import { View, StyleSheet, TextInput } from "react-native";
 import Colors from "./Colors";
-import Button from "./Buttons/Button";
 import { useTheme, useThemeStyle } from "./Hooks";
 import IconButton from "./Buttons/IconButton";
 
