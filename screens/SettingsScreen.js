@@ -14,17 +14,18 @@ export default function SettingsScreen() {
   return (
     <>
       <View style={[themeStyle.bgColor, styles.settingsDiv]}>
-        <Button
-          icon="login"
-          // primary
-          secondary
-          iconSize={20}
-          touchableStyle={{ width: "100%", marginVertical: 2.5 }}
-          // @ts-ignore
-          onPress={() => navigation.navigate("Login")}
-          text="Login"
-        />
-        {user.loggedIn && (
+        {!user.loggedIn ? (
+          <Button
+            icon="login"
+            // primary
+            secondary
+            iconSize={20}
+            touchableStyle={{ width: "100%", marginVertical: 2.5 }}
+            // @ts-ignore
+            onPress={() => navigation.navigate("Login")}
+            text="Login"
+          />
+        ) : (
           <Button
             icon="logout"
             iconSize={20}
