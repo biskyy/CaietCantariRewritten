@@ -81,8 +81,8 @@ const LoginScreen = () => {
         secureTextEntry
       />
       <Button
-        textStyle={[themeStyle.inverseTxtColor, styles.loginButtonText]}
-        touchableStyle={[themeStyle.inverseBgColor, styles.loginButton]}
+        primary
+        touchableStyle={{ marginTop: 30 }}
         text="Login"
         onPress={handleLoginButton}
       />
@@ -93,15 +93,6 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   loginDiv: {
     height: "100%",
-  },
-  loginButton: {
-    marginTop: 30,
-    padding: 20,
-    borderRadius: 10,
-  },
-  loginButtonText: {
-    fontSize: 16,
-    fontWeight: "bold",
   },
 });
 
