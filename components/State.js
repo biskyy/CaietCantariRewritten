@@ -45,6 +45,8 @@ export const themeAtom = atomWithStorage("theme", "not set", storage, {
   getOnInit: true,
 });
 
+export const orientationAtom = atom("portrait");
+
 const readOnlyLoadableThemeAtom = loadable(themeAtom);
 
 export const writeableLoadableThemeAtom = atom(

@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -14,9 +14,9 @@ import {
   View,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { reportsArrayAtom, userAtom } from "./State";
+import { orientationAtom, reportsArrayAtom, userAtom } from "./State";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { StatusBar } from "expo-status-bar";
+import { StatusBar, setStatusBarHidden } from "expo-status-bar";
 import Separator from "./Separator";
 import Button from "./Buttons/Button";
 import { useAtom } from "jotai";
@@ -28,12 +28,14 @@ import Dialog from "./Dialog/Dialog";
 import DialogTitle from "./Dialog/DialogTitle";
 import DialogText from "./Dialog/DialogText";
 import DialogSubtitle from "./Dialog/DialogSubtitle";
+import * as ScreenOrientation from "expo-screen-orientation";
 
-function Navbar() {
+const Navbar = () => {
   const [theme, setTheme] = useTheme();
   const themeStyle = useThemeStyle();
   const [displayedSongInfo] = useDisplayedSongInfo();
   const [, setReportsArray] = useAtom(reportsArrayAtom);
+  const [orientation] = useAtom(orientationAtom);
 
   const [user] = useAtom(userAtom);
   const [modalVisible, setModalVisible] = useState(false);
@@ -48,11 +50,10 @@ function Navbar() {
     // createReport(displayedSongInfo.index);
   };
 
-  // console.log(displayedSongInfo.song);
+  if (orientation === "landscape") return <></>;
 
   return (
     <>
-      <StatusBar style={theme.data ? "light" : "dark"} />
       <View
         style={{
           ...themeStyle.bgColor,
@@ -189,7 +190,7 @@ function Navbar() {
       </Dialog>
     </>
   );
-}
+};
 
 const styles = StyleSheet.create({
   navbarDiv: {

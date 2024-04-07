@@ -1,7 +1,8 @@
-import { View, StyleSheet, Text, ScrollView } from "react-native";
+import { View, StyleSheet, Text, ScrollView, Platform } from "react-native";
 import {
   favoriteSongsAtom,
   fontSizeAtom,
+  orientationAtom,
   songsAtom,
 } from "../components/State";
 import { useAtom } from "jotai";
@@ -16,6 +17,7 @@ import {
 } from "../components/Hooks";
 import { useKeepAwake } from "expo-keep-awake";
 import IconButton from "../components/Buttons/IconButton";
+import * as ScreenOrientation from "expo-screen-orientation";
 
 export default function SongScreen({ route, navigation }) {
   const [theme] = useTheme();
@@ -23,8 +25,18 @@ export default function SongScreen({ route, navigation }) {
   const [fontSize, setFontSize] = useAtom(fontSizeAtom);
   const [songs] = useAtom(songsAtom);
   const [favoriteSongs, setFavoriteSongs] = useAtom(favoriteSongsAtom);
+  const [orientation] = useAtom(orientationAtom);
 
   useKeepAwake();
+
+  useEffect(() => {
+    ScreenOrientation.unlockAsync();
+    return () => {
+      ScreenOrientation.lockAsync(
+        ScreenOrientation.OrientationLock.PORTRAIT_UP
+      );
+    };
+  }, []);
 
   const [displayedSongInfo, setDisplayedSongInfo] = useDisplayedSongInfo();
 
@@ -95,6 +107,8 @@ export default function SongScreen({ route, navigation }) {
             alignItems: "center",
             paddingHorizontal: 60,
             paddingVertical: 30,
+            paddingBottom:
+              orientation === "landscape" && Platform.OS === "ios" ? 60 : 30,
           }}
         >
           <Text style={{ ...themeStyle.txtColor, fontSize }}>

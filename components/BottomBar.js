@@ -3,10 +3,15 @@ import Separator from "./Separator";
 import { Platform, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useThemeStyle } from "./Hooks";
+import { useAtom } from "jotai";
+import { orientationAtom } from "./State";
 
 const BottomBar = (props) => {
   const themeStyle = useThemeStyle();
   const insets = useSafeAreaInsets();
+  const [orientation] = useAtom(orientationAtom);
+
+  if (orientation === "landscape") return <></>;
 
   return (
     <>
