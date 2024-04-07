@@ -26,10 +26,10 @@ export default function SongScreen({ route, navigation }) {
 
   useKeepAwake();
 
-  const [displayedSongInfo, setDispalyedSongInfo] = useDisplayedSongInfo();
+  const [displayedSongInfo, setDisplayedSongInfo] = useDisplayedSongInfo();
 
   useEffect(
-    () => setDispalyedSongInfo({ song: songs[displayedSongInfo.index] }),
+    () => setDisplayedSongInfo({ song: songs[displayedSongInfo.index] }),
     [songs, displayedSongInfo.index]
   );
 
@@ -60,7 +60,7 @@ export default function SongScreen({ route, navigation }) {
             touchableStyle={styles.titleArrow}
             onPress={() =>
               displayedSongInfo.index > displayedSongInfo.listFirstIndex &&
-              setDispalyedSongInfo({ index: displayedSongInfo.index - 1 })
+              setDisplayedSongInfo({ index: displayedSongInfo.index - 1 })
             }
           />
           <Text
@@ -84,7 +84,7 @@ export default function SongScreen({ route, navigation }) {
             touchableStyle={styles.titleArrow}
             onPress={() =>
               displayedSongInfo.index < displayedSongInfo.listLastIndex - 1 &&
-              setDispalyedSongInfo({ index: displayedSongInfo.index + 1 })
+              setDisplayedSongInfo({ index: displayedSongInfo.index + 1 })
             }
           />
         </View>
