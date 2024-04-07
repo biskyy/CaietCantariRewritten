@@ -14,24 +14,29 @@ import {
   View,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { userAtom } from "./State";
+import { reportsArrayAtom, userAtom } from "./State";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import Separator from "./Separator";
 import Button from "./Buttons/Button";
 import { useAtom } from "jotai";
 import { useDisplayedSongInfo, useTheme, useThemeStyle } from "./Hooks";
-import { createReport } from "./Utils";
+import { createReport, fetchReports } from "./Utils";
 import Input from "./Input";
 import IconButton from "./Buttons/IconButton";
+import Dialog from "./Dialog/Dialog";
+import DialogTitle from "./Dialog/DialogTitle";
+import DialogText from "./Dialog/DialogText";
+import DialogSubtitle from "./Dialog/DialogSubtitle";
 
 function Navbar() {
   const [theme, setTheme] = useTheme();
   const themeStyle = useThemeStyle();
   const [displayedSongInfo] = useDisplayedSongInfo();
+  const [, setReportsArray] = useAtom(reportsArrayAtom);
 
   const [user] = useAtom(userAtom);
-  const [modalVisibility, setModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const route = useRoute();
 
@@ -42,6 +47,8 @@ function Navbar() {
   const reportSong = () => {
     // createReport(displayedSongInfo.index);
   };
+
+  // console.log(displayedSongInfo.song);
 
   return (
     <>
@@ -77,7 +84,14 @@ function Navbar() {
         <View
           style={[
             styles.navbarTitleContainer,
-            { flexGrow: route.name === "Cantare" ? 4 : 6 },
+            {
+              flexGrow:
+                route.name === "Cantare"
+                  ? 4
+                  : route.name === "Rapoarte"
+                  ? 5
+                  : 6,
+            },
           ]}
         >
           <Text
@@ -120,6 +134,17 @@ function Navbar() {
             }
           />
         )}
+        {route.name === "Rapoarte" && (
+          <IconButton
+            icon="refresh"
+            size={32}
+            touchableStyle={styles.navbarMenuIcon}
+            onPress={async () => {
+              const response = await fetchReports();
+              setReportsArray(response.data);
+            }}
+          />
+        )}
         <IconButton
           icon="contrast"
           size={32}
@@ -130,109 +155,38 @@ function Navbar() {
         />
       </View>
       <Separator />
-      <Modal
-        visible={modalVisibility}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-          <View style={{ flex: 1 }}>
-            <ScrollView
-              style={{
-                backgroundColor: "rgba(0,0,0,0.5)",
-              }}
-              scrollEnabled={false}
-              keyboardShouldPersistTaps="handled"
-              contentContainerStyle={{
-                flexGrow: 1,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <TouchableWithoutFeedback>
-                <KeyboardAvoidingView
-                  behavior={Platform.OS === "ios" ? "padding" : "height"}
-                >
-                  <View
-                    style={[
-                      themeStyle.borderColor,
-                      themeStyle.bgColor,
-                      {
-                        borderWidth: 1,
-                        padding: 16,
-                        borderRadius: 6,
-                        width: "80%",
-                      },
-                    ]}
-                  >
-                    <ScrollView
-                      scrollEnabled={false}
-                      keyboardShouldPersistTaps="handled"
-                    >
-                      <Text
-                        style={[
-                          themeStyle.txtColor,
-                          themeStyle.title,
-                          { marginBottom: 10 },
-                        ]}
-                      >
-                        Raporteaza o greseala
-                      </Text>
-                      <Text
-                        style={[
-                          themeStyle.txtColor,
-                          themeStyle.text,
-                          { marginBottom: 10 },
-                        ]}
-                      >
-                        Doresti sa raportezi o greseala pentru cantarea “
-                        {displayedSongInfo.song.title}”?
-                      </Text>
-                      <Text
-                        style={[
-                          themeStyle.txtColor,
-                          themeStyle.subtitle,
-                          { marginBottom: 10 },
-                        ]}
-                      >
-                        Adauga detalii suplimentare (optional)
-                      </Text>
-                      <Input
-                        textInputStyle={{}}
-                        textInputDivStyle={{ marginBottom: 10, height: 150 }}
-                        placeholder="Scrie aici cum ar trebuii sa corectam cantarea"
-                        multiline
-                      />
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <Button
-                          onPress={() => setModalVisible(false)}
-                          text="Anulează"
-                          textStyle={[{ textAlign: "center" }]}
-                          touchableStyle={[]}
-                          secondary
-                        />
-                        <Button
-                          onPress={() => setModalVisible(false)}
-                          text="Trimite"
-                          textStyle={[{ textAlign: "center" }]}
-                          touchableStyle={[]}
-                          primary
-                        />
-                      </View>
-                    </ScrollView>
-                  </View>
-                </KeyboardAvoidingView>
-              </TouchableWithoutFeedback>
-            </ScrollView>
-          </View>
-        </TouchableWithoutFeedback>
-      </Modal>
+      <Dialog visible={modalVisible} setModalVisible={setModalVisible}>
+        <DialogTitle>Raporteaza o cantare</DialogTitle>
+        <Separator />
+        <DialogText>
+          Doresti sa raportezi o greseala pentru cantarea "
+          {displayedSongInfo.song.title}"
+        </DialogText>
+        <DialogSubtitle>Adauga detalii suplimentare (optional)</DialogSubtitle>
+        <Input
+          textInputStyle={{}}
+          textInputDivStyle={{ marginBottom: 10, height: 150 }}
+          placeholder="Scrie aici cum ar trebuii sa corectam cantarea"
+          multiline
+        />
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <Button
+            onPress={() => setModalVisible(false)}
+            text="Anulează"
+            secondary
+          />
+          <Button
+            onPress={() => setModalVisible(false)}
+            text="Trimite"
+            primary
+          />
+        </View>
+      </Dialog>
     </>
   );
 }
