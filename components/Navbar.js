@@ -29,6 +29,9 @@ import DialogTitle from "./Dialog/DialogTitle";
 import DialogText from "./Dialog/DialogText";
 import DialogSubtitle from "./Dialog/DialogSubtitle";
 import * as ScreenOrientation from "expo-screen-orientation";
+import axios from "axios";
+// import * as NavigationBar from "expo-navigation-bar";
+// import * as SystemUI from "expo-system-ui";
 
 const Navbar = () => {
   const [theme, setTheme] = useTheme();
@@ -36,6 +39,21 @@ const Navbar = () => {
   const [displayedSongInfo] = useDisplayedSongInfo();
   const [, setReportsArray] = useAtom(reportsArrayAtom);
   const [orientation] = useAtom(orientationAtom);
+  const [additionalDetails, setAdditionalDetails] = useState("");
+
+  // if (theme.data) {
+  //   if (Platform.OS === "android") {
+  //     NavigationBar.setButtonStyleAsync("light");
+  //     NavigationBar.setBackgroundColorAsync("#0a0d0c");
+  //   }
+  //   SystemUI.setBackgroundColorAsync("#0a0d0c");
+  // } else {
+  //   if (Platform.OS === "android") {
+  //     NavigationBar.setButtonStyleAsync("dark");
+  //     NavigationBar.setBackgroundColorAsync("#f0f4fa");
+  //   }
+  //   SystemUI.setBackgroundColorAsync("#f0f4fa");
+  // }
 
   const [user] = useAtom(userAtom);
   const [modalVisible, setModalVisible] = useState(false);
@@ -47,7 +65,7 @@ const Navbar = () => {
   const insets = useSafeAreaInsets();
 
   const reportSong = () => {
-    // createReport(displayedSongInfo.index);
+    createReport(displayedSongInfo.index, additionalDetails);
   };
 
   if (orientation === "landscape") return <></>;
@@ -128,9 +146,8 @@ const Navbar = () => {
             touchableStyle={styles.navbarMenuIcon}
             onPress={() =>
               Share.share({
-                message: displayedSongInfo.song.content,
+                message: `${displayedSongInfo.song.title}\n\n${displayedSongInfo.song.content}`,
                 title: displayedSongInfo.song.title,
-                url: displayedSongInfo.song.title,
               })
             }
           />
@@ -165,7 +182,8 @@ const Navbar = () => {
         </DialogText>
         <DialogSubtitle>Adauga detalii suplimentare (optional)</DialogSubtitle>
         <Input
-          textInputStyle={{}}
+          value={additionalDetails}
+          onChangeText={setAdditionalDetails}
           textInputDivStyle={{ marginBottom: 10, height: 150 }}
           placeholder="Scrie aici cum ar trebuii sa corectam cantarea"
           multiline
@@ -182,7 +200,10 @@ const Navbar = () => {
             secondary
           />
           <Button
-            onPress={() => setModalVisible(false)}
+            onPress={() => {
+              createReport(displayedSongInfo.index, additionalDetails);
+              setModalVisible(false);
+            }}
             text="Trimite"
             primary
           />
