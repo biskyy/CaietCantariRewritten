@@ -59,11 +59,11 @@ export default function App() {
 
   // useEffect(() => {
   // console.log("hi");
-  const setupOrientation = async () => {
-    const orientation = await ScreenOrientation.getOrientationAsync();
-    if (orientation === 3 || orientation === 4) setOrientation("landscape");
-    else setOrientation("portrait");
-  };
+  // const setupOrientation = async () => {
+  //   const orientation = await ScreenOrientation.getOrientationAsync();
+  //   if (orientation === 3 || orientation === 4) setOrientation("landscape");
+  //   else setOrientation("portrait");
+  // };
 
   ScreenOrientation.addOrientationChangeListener(({ orientationInfo }) => {
     if (
@@ -78,21 +78,24 @@ export default function App() {
     }
   });
 
-  useEffect(() => {
-    if (theme.data) {
-      if (Platform.OS === "android") {
-        NavigationBar.setButtonStyleAsync("light");
-        NavigationBar.setBackgroundColorAsync("#0a0d0c");
-      }
-      SystemUI.setBackgroundColorAsync("#0a0d0c");
-    } else {
-      if (Platform.OS === "android") {
-        NavigationBar.setButtonStyleAsync("dark");
-        NavigationBar.setBackgroundColorAsync("#f0f4fa");
-      }
-      SystemUI.setBackgroundColorAsync("#f0f4fa");
-    }
-  }, [theme.data]);
+  // NavigationBar.setButtonStyleAsync("light");
+  // NavigationBar.setBackgroundColorAsync("#FFFFFF00");
+
+  // useEffect(() => {
+  //   if (theme.data) {
+  //     if (Platform.OS === "android") {
+  //       NavigationBar.setButtonStyleAsync("light");
+  //       NavigationBar.setBackgroundColorAsync("#0a0d0c");
+  //     }
+  //     SystemUI.setBackgroundColorAsync("#0a0d0c");
+  //   } else {
+  //     if (Platform.OS === "android") {
+  //       NavigationBar.setButtonStyleAsync("dark");
+  //       NavigationBar.setBackgroundColorAsync("#f0f4fa");
+  //     }
+  //     SystemUI.setBackgroundColorAsync("#f0f4fa");
+  //   }
+  // }, [theme.data]);
 
   useEffect(() => {
     if (theme.state !== "loading") {

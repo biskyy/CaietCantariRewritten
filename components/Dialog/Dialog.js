@@ -6,13 +6,32 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import { useThemeStyle } from "../Hooks";
+import { useTheme, useThemeStyle } from "../Hooks";
+// import * as NavigationBar from "expo-navigation-bar";
+// import * as SystemUI from "expo-system-ui";
 
 const Dialog = (props) => {
+  const [theme] = useTheme();
   const themeStyle = useThemeStyle();
 
+  // if (theme.data) {
+  //   if (Platform.OS === "android") {
+  //     NavigationBar.setButtonStyleAsync("light");
+  //     NavigationBar.setBackgroundColorAsync("#0a0d0c");
+  //   }
+  //   SystemUI.setBackgroundColorAsync("#0a0d0c");
+  // } else {
+  //   if (Platform.OS === "android") {
+  //     NavigationBar.setButtonStyleAsync("dark");
+  //     NavigationBar.setBackgroundColorAsync("#f0f4fa");
+  //   }
+  //   SystemUI.setBackgroundColorAsync("#f0f4fa");
+  // }
+
   return (
+    // dont touch this
     <Modal
+      statusBarTranslucent
       visible={props.visible}
       transparent
       animationType="fade"

@@ -127,6 +127,7 @@ const handleErrorResponse = (error) => {
     );
     return { data: undefined, status: error.response.status };
   } else if (error.request) {
+    console.log(error.request);
     Alert.alert(
       "Serverul este offline",
       "Nu s-a putut efectua cererea deoarece serverul nu este online."
