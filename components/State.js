@@ -21,6 +21,8 @@ export const loadingScreenAtom = atom({
   callback: () => {},
 });
 
+export const modalVisibleAtom = atom(false);
+
 /**
  * @typedef {Object} SongObject
  * @property {string} title
