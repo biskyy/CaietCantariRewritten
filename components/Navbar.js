@@ -14,7 +14,12 @@ import {
   View,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { orientationAtom, reportsArrayAtom, userAtom } from "./State";
+import {
+  modalVisibleAtom,
+  orientationAtom,
+  reportsArrayAtom,
+  userAtom,
+} from "./State";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar, setStatusBarHidden } from "expo-status-bar";
 import Separator from "./Separator";
@@ -41,22 +46,8 @@ const Navbar = () => {
   const [orientation] = useAtom(orientationAtom);
   const [additionalDetails, setAdditionalDetails] = useState("");
 
-  // if (theme.data) {
-  //   if (Platform.OS === "android") {
-  //     NavigationBar.setButtonStyleAsync("light");
-  //     NavigationBar.setBackgroundColorAsync("#0a0d0c");
-  //   }
-  //   SystemUI.setBackgroundColorAsync("#0a0d0c");
-  // } else {
-  //   if (Platform.OS === "android") {
-  //     NavigationBar.setButtonStyleAsync("dark");
-  //     NavigationBar.setBackgroundColorAsync("#f0f4fa");
-  //   }
-  //   SystemUI.setBackgroundColorAsync("#f0f4fa");
-  // }
-
   const [user] = useAtom(userAtom);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useAtom(modalVisibleAtom);
 
   const route = useRoute();
 
@@ -176,11 +167,8 @@ const Navbar = () => {
       <Dialog visible={modalVisible} setModalVisible={setModalVisible}>
         <DialogTitle>Raporteaza o cantare</DialogTitle>
         <Separator />
-        <DialogText>
-          Doresti sa raportezi o greseala pentru cantarea "
-          {displayedSongInfo.song.title}"
-        </DialogText>
-        <DialogSubtitle>Adauga detalii suplimentare (optional)</DialogSubtitle>
+        <Text />
+        <DialogText>Adauga detalii suplimentare (optional)</DialogText>
         <Input
           value={additionalDetails}
           onChangeText={setAdditionalDetails}
