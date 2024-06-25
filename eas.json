@@ -5,9 +5,9 @@
   "build": {
     "development": {
       "distribution": "internal",
-      // "android": {
-      // "buildType": "apk"
-      // },
+      "android": {
+        "buildType": "apk"
+      },
       "channel": "development",
       "autoIncrement": true
     },
@@ -24,8 +24,7 @@
         "buildType": "apk"
       },
       "channel": "production",
-      "autoIncrement": true,
-      "releaseChannel": "production"
+      "autoIncrement": true
     }
   },
   "submit": {
