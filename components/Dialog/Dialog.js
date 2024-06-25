@@ -6,27 +6,10 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import { useTheme, useThemeStyle } from "../Hooks";
-// import * as NavigationBar from "expo-navigation-bar";
-// import * as SystemUI from "expo-system-ui";
+import { useThemeStyle } from "../Hooks";
 
 const Dialog = (props) => {
-  const [theme] = useTheme();
   const themeStyle = useThemeStyle();
-
-  // if (theme.data) {
-  //   if (Platform.OS === "android") {
-  //     NavigationBar.setButtonStyleAsync("light");
-  //     NavigationBar.setBackgroundColorAsync("#0a0d0c");
-  //   }
-  //   SystemUI.setBackgroundColorAsync("#0a0d0c");
-  // } else {
-  //   if (Platform.OS === "android") {
-  //     NavigationBar.setButtonStyleAsync("dark");
-  //     NavigationBar.setBackgroundColorAsync("#f0f4fa");
-  //   }
-  //   SystemUI.setBackgroundColorAsync("#f0f4fa");
-  // }
 
   return (
     // dont touch this
@@ -53,7 +36,8 @@ const Dialog = (props) => {
           >
             <TouchableWithoutFeedback>
               <KeyboardAvoidingView
-                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                behavior={Platform.OS === "ios" ? "padding" : "padding"}
+                // keyboardVerticalOffset={-111}
               >
                 <View
                   style={[
