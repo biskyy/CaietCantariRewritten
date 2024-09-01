@@ -3,7 +3,7 @@ name: Build and Release APK
 on:
   push:
     branches:
-      - master # Change this to your default branch
+      - main # Change this to your default branch
 
 jobs:
   build:
@@ -22,12 +22,12 @@ jobs:
         run: npm install
 
       - name: Install Expo CLI
-        run: npm install -g expo-cli
+        run: npm install -g expo-cli eas-cli # Install both Expo CLI and EAS CLI
 
       - name: Log in to EAS
         env:
           EAS_ACCESS_TOKEN: ${{ secrets.EAS_ACCESS_TOKEN }}
-        run: eas login --token $EAS_ACCESS_TOKEN
+        run: eas whoami || eas login --token $EAS_ACCESS_TOKEN
 
       - name: Build APK
         run: eas build --platform android --non-interactive
@@ -53,7 +53,7 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         env:
-          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: "v${{ env.VERSION }}"
           release_name: "Release v${{ env.VERSION }}"
@@ -63,7 +63,7 @@ jobs:
       - name: Upload APK to Release
         uses: actions/upload-release-asset@v1
         env:
-          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./app.apk
