@@ -1,0 +1,71 @@
+name: Build and Release APK
+
+on:
+  push:
+    branches:
+      - master # Change this to your default branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Expo CLI
+        run: npm install -g expo-cli
+
+      - name: Log in to EAS
+        env:
+          EAS_ACCESS_TOKEN: ${{ secrets.EAS_ACCESS_TOKEN }}
+        run: eas login --token $EAS_ACCESS_TOKEN
+
+      - name: Build APK
+        run: eas build --platform android --non-interactive
+        env:
+          EAS_BUILD_PROFILE: production # Ensure you have a production profile in eas.json
+
+      - name: Wait for build to complete
+        run: eas build:list --status=finished --platform android --non-interactive
+        id: eas_build
+
+      - name: Download APK
+        run: |
+          BUILD_ID=$(eas build:list --platform android --status=finished --json --non-interactive | jq -r '.[0].id')
+          eas build:download --platform android --output ./app.apk --id $BUILD_ID
+
+      - name: Get version from app.json
+        id: get_version
+        run: |
+          VERSION=$(cat app.json | jq -r .expo.version)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        with:
+          tag_name: "v${{ env.VERSION }}"
+          release_name: "Release v${{ env.VERSION }}"
+          draft: false
+          prerelease: false
+
+      - name: Upload APK to Release
+        uses: actions/upload-release-asset@v1
+        env:
+          REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./app.apk
+          asset_name: app-v${{ env.VERSION }}.apk
+          asset_content_type: application/vnd.android.package-archive
