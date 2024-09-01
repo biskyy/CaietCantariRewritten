@@ -111,7 +111,14 @@ export default function SongScreen({ route, navigation }) {
               orientation === "landscape" && Platform.OS === "ios" ? 60 : 30,
           }}
         >
-          <Text style={{ ...themeStyle.txtColor, fontSize }}>
+          <Text
+            style={{
+              ...themeStyle.txtColor,
+              fontSize,
+              // textAlign: "center",
+              width: "100%",
+            }}
+          >
             {displayedSongInfo.song.content}
           </Text>
         </ScrollView>
