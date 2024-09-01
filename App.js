@@ -48,7 +48,7 @@ export default function App() {
     preloadFontsAndIcons();
   }, []);
 
-  // set orientation state
+  // set orientation statee
   ScreenOrientation.addOrientationChangeListener(({ orientationInfo }) => {
     if (
       orientationInfo.orientation === 3 ||
