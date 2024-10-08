@@ -26,19 +26,24 @@ jobs:
       - name: Install Expo CLI
         run: npm install -g expo-cli eas-cli # Install both Expo CLI and EAS CLI
 
-      - name: Build APK
-        run: eas build --platform android --non-interactive
-        env:
-          EAS_BUILD_PROFILE: production # Ensure you have a production profile in eas.json
+      # - name: Build APK
+      #   run: eas build --platform android --non-interactive
+      #   env:
+      #     EAS_BUILD_PROFILE: production # Ensure you have a production profile in eas.json
 
-      - name: Wait for build to complete
-        run: eas build:list --status=finished --platform android --non-interactive
-        id: eas_build
+      # - name: Wait for build to complete
+      #   run: eas build:list --status=finished --platform android --non-interactive
+      #   id: eas_build
+
+      - name: Get APK download URL
+        id: get_apk_url
+        run: |
+          APK_URL=$(eas build:view --platform android --json --non-interactive | jq -r '.artifacts.buildUrl')
+          echo "APK_URL=$APK_URL" >> $GITHUB_ENV
 
       - name: Download APK
         run: |
-          BUILD_ID=$(eas build:list --platform android --status=finished --json --non-interactive | jq -r '.[0].id')
-          eas build:download --platform android --output ./app.apk --id $BUILD_ID
+          curl -o ./app.apk ${{ env.APK_URL }}
 
       - name: Get version from app.json
         id: get_version
