@@ -24,13 +24,8 @@ jobs:
       - name: Install Expo CLI
         run: npm install -g expo-cli eas-cli # Install both Expo CLI and EAS CLI
 
-      - name: Log in to EAS
-        env:
-          EAS_ACCESS_TOKEN: ${{ secrets.EAS_ACCESS_TOKEN }}
-        run: eas whoami || eas login --token $EAS_ACCESS_TOKEN
-
       - name: Build APK
-        run: eas build --platform android --non-interactive
+        run: eas build --platform android --non-interactive --no-wait
         env:
           EAS_BUILD_PROFILE: production # Ensure you have a production profile in eas.json
 
