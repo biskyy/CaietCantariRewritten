@@ -27,7 +27,7 @@ jobs:
         run: npm install -g expo-cli eas-cli # Install both Expo CLI and EAS CLI
 
       - name: Build APK
-        run: eas build --platform android --non-interactive --no-wait
+        run: eas build --platform android --non-interactive
         env:
           EAS_BUILD_PROFILE: production # Ensure you have a production profile in eas.json
 
