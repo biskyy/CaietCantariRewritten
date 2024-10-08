@@ -14,7 +14,7 @@ import { memo, useCallback, useMemo, useState } from "react";
 import { useAtom } from "jotai";
 import { useThemeStyle, useDisplayedSongInfo, useTheme } from "./Hooks";
 import SongButton from "./Buttons/SongButton";
-import SearchBar from "./SeachBar";
+// import SearchBar from "./SeachBar";
 
 const validCategories = ["lauda", "rugaciune", "predare"];
 
@@ -45,9 +45,9 @@ const SongList = () => {
     "Toate Cantarile": null,
     "Caiet de Cantari": "CC",
     "Cantari BER": "BER",
-    "Jubilate": "J",
+    Jubilate: "J",
     "Cartea de Tineret": "CT",
-    "Cor": "Cor",
+    Cor: "Cor",
     "Cantari favorite": "CF",
   };
 
