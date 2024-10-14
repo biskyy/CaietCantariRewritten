@@ -38,7 +38,7 @@ jobs:
       - name: Get APK download URL
         id: get_apk_url
         run: |
-          APK_URL=$(eas build:view --platform android --non-interactive | grep 'Artifact' | awk '{print $2}')
+          APK_URL=$(eas build:view | grep "Artifact" | awk '{print $2}')
           if [ -z "$APK_URL" ]; then
             echo "No APK URL found. Check build status."
             exit 1
