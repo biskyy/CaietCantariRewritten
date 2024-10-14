@@ -50,7 +50,7 @@ jobs:
 
       - name: Download APK
         run: |
-          curl -o ./app.apk ${{ env.APK_URL }}
+          curl -L -o ./app.apk ${{ env.APK_URL }}
 
       - name: Get version from app.json
         id: get_version
