@@ -2,11 +2,12 @@
   "expo": {
     "name": "Caiet de Cantari",
     "slug": "CaietDeCantari",
-    "version": "0.5.4",
+    "version": "0.5.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "assetBundlePatterns": ["node_modules/@expo/vector-icons/**/*"],
+    "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
       "splash": {
@@ -20,7 +21,7 @@
         }
       },
       "bundleIdentifier": "com.biskyy.caietcantarirewritten",
-      "buildNumber": "0.5.4"
+      "buildNumber": "0.5.3"
     },
     "android": {
       "package": "com.biskyy.caietcantarirewritten",
