@@ -3,7 +3,9 @@ import { atomWithStorage, createJSONStorage, loadable } from "jotai/utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Cantari from "../assets/Cantari.json";
 
-export const apiUrl = "https://caiet-de-cantari.biskyys-api.net";
+//export const apiUrl = "https://caiet-de-cantari.biskyys-api.net";
+export const apiUrl =
+  "https://oi2ahiamhhmtrhwgsi2z43wob40wfgbe.lambda-url.eu-central-1.on.aws";
 // export const apiUrl = "http://192.168.1.61:3000/caiet-de-cantari";
 
 const storage = createJSONStorage(() => AsyncStorage);
@@ -13,7 +15,7 @@ export const fontSizeAtom = atomWithStorage("fontSize", 20, storage);
 export const userAtom = atomWithStorage(
   "user",
   { loggedIn: false, token: "", showCategories: true },
-  storage
+  storage,
 );
 export const loadingScreenAtom = atom({
   state: 0,
@@ -53,5 +55,5 @@ const readOnlyLoadableThemeAtom = loadable(themeAtom);
 
 export const writeableLoadableThemeAtom = atom(
   (get) => get(readOnlyLoadableThemeAtom),
-  async (_get, set, arg) => set(themeAtom, arg)
+  async (_get, set, arg) => set(themeAtom, arg),
 );
