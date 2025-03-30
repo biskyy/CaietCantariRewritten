@@ -2,7 +2,7 @@
   "expo": {
     "name": "Caiet de Cantari",
     "slug": "CaietDeCantari",
-    "version": "0.5.3",
+    "version": "0.5.5",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
