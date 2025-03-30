@@ -33,7 +33,7 @@ export default function SongScreen({ route, navigation }) {
     ScreenOrientation.unlockAsync();
     return () => {
       ScreenOrientation.lockAsync(
-        ScreenOrientation.OrientationLock.PORTRAIT_UP
+        ScreenOrientation.OrientationLock.PORTRAIT_UP,
       );
     };
   }, []);
@@ -42,7 +42,7 @@ export default function SongScreen({ route, navigation }) {
 
   useEffect(
     () => setDisplayedSongInfo({ song: songs[displayedSongInfo.index] }),
-    [songs, displayedSongInfo.index]
+    [songs, displayedSongInfo.index],
   );
 
   const handleFontSizeChange = (sign) => {
@@ -53,7 +53,7 @@ export default function SongScreen({ route, navigation }) {
   function addSongToFavorites() {
     if (favoriteSongs.includes(displayedSongInfo.index))
       setFavoriteSongs(
-        favoriteSongs.filter((song) => song !== displayedSongInfo.index)
+        favoriteSongs.filter((song) => song !== displayedSongInfo.index),
       );
     else setFavoriteSongs([displayedSongInfo.index, ...favoriteSongs]);
   }
@@ -115,8 +115,6 @@ export default function SongScreen({ route, navigation }) {
             style={{
               ...themeStyle.txtColor,
               fontSize,
-              // textAlign: "center",
-              width: "100%",
             }}
           >
             {displayedSongInfo.song.content}
