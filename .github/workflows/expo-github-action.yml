@@ -1,2 +1,13 @@
-name: Expo GitHub Action
-uses: expo/expo-github-action@8.2.1
+name: publish expo update
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Expo GitHub Action
+        uses: expo/expo-github-action@8.2.1
