@@ -1,6 +1,10 @@
 name: publish expo update
 on: [push]
 
+inputs:
+  packager:
+    default: bun
+
 jobs:
   build:
     runs-on: ubuntu-latest
