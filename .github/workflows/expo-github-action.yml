@@ -6,8 +6,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: checkout code
         uses: actions/checkout@v3
+
+      - name: setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          cache: yarn
 
       - name: Expo GitHub Action
         uses: expo/expo-github-action@8.2.1
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: install deps
+        run: yarn install
+
+      - name: create update
+        run: eas update --auto --non-interactive
