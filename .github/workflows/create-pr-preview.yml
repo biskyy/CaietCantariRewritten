@@ -3,7 +3,8 @@ name: create-pr-preview
 on: [pull_request]
 
 jobs:
-  create-preview:
+  create-update:
+    permissions: write-all
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
