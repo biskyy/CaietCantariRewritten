@@ -34,6 +34,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   // some crazy new feature
+  // other crazy new feature
   const colorScheme = useColorScheme();
   const [theme, setTheme] = useTheme();
   const [loading, setLoading] = useState(true);
