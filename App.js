@@ -33,6 +33,7 @@ const Stack = createNativeStackNavigator();
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
+  // old version
   const colorScheme = useColorScheme();
   const [theme, setTheme] = useTheme();
   const [loading, setLoading] = useState(true);
