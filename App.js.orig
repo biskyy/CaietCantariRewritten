@@ -34,9 +34,10 @@ SplashScreen.preventAutoHideAsync();
 
 export default function App() {
 <<<<<<< HEAD
-  // old version
+  // modified the craze new feature
 =======
   // some crazy new feature
+  // other crazy new feature
 >>>>>>> wip-feat1
   const colorScheme = useColorScheme();
   const [theme, setTheme] = useTheme();
