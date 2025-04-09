@@ -33,7 +33,11 @@ const Stack = createNativeStackNavigator();
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  // modified the craze new feature
+<<<<<<< HEAD
+  // old version
+=======
+  // some crazy new feature
+>>>>>>> wip-feat1
   const colorScheme = useColorScheme();
   const [theme, setTheme] = useTheme();
   const [loading, setLoading] = useState(true);
