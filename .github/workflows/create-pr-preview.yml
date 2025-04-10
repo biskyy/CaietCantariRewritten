@@ -6,6 +6,8 @@ jobs:
   create-update:
     permissions:
       discussions: write
+      pull-requests: write
+
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
