@@ -4,7 +4,8 @@ on: [pull_request]
 
 jobs:
   create-update:
-    permissions: write-all
+    permissions:
+      discussions: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
