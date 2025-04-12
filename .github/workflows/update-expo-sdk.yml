@@ -41,9 +41,11 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
+      - name: Set branch name
+        run: echo "BRANCH=expo-sdk-update-$(date +%d-%m-%Y)" >> "$GITHUB_ENV"
+
       - name: Create temp branch and commit changes
         run: |
-          echo "BRANCH=expo-sdk-update-$(date +%d-%m-%Y)" >> $GITHUB_ENV
           git checkout -b "$BRANCH"
           git add .
           git commit -m "chore: weekly expo sdk update"
