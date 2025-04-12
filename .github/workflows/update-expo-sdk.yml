@@ -1,6 +1,7 @@
 name: update-expo-sdk
 
 on:
+  [push]
   schedule:
     - cron: "0 8 * * MON"
 
