@@ -27,6 +27,9 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
           packager: bun
 
+      - name: Install packages
+        run: bun install
+
       - name: Update expo
         run: bun expo install expo@latest
 
