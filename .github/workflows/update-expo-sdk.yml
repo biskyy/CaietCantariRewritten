@@ -1,7 +1,8 @@
 name: update-expo-sdk
 
 on:
-  [push]
+  branches:
+    - wip-update-expo-weekly-action
   schedule:
     - cron: "0 8 * * MON"
 
