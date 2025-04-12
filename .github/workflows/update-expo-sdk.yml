@@ -28,10 +28,10 @@ jobs:
           packager: bun
 
       - name: Update expo
-        run: npx expo install expo@latest
+        run: bun expo install expo@latest
 
       - name: Fix dependencies
-        run: npx expo install --fix
+        run: bun expo install --fix
 
       - name: Configure git
         run: |
