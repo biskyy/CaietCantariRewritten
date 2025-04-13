@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Redirecting...</title>
+    <script>
+      fetch("link")
+        .then((response) => response.text())
+        .then((url) => {
+          const trimmedUrl = url.trim();
+          if (trimmedUrl) window.location.href = trimmedUrl;
+          else document.body.innerHTML = "<p>No redirect URL defined.</p>";
+        })
+        .catch((err) => {
+          console.error("Failed to load redirect link:", err);
+          document.body.innerHTML = "<p>Error loading redirect link.</p>";
+        });
+    </script>
+  </head>
+</html>
