@@ -2,18 +2,23 @@
 <html>
   <head>
     <title>Redirecting...</title>
+    <!--<script>-->
+    <!--  fetch("link")-->
+    <!--    .then((response) => response.text())-->
+    <!--    .then((url) => {-->
+    <!--      const trimmedUrl = url.trim();-->
+    <!--      if (trimmedUrl) window.location.href = trimmedUrl;-->
+    <!--      else document.body.innerHTML = "<p>No redirect URL defined.</p>";-->
+    <!--    })-->
+    <!--    .catch((err) => {-->
+    <!--      console.error("Failed to load redirect link:", err);-->
+    <!--      document.body.innerHTML = "<p>Error loading redirect link.</p>";-->
+    <!--    });-->
+    <!--</script>-->
     <script>
-      fetch("link")
-        .then((response) => response.text())
-        .then((url) => {
-          const trimmedUrl = url.trim();
-          if (trimmedUrl) window.location.href = trimmedUrl;
-          else document.body.innerHTML = "<p>No redirect URL defined.</p>";
-        })
-        .catch((err) => {
-          console.error("Failed to load redirect link:", err);
-          document.body.innerHTML = "<p>Error loading redirect link.</p>";
-        });
+      window.location.replace(
+        "exp://u.expo.dev/update/077c0b77-4df0-4b13-8330-3b35f386fba3",
+      );
     </script>
   </head>
 </html>
