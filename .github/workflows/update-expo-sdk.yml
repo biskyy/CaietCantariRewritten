@@ -50,7 +50,7 @@ jobs:
           git diff --quiet && echo "No changes detected." && echo "BRANCH=" >> "$GITHUB_ENV" && exit 0
           git checkout -b "$BRANCH"
           git add .
-          git commit -m "chore: weekly expo sdk update"
+          git commit -m "chore: weekly expo sdk update - $(date +%d-%m-%Y) [skip ci]"
           git push origin "$BRANCH"
           # echo "BRANCH_NAME=$BRANCH" >> $GITHUB_ENV
 
@@ -61,7 +61,7 @@ jobs:
         run: |
           gh auth setup-git
           gh pr create \
-            --title "weekly expo sdk update" \
+            --title "weekly expo sdk update - $(date +%d-%m-%Y)" \
             --body "update expo sdk to the latest version along with its dependencies" \
             --head "$BRANCH" \
             --base development
