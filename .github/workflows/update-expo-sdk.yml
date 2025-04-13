@@ -57,7 +57,7 @@ jobs:
       - name: Create pull request
         if: ${{ env.BRANCH != '' }}
         env:
-          GH_TOKEN: ${{ secrets.GH_CREATE_PR_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh auth setup-git
           gh pr create \
