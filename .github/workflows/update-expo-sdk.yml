@@ -39,10 +39,10 @@ jobs:
       - name: Fix dependencies
         run: bun expo install --fix
 
-      - name: Configure git
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+      # - name: Configure git
+      #   run: |
+      #     git config user.name "github-actions[bot]"
+      #     git config user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Set branch name
         run: echo "BRANCH=expo-sdk-update-$(date +%d-%m-%Y)" >> "$GITHUB_ENV"
