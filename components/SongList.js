@@ -60,7 +60,7 @@ const SongList = () => {
         if (bookIDFilter === "CF") return favoriteSongs.includes(song.index);
         return bookIDFilter === null || song.book_id === bookIDFilter;
       }),
-    [theme, songs, favoriteSongs]
+    [theme, songs, favoriteSongs],
   );
 
   const [filteredSongs, setFilteredSongs] = useState(data);
@@ -123,7 +123,7 @@ const SongList = () => {
     ({ item }) => (
       <SongButton song={item} onPress={() => itemOnPressProp(item)} />
     ),
-    [theme]
+    [theme],
   );
 
   return (
@@ -136,6 +136,7 @@ const SongList = () => {
         indicatorStyle={theme.data ? "white" : "black"}
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{ padding: 10 }}
+        contentInsetAdjustmentBehavior="automatic"
       />
       {searchQuery !== "" && (
         <View style={{ ...themeStyle.bgColor, flex: 9999 }}>
