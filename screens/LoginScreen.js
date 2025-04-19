@@ -26,9 +26,8 @@ const LoginScreen = () => {
       setPasswordText("");
       Keyboard.dismiss();
       setUser({
-        loggedIn: true,
-        token: response.data.token,
-        showCategories: user.showCategories,
+        ...user,
+        adminToken: response.data.token,
       });
     }
     setLoadingScreen({

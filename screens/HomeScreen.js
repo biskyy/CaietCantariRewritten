@@ -41,7 +41,7 @@ const CustomDrawerMenu = (props) => {
         callback: () =>
           Alert.alert(
             "S-au actualizat cantarile",
-            "Cantarile au fost actualizate cu succes."
+            "Cantarile au fost actualizate cu succes.",
           ),
       });
     }
@@ -107,7 +107,7 @@ const CustomDrawerMenu = (props) => {
             ? { primary: true }
             : { secondary: true })}
         />
-        {user.loggedIn && (
+        {user.adminToken && (
           <Button
             text="Rapoarte"
             icon="bug-report"

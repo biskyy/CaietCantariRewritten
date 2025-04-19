@@ -99,8 +99,8 @@ const Navbar = () => {
                 route.name === "Cantare"
                   ? 4
                   : route.name === "Rapoarte"
-                  ? 5
-                  : 6,
+                    ? 5
+                    : 6,
             },
           ]}
         >
@@ -111,7 +111,7 @@ const Navbar = () => {
             {route.name}
           </Text>
         </View>
-        {route.name === "Cantare" && user.loggedIn ? (
+        {route.name === "Cantare" && user.adminToken ? (
           <IconButton
             icon="edit"
             size={32}
@@ -121,7 +121,7 @@ const Navbar = () => {
           />
         ) : (
           route.name === "Cantare" &&
-          !user.loggedIn && (
+          !user.adminToken && (
             <IconButton
               icon="report-gmailerrorred"
               size={32}

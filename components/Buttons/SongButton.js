@@ -1,13 +1,13 @@
 import { useAtom } from "jotai";
 import Colors from "../Colors";
-import { userAtom } from "../State";
+import { userPrefsAtom } from "../State";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { useThemeStyle } from "../Hooks";
 
 const SongButton = (props) => {
   const themeStyle = useThemeStyle();
 
-  const [user] = useAtom(userAtom);
+  const [userPrefs] = useAtom(userPrefsAtom);
 
   let prevPageX;
 
@@ -26,7 +26,7 @@ const SongButton = (props) => {
       <Text style={[themeStyle.txtColor, themeStyle.text]} numberOfLines={1}>
         {props.song.title}
       </Text>
-      {props.song.tags.length !== 0 && user.showCategories && (
+      {props.song.tags.length !== 0 && userPrefs.showCategories && (
         <Text style={[{ fontSize: 12, color: Colors[500] }]} numberOfLines={1}>
           {props.song.tags.length > 3
             ? [...props.song.tags.slice(0, 2), "…"].join(" • ")

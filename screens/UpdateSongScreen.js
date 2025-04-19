@@ -50,7 +50,7 @@ const UpdateSongScreen = () => {
 
   const submitChanges = async () => {
     if (displayedSongInfo.currentReport) {
-      await deleteReport(displayedSongInfo.currentReport, user.token);
+      await deleteReport(displayedSongInfo.currentReport, user.adminToken);
       setDisplayedSongInfo({ currentReport: {} });
     }
     setLoadingScreen({ state: 1, message: "Se incarca schimbarile" });
@@ -63,7 +63,7 @@ const UpdateSongScreen = () => {
         tags: song.tags !== "" ? song.tags.split(", ") : [],
         index: song.index,
       },
-      user.token
+      user.adminToken,
     );
     setLoadingScreen({
       state: 2,
