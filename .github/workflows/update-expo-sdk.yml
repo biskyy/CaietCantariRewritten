@@ -50,7 +50,7 @@ jobs:
           git diff --quiet && echo "No changes detected." && echo "BRANCH=" >> "$GITHUB_ENV" && exit 0
           git checkout -b "$BRANCH"
           git add .
-          git commit -m "chore: weekly expo sdk update - $(date +%d-%m-%Y) [skip ci]"
+          git commit -m "chore: weekly expo sdk update - $(date +%d-%m-%Y)"
           git push origin "$BRANCH"
           # echo "BRANCH_NAME=$BRANCH" >> $GITHUB_ENV
 
