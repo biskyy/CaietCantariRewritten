@@ -102,9 +102,7 @@ export default function App() {
         <NavigationContainer theme={theme.data ? DarkTheme : DefaultTheme}>
           <Stack.Navigator
             initialRouteName="Home"
-            screenOptions={{
-              header: () => <Navbar />,
-            }}
+            screenOptions={{ header: () => <Navbar /> }}
           >
             <Stack.Screen
               name="Home"
