@@ -31,7 +31,7 @@ export const fontSizeAtom = atomWithStorage(
 
 export const userAtom = atomWithStorage(
   USER_ATOM_STORAGE,
-  { token: "", adminToken: "" },
+  { token: "", adminToken: "", tokenExpiryDate: 0 },
   storage,
 );
 
