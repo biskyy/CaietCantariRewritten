@@ -54,6 +54,7 @@ const UpdateSongScreen = () => {
       setDisplayedSongInfo({ currentReport: {} });
     }
     setLoadingScreen({ state: 1, message: "Se incarca schimbarile" });
+
     const updateResponse = await updateSongRequest(
       {
         book_id: song.book_id,
