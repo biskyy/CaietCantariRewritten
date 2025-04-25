@@ -34,7 +34,9 @@ const CustomDrawerMenu = (props) => {
       state: 1,
       message: "Se actualizeaza cantarile",
     });
+
     const response = await fetchSongsRequest();
+
     if (response.status === 200) {
       setSongs(response.data);
       setLoadingScreen({
@@ -44,6 +46,9 @@ const CustomDrawerMenu = (props) => {
             "Cantarile au fost actualizate cu succes.",
           ),
       });
+    } else {
+      // we have to reset it otherwise the previous one will get called
+      setLoadingScreen({ callback: () => {} });
     }
     setLoadingScreen({ state: 2 });
   };
