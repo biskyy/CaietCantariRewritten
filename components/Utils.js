@@ -1,9 +1,11 @@
 import axios from "axios";
 import { Alert } from "react-native";
-import { apiUrl, reportsArrayAtom } from "./State";
+import { apiUrl, reportsArrayAtom, userAtom } from "./State";
 import NetInfo from "@react-native-community/netinfo";
 import * as Font from "expo-font";
-import { useAtom } from "jotai";
+import { getDefaultStore, useAtom } from "jotai";
+
+const store = getDefaultStore();
 
 /**
  * @returns boolean
@@ -13,9 +15,48 @@ export const isInternetConnected = async () => {
   if (!internet.isConnected)
     Alert.alert(
       "Nu exista conexiune la internet",
-      "Este necesara o conexiune la internet pentru a realiza o cerere."
+      "Este necesara o conexiune la internet pentru a realiza o cerere.",
     );
   return internet.isConnected;
+};
+
+const getUserToken = async () => {
+  let user = await store.get(userAtom); // need to await bcuz of AsyncStorage
+
+  if (!user.tokenExpiryDate) {
+    // if for some reason the user doesnt have a tokenExpiryDate reset it
+    await store.set(userAtom, {
+      ...user,
+      tokenExpiryDate: 0,
+    });
+
+    user = await store.get(userAtom);
+  }
+
+  if (user.tokenExpiryDate < Date.now()) {
+    // token expired, resetting
+    console.log("resetting token");
+
+    try {
+      const response = await axios.get(`${apiUrl}/auth/token`, {
+        timeout: 10000,
+      });
+
+      await store.set(userAtom, {
+        ...user,
+        token: response.data.token,
+        tokenExpiryDate: Date.now() + 60 * 60 * 1000,
+      });
+    } catch (error) {
+      return handleErrorResponse(error);
+    }
+  }
+
+  const updatedUser = await store.get(userAtom);
+
+  // console.log(await store.get(userAtom));
+
+  return updatedUser.token;
 };
 
 /**
@@ -25,9 +66,15 @@ export const isInternetConnected = async () => {
  */
 export const fetchSongsRequest = async (config) => {
   if (!(await isInternetConnected())) return { data: undefined, status: 400 };
+  const userToken = await getUserToken();
+
+  // console.log(userToken);
 
   try {
     const response = await axios.get(`${apiUrl}/songs`, {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
       timeout: 10000,
       ...config,
     });
@@ -45,12 +92,13 @@ export const fetchSongsRequest = async (config) => {
  */
 export const loginRequest = async (username, password) => {
   if (!(await isInternetConnected())) return { data: undefined, status: 400 };
+  const userToken = await getUserToken();
 
   try {
     const response = await axios.post(
-      `${apiUrl}/login`,
+      `${apiUrl}/auth/login`,
       { username, password },
-      { timeout: 10000 }
+      { headers: { Authorization: `Bearer ${userToken}` }, timeout: 10000 },
     );
     return { data: response.data, status: response.status };
   } catch (error) {
@@ -65,10 +113,12 @@ export const loginRequest = async (username, password) => {
 export const updateSongRequest = async (updatedSong, token) => {
   if (!(await isInternetConnected())) return { data: undefined, status: 400 };
 
+  console.log(token);
+
   try {
     const response = await axios.put(`${apiUrl}/songs`, updatedSong, {
       headers: {
-        authorization: token,
+        authorization: `Bearer ${token}`,
       },
       timeout: 10000,
     });
@@ -80,11 +130,13 @@ export const updateSongRequest = async (updatedSong, token) => {
 
 export const createReport = async (songIndex, additionalDetails) => {
   if (!(await isInternetConnected())) return { data: undefined, status: 400 };
+  const userToken = await getUserToken();
+
   try {
     const response = await axios.post(
       `${apiUrl}/reports`,
       { songIndex, additionalDetails },
-      { timeout: 10000 }
+      { headers: { Authorization: `Bearer ${userToken}` }, timeout: 10000 },
     );
     return { data: response.data, status: response.status };
   } catch (error) {
@@ -94,8 +146,13 @@ export const createReport = async (songIndex, additionalDetails) => {
 
 export const fetchReports = async () => {
   if (!(await isInternetConnected())) return { data: undefined, status: 400 };
+  const userToken = await getUserToken();
+
   try {
-    const response = await axios.get(`${apiUrl}/reports`, { timeout: 10000 });
+    const response = await axios.get(`${apiUrl}/reports`, {
+      headers: { Authorization: `Bearer ${userToken}` },
+      timeout: 10000,
+    });
     return { data: response.data, status: response.status };
   } catch (error) {
     return handleErrorResponse(error);
@@ -108,7 +165,7 @@ export const deleteReport = async (report, token) => {
   try {
     const response = await axios.delete(`${apiUrl}/reports`, {
       headers: {
-        authorization: token,
+        authorization: `Bearer ${token}`,
       },
       timeout: 10000,
       data: report,
@@ -123,20 +180,20 @@ const handleErrorResponse = (error) => {
   if (error.response) {
     Alert.alert(
       `Eroare: ${error.response.status}`,
-      `${error.response.data.message}`
+      `${error.response.data.message}`,
     );
     return { data: undefined, status: error.response.status };
   } else if (error.request) {
     console.log(error.request);
     Alert.alert(
       "Serverul este offline",
-      "Nu s-a putut efectua cererea deoarece serverul nu este online."
+      "Nu s-a putut efectua cererea deoarece serverul nu este online.",
     );
     return { data: undefined, status: 500 };
   } else {
     Alert.alert(
       "Cererea este invalida",
-      `${error.message}\n\nTrimite un screenshot la developer ;)`
+      `${error.message}\n\nTrimite un screenshot la developer;)`,
     );
     return { data: undefined, status: 400 };
   }
