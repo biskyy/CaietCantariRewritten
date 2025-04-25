@@ -3,10 +3,12 @@ import Button from "../components/Buttons/Button";
 import { useNavigation } from "@react-navigation/native";
 import { useThemeStyle } from "../components/Hooks";
 import { useAtom } from "jotai";
-import { userAtom } from "../components/State";
+import { userAtom, userPrefsAtom } from "../components/State";
 
 export default function SettingsScreen() {
   const themeStyle = useThemeStyle();
+
+  const [userPrefs, setUserPrefs] = useAtom(userPrefsAtom);
   const [user, setUser] = useAtom(userAtom);
 
   const navigation = useNavigation();
@@ -14,7 +16,7 @@ export default function SettingsScreen() {
   return (
     <>
       <View style={[themeStyle.bgColor, styles.settingsDiv]}>
-        {!user.loggedIn ? (
+        {!user.adminToken ? (
           <Button
             icon="login"
             // primary
@@ -34,9 +36,7 @@ export default function SettingsScreen() {
             // @ts-ignore
             onPress={() =>
               setUser({
-                loggedIn: false,
-                token: "",
-                showCategories: user.showCategories,
+                adminToken: "",
               })
             }
             text="Logout"
@@ -44,15 +44,16 @@ export default function SettingsScreen() {
         )}
         <Button
           text="Arata categoriile pe meniul principal"
-          icon={user.showCategories ? "check-box" : "check-box-outline-blank"}
+          icon={
+            userPrefs.showCategories ? "check-box" : "check-box-outline-blank"
+          }
           iconSize={20}
           touchableStyle={{ width: "100%", marginVertical: 2.5 }}
           // @ts-ignore
           onPress={() => {
-            setUser({
-              loggedIn: user.loggedIn,
-              token: user.token,
-              showCategories: !user.showCategories,
+            setUserPrefs({
+              ...userPrefs,
+              showCategories: !userPrefs.showCategories,
             });
           }}
           secondary

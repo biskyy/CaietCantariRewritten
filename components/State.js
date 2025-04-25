@@ -3,25 +3,51 @@ import { atomWithStorage, createJSONStorage, loadable } from "jotai/utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Cantari from "../assets/Cantari.json";
 
+export const SONGS_ATOM_STORAGE = "songs";
+export const FAVORITE_SONGS_ATOM_STORAGE = "favoriteSongs";
+export const FONT_SIZE_ATOM_STORAGE = "fontSize";
+export const USER_PREFS_ATOM_STORAGE = "userPrefs";
+export const USER_ATOM_STORAGE = "user";
+
 //export const apiUrl = "https://caiet-de-cantari.biskyys-api.net";
 export const apiUrl =
   "https://oi2ahiamhhmtrhwgsi2z43wob40wfgbe.lambda-url.eu-central-1.on.aws";
 // export const apiUrl = "http://192.168.1.61:3000/caiet-de-cantari";
 
 const storage = createJSONStorage(() => AsyncStorage);
-export const songsAtom = atomWithStorage("songs", Cantari, storage);
-export const favoriteSongsAtom = atomWithStorage("favoriteSongs", [], storage);
-export const fontSizeAtom = atomWithStorage("fontSize", 20, storage);
-export const userAtom = atomWithStorage(
-  "user",
-  { loggedIn: false, token: "", showCategories: true },
+export const songsAtom = atomWithStorage(SONGS_ATOM_STORAGE, Cantari, storage);
+
+export const favoriteSongsAtom = atomWithStorage(
+  FAVORITE_SONGS_ATOM_STORAGE,
+  [],
   storage,
 );
+
+export const fontSizeAtom = atomWithStorage(
+  FONT_SIZE_ATOM_STORAGE,
+  20,
+  storage,
+);
+
+export const userAtom = atomWithStorage(
+  USER_ATOM_STORAGE,
+  { token: "", adminToken: "", tokenExpiryDate: 0 },
+  storage,
+);
+
 export const loadingScreenAtom = atom({
   state: 0,
   message: "",
   callback: () => {},
 });
+
+export const userPrefsAtom = atomWithStorage(
+  USER_PREFS_ATOM_STORAGE,
+  {
+    showCategories: true,
+  },
+  storage,
+);
 
 export const modalVisibleAtom = atom(false);
 

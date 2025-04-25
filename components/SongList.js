@@ -60,7 +60,7 @@ const SongList = () => {
         if (bookIDFilter === "CF") return favoriteSongs.includes(song.index);
         return bookIDFilter === null || song.book_id === bookIDFilter;
       }),
-    [theme, songs, favoriteSongs]
+    [theme, songs, favoriteSongs],
   );
 
   const [filteredSongs, setFilteredSongs] = useState(data);
@@ -87,6 +87,11 @@ const SongList = () => {
         formattedQuery.length - prevSearchQuery.length > 1 // handle keyboard correcting words
       ) {
         return data.filter((song) => {
+          if (!song.searchable_title || !song.searchable_content)
+            return console.log(
+              `song with id ${song.id} doesnt have searchable_title or searchable_content`,
+            );
+
           return (
             song.searchable_title.includes(trimmedFormattedQuery) ||
             song.searchable_content.includes(trimmedFormattedQuery)
@@ -94,6 +99,11 @@ const SongList = () => {
         });
       }
       return prevFilteredSongs.filter((song) => {
+        if (!song.searchable_title || !song.searchable_content)
+          return console.log(
+            `song with id ${song.id} doesnt have searchable_title or searchable_content`,
+          );
+
         return (
           song.searchable_title.includes(trimmedFormattedQuery) ||
           song.searchable_content.includes(trimmedFormattedQuery)
@@ -123,7 +133,7 @@ const SongList = () => {
     ({ item }) => (
       <SongButton song={item} onPress={() => itemOnPressProp(item)} />
     ),
-    [theme]
+    [theme],
   );
 
   return (
@@ -136,6 +146,7 @@ const SongList = () => {
         indicatorStyle={theme.data ? "white" : "black"}
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{ padding: 10 }}
+        contentInsetAdjustmentBehavior="automatic"
       />
       {searchQuery !== "" && (
         <View style={{ ...themeStyle.bgColor, flex: 9999 }}>

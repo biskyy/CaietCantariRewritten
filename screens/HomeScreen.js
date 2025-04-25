@@ -34,16 +34,21 @@ const CustomDrawerMenu = (props) => {
       state: 1,
       message: "Se actualizeaza cantarile",
     });
+
     const response = await fetchSongsRequest();
+
     if (response.status === 200) {
       setSongs(response.data);
       setLoadingScreen({
         callback: () =>
           Alert.alert(
             "S-au actualizat cantarile",
-            "Cantarile au fost actualizate cu succes."
+            "Cantarile au fost actualizate cu succes.",
           ),
       });
+    } else {
+      // we have to reset it otherwise the previous one will get called
+      setLoadingScreen({ callback: () => {} });
     }
     setLoadingScreen({ state: 2 });
   };
@@ -107,7 +112,7 @@ const CustomDrawerMenu = (props) => {
             ? { primary: true }
             : { secondary: true })}
         />
-        {user.loggedIn && (
+        {user.adminToken && (
           <Button
             text="Rapoarte"
             icon="bug-report"

@@ -63,7 +63,7 @@ const ReportsScreen = () => {
         />
       );
     },
-    [theme]
+    [theme],
   );
 
   const goToUpdateSong = () => {
@@ -125,7 +125,7 @@ const ReportsScreen = () => {
               text="Sterge"
               secondary
               onPress={() => {
-                deleteReport(displayedSongInfo.currentReport, user.token);
+                deleteReport(displayedSongInfo.currentReport, user.adminToken);
                 setModalVisible(false);
               }}
             />
