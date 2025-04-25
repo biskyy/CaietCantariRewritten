@@ -4,6 +4,7 @@ import {
   KeyboardAvoidingView,
   Modal,
   Platform,
+  Pressable,
   ScrollView,
   Share,
   StyleSheet,
@@ -164,39 +165,41 @@ const Navbar = () => {
         />
       </View>
       <Separator />
-      <Dialog visible={modalVisible} setModalVisible={setModalVisible}>
-        <DialogTitle>Raporteaza o cantare</DialogTitle>
-        <Separator />
-        <Text />
-        <DialogText>Adauga detalii suplimentare (optional)</DialogText>
-        <Input
-          value={additionalDetails}
-          onChangeText={setAdditionalDetails}
-          textInputDivStyle={{ marginBottom: 10, height: 150 }}
-          placeholder="Scrie aici cum ar trebuii sa corectam cantarea"
-          multiline
-        />
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <Button
-            onPress={() => setModalVisible(false)}
-            text="Anulează"
-            secondary
+      {modalVisible && (
+        <Dialog visible={modalVisible} setModalVisible={setModalVisible}>
+          <DialogTitle>Raporteaza o cantare</DialogTitle>
+          <Separator />
+          <Text />
+          <DialogText>Adauga detalii suplimentare (optional)</DialogText>
+          <Input
+            value={additionalDetails}
+            onChangeText={setAdditionalDetails}
+            textInputDivStyle={{ marginBottom: 10, height: 150 }}
+            placeholder="Scrie aici cum ar trebuii sa corectam cantarea"
+            multiline
           />
-          <Button
-            onPress={() => {
-              createReport(displayedSongInfo.index, additionalDetails);
-              setModalVisible(false);
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
             }}
-            text="Trimite"
-            primary
-          />
-        </View>
-      </Dialog>
+          >
+            <Button
+              onPress={() => setModalVisible(false)}
+              text="Anulează"
+              secondary
+            />
+            <Button
+              onPress={() => {
+                createReport(displayedSongInfo.index, additionalDetails);
+                setModalVisible(false);
+              }}
+              text="Trimite"
+              primary
+            />
+          </View>
+        </Dialog>
+      )}
     </>
   );
 };
