@@ -87,6 +87,11 @@ const SongList = () => {
         formattedQuery.length - prevSearchQuery.length > 1 // handle keyboard correcting words
       ) {
         return data.filter((song) => {
+          if (!song.searchable_title || !song.searchable_content)
+            return console.log(
+              `song with id ${song.id} doesnt have searchable_title or searchable_content`,
+            );
+
           return (
             song.searchable_title.includes(trimmedFormattedQuery) ||
             song.searchable_content.includes(trimmedFormattedQuery)
@@ -94,6 +99,11 @@ const SongList = () => {
         });
       }
       return prevFilteredSongs.filter((song) => {
+        if (!song.searchable_title || !song.searchable_content)
+          return console.log(
+            `song with id ${song.id} doesnt have searchable_title or searchable_content`,
+          );
+
         return (
           song.searchable_title.includes(trimmedFormattedQuery) ||
           song.searchable_content.includes(trimmedFormattedQuery)
