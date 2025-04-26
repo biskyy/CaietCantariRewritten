@@ -54,8 +54,8 @@ jobs:
         run: eas build --platform=android --non-interactive
 
   create-release:
-    if: jobs.create-build.result == 'success'
-    needs: [create-build]
+    # if: jobs.create-build.result == 'success'
+    # needs: [create-build]
 
     runs-on: ubuntu-latest
 
@@ -75,6 +75,7 @@ jobs:
 
       - name: Set environment variables
         run: |
+          echo eas build:list --limit=1 --build-profile=production --json --non-interactive
           ARTIFACT_URL=$( eas build:list --limit=1 --build-profile=production --json --non-interactive \
             | jq -r ".[0].artifacts.applicationArchiveUrl" )
           APP_VERSION=$( eas build:list --limit=1 --build-profile=production --json --non-interactive \
