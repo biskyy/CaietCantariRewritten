@@ -99,7 +99,7 @@ jobs:
           gh auth setup-git
           gh release create \
             "v$APP_VERSION" \
-            caiet-de-cantari-v"$APP_VERSION" \
+            caiet-de-cantari-v"$APP_VERSION".apk \
             --latest \
             --target "production" \
             --title "v$APP_VERSION" \
