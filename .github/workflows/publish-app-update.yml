@@ -54,8 +54,8 @@ jobs:
         run: eas build --platform=android --non-interactive
 
   create-release:
-    # needs: [create-build]
-    # if: needs.create-build.result == 'success'
+    needs: [create-build]
+    if: needs.create-build.result == 'success'
 
     runs-on: ubuntu-latest
 
@@ -81,7 +81,6 @@ jobs:
 
       - name: Set environment variables
         run: |
-          eas build:list --limit=1 --build-profile=production --json --non-interactive
           echo "ARTIFACT_URL=$( eas build:list --limit=1 --build-profile=production --json --non-interactive \
             | jq -r ".[0].artifacts.applicationArchiveUrl" )" >> $GITHUB_ENV
           echo "APP_VERSION=$( eas build:list --limit=1 --build-profile=production --json --non-interactive \
@@ -98,8 +97,8 @@ jobs:
         run: |
           gh auth setup-git
           gh release create \
-            "v$APP_VERSION" \
-            caiet-de-cantari-v"$APP_VERSION".apk \
+            "v$APP_VERSION" \ # tag
+            caiet-de-cantari-v"$APP_VERSION".apk \ # asset to add to release
             --latest \
             --target "production" \
             --title "v$APP_VERSION" \
