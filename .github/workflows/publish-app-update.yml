@@ -82,12 +82,12 @@ jobs:
       - name: Set environment variables
         run: |
           eas build:list --limit=1 --build-profile=production --json --non-interactive
-          ARTIFACT_URL=$( eas build:list --limit=1 --build-profile=production --json --non-interactive \
-            | jq -r ".[0].artifacts.applicationArchiveUrl" )
-          APP_VERSION=$( eas build:list --limit=1 --build-profile=production --json --non-interactive \
-            | jq -r ".[0].appVersion" )
-          COMMIT_MESSAGE=$( eas build:list --limit=1 --build-profile=production --json --non-interactive \
-            | jq -r ".[0].gitCommitMessage" )
+          echo "ARTIFACT_URL=$( eas build:list --limit=1 --build-profile=production --json --non-interactive \
+            | jq -r ".[0].artifacts.applicationArchiveUrl" )" >> $GITHUB_ENV
+          echo "APP_VERSION=$( eas build:list --limit=1 --build-profile=production --json --non-interactive \
+            | jq -r ".[0].appVersion" )" >> $GITHUB_ENV
+          echo "COMMIT_MESSAGE=$( eas build:list --limit=1 --build-profile=production --json --non-interactive \
+            | jq -r ".[0].gitCommitMessage" )" >> $GITHUB_ENV
 
       - name: Get build artifact
         run: curl -L -o caiet-de-cantari-v"$APP_VERSION".apk "$ARTIFACT_URL"
