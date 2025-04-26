@@ -78,7 +78,7 @@ jobs:
 
       - name: Set environment variables
         run: |
-          # eas build:list --limit=1 --build-profile=production --json --non-interactive
+          eas build:list --limit=1 --build-profile=production --json --non-interactive
           ARTIFACT_URL=$( eas build:list --limit=1 --build-profile=production --json --non-interactive \
             | jq -r ".[0].artifacts.applicationArchiveUrl" )
           APP_VERSION=$( eas build:list --limit=1 --build-profile=production --json --non-interactive \
