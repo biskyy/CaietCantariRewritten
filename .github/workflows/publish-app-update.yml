@@ -103,6 +103,5 @@ jobs:
             --latest \
             --target "production" \
             --title "v$APP_VERSION" \
-            --notes-from-tag \
-            --notes-from-tag
+            --generate-notes
 
