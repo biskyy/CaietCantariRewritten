@@ -72,6 +72,7 @@ jobs:
       - name: Expo GitHub Action
         uses: expo/expo-github-action@8.2.1
         with:
+          expo-version: latest
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
           packager: bun
