@@ -52,3 +52,50 @@ jobs:
 
       - name: Create build
         run: eas build --platform=android --non-interactive
+
+  create-release:
+    if: jobs.create-build.result == 'success'
+    needs: [create-build]
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      - contents: write
+
+    steps:
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Expo GitHub Action
+        uses: expo/expo-github-action@8.2.1
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+          packager: bun
+
+      - name: Set environment variables
+        run: |
+          ARTIFACT_URL=$( eas build:list --limit=1 --build-profile=production --json --non-interactive \
+            | jq -r ".[0].artifacts.applicationArchiveUrl" )
+          APP_VERSION=$( eas build:list --limit=1 --build-profile=production --json --non-interactive \
+            | jq -r ".[0].appVersion" )
+          COMMIT_MESSAGE=$( eas build:list --limit=1 --build-profile=production --json --non-interactive \
+            | jq -r ".[0].gitCommitMessage" )
+
+      - name: Get build artifact
+        run: curl -L -o caiet-de-cantari-v"$APP_VERSION".apk "$ARTIFACT_URL"
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh auth setup-git
+          gh release create \
+            "v$APP_VERSION" \
+            caiet-de-cantari-v"$APP_VERSION" \
+            --latest \
+            --target "production" \
+            --title "v$APP_VERSION" \
+            --notes-from-tag \
+            --notes-from-tag
+
