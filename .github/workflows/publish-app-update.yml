@@ -54,13 +54,13 @@ jobs:
         run: eas build --platform=android --non-interactive
 
   create-release:
-    # if: jobs.create-build.result == 'success'
     # needs: [create-build]
+    # if: needs.create-build.result == 'success'
 
     runs-on: ubuntu-latest
 
     permissions:
-      - contents: write
+      contents: write
 
     steps:
       - name: Setup bun
