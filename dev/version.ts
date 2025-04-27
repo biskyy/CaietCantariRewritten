@@ -57,7 +57,7 @@ await Bun.write(packageJsonPath, JSON.stringify(packageJson, null, 2));
 await Bun.write(appJsonPath, JSON.stringify(appJson, null, 2));
 
 // Optionally: Commit and tag
-// await $`git add ${packageJsonPath} ${appJsonPath}`;
+await $`git add ${packageJsonPath} ${appJsonPath}`;
 // await $`git commit -m v${desired}`;
 // await $`git tag v${desired}`;
 // await $`git push`;
