@@ -9,7 +9,7 @@
     "web": "expo start --web",
     "update": "eas update --channel=\"development\"",
     "build": "eas build -p android -e development",
-    "version": "bun run dev/version.ts"
+    "version": "bun run dev/version.js"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.4",
