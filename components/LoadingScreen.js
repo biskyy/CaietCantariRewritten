@@ -6,7 +6,9 @@ import Animated, {
   runOnJS,
 } from "react-native-reanimated";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useLoadingScreen, useThemeStyle } from "./Hooks";
+
+import { useThemeStyle } from "@/hooks/useThemeStyle";
+import { useLoadingScreen } from "@/hooks/useLoadingScreen";
 
 const LoadingScreen = () => {
   const themeStyle = useThemeStyle();

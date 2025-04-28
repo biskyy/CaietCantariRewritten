@@ -1,3 +1,4 @@
+import { memo, useCallback, useMemo, useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -5,16 +6,19 @@ import {
   Text,
   View,
 } from "react-native";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { favoriteSongsAtom, songsAtom } from "./State";
-import { FlashList } from "@shopify/flash-list";
-import Input from "./Input";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { memo, useCallback, useMemo, useState } from "react";
 import { useAtom } from "jotai";
-import { useThemeStyle, useDisplayedSongInfo, useTheme } from "./Hooks";
-import SongButton from "./Buttons/SongButton";
-// import SearchBar from "./SeachBar";
+import { FlashList } from "@shopify/flash-list";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import Input from "@/components/Input";
+import SongButton from "@/components/Button/SongButton";
+
+import { favoriteSongsAtom, songsAtom } from "@/state/persistent";
+
+import { useTheme } from "@/hooks/useTheme";
+import { useThemeStyle } from "@/hooks/useThemeStyle";
+import { useDisplayedSongInfo } from "@/hooks/useDisplayedSong";
 
 const validCategories = ["lauda", "rugaciune", "predare"];
 
@@ -112,7 +116,7 @@ const SongList = () => {
     });
   };
 
-  // everything is memoized to prevent stupid rerenders from occuring
+  // everything is memoized to prevent stupid rerenders from occurring
   const estimatedListSize = useMemo(() => {
     return { height: 794, width: 414 };
   }, [theme]);

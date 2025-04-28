@@ -1,21 +1,23 @@
-import { View, Text, ScrollView, ActivityIndicator } from "react-native";
-import {
-  useDisplayedSongInfo,
-  useTheme,
-  useThemeStyle,
-} from "../components/Hooks";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { deleteReport, fetchReports } from "../components/Utils";
-import { FlashList } from "@shopify/flash-list";
-import Button from "../components/Buttons/Button";
+import { View, Text, ScrollView, ActivityIndicator } from "react-native";
 import { useAtom } from "jotai";
-import { reportsArrayAtom, songsAtom, userAtom } from "../components/State";
+import { FlashList } from "@shopify/flash-list";
 import { useNavigation } from "@react-navigation/native";
-import Dialog from "../components/Dialog/Dialog";
-import DialogTitle from "../components/Dialog/DialogTitle";
-import DialogSubtitle from "../components/Dialog/DialogSubtitle";
-import DialogText from "../components/Dialog/DialogText";
-import Separator from "../components/Separator";
+
+import Button from "@/components/Button/Button";
+import Dialog from "@/components/Dialog/Dialog";
+import DialogTitle from "@/components/Dialog/DialogTitle";
+import DialogSubtitle from "@/components/Dialog/DialogSubtitle";
+import DialogText from "@/components/Dialog/DialogText";
+import Separator from "@/components/Separator";
+
+import { reportsArrayAtom } from "@/state/global";
+import { songsAtom, userAtom } from "@/state/persistent";
+import { deleteReport, fetchReports } from "@/state/utils";
+
+import { useThemeStyle } from "@/hooks/useThemeStyle";
+import { useDisplayedSongInfo } from "@/hooks/useDisplayedSong";
+import { useTheme } from "@/hooks/useTheme";
 
 const ReportsScreen = () => {
   const themeStyle = useThemeStyle();

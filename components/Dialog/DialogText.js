@@ -1,5 +1,6 @@
-import { useThemeStyle } from "../Hooks";
 import { Text } from "react-native";
+
+import { useThemeStyle } from "@/hooks/useThemeStyle";
 
 const DialogText = (props) => {
   const themeStyle = useThemeStyle();

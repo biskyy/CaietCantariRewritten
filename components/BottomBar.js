@@ -1,10 +1,13 @@
 import { memo } from "react";
-import Separator from "./Separator";
 import { Keyboard, Platform, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useThemeStyle } from "./Hooks";
 import { useAtom } from "jotai";
-import { modalVisibleAtom, orientationAtom } from "./State";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import Separator from "@/components/Separator";
+
+import { modalVisibleAtom, orientationAtom } from "@/state/global";
+
+import { useThemeStyle } from "@/hooks/useThemeStyle";
 
 const BottomBar = (props) => {
   const themeStyle = useThemeStyle();

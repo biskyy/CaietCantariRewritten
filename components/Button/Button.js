@@ -1,8 +1,8 @@
 import { memo } from "react";
 import { Text, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import React from "react";
-import { useThemeStyle } from "../Hooks";
+
+import { useThemeStyle } from "@/hooks/useThemeStyle";
 
 const Button = ({
   text = undefined,

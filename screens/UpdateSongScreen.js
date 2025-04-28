@@ -1,17 +1,18 @@
-import { Alert, ScrollView, StyleSheet, View } from "react-native";
-import Input from "../components/Input";
-import { userAtom } from "../components/State";
 import { useReducer, useState } from "react";
-import BottomBar from "../components/BottomBar";
+import { Alert, ScrollView, StyleSheet, View } from "react-native";
 import { useAtom } from "jotai";
 import { useNavigation } from "@react-navigation/native";
-import {
-  useDisplayedSongInfo,
-  useLoadingScreen,
-  useThemeStyle,
-} from "../components/Hooks";
-import { deleteReport, updateSongRequest } from "../components/Utils";
-import IconButton from "../components/Buttons/IconButton";
+
+import Input from "@/components/Input";
+import BottomBar from "@/components/BottomBar";
+import IconButton from "@/components/Button/IconButton";
+
+import { userAtom } from "@/state/persistent";
+import { deleteReport, updateSongRequest } from "@/state/utils";
+
+import { useThemeStyle } from "@/hooks/useThemeStyle";
+import { useDisplayedSongInfo } from "@/hooks/useDisplayedSong";
+import { useLoadingScreen } from "@/hooks/useLoadingScreen";
 
 const reducer = (currentState, action) => {
   switch (action.type) {
@@ -71,7 +72,7 @@ const UpdateSongScreen = () => {
       callback: () => {
         const status = updateResponse.status;
         if (status === 200) {
-          Alert.alert("Succes", "Cantarea a fost actualizata cu succes.");
+          Alert.alert("Success", "Cantarea a fost actualizata cu success.");
           navigation.goBack();
         }
       },

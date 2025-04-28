@@ -1,41 +1,41 @@
 import "react-native-gesture-handler";
 import { Suspense, useEffect, useState } from "react";
+import { Platform, View, useColorScheme } from "react-native";
 import {
   DarkTheme,
   DefaultTheme,
   NavigationContainer,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+import { useAtom } from "jotai";
+
+import { MaterialIcons } from "@expo/vector-icons";
+import { StatusBar, setStatusBarHidden } from "expo-status-bar";
 import * as SplashScreen from "expo-splash-screen";
+import * as ScreenOrientation from "expo-screen-orientation";
+import * as SystemUI from "expo-system-ui";
+import * as NavigationBar from "expo-navigation-bar";
 
 // Screens
 import HomeScreen from "./screens/HomeScreen";
 import SongScreen from "./screens/SongScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 import LoadingScreen from "./components/LoadingScreen";
+import LoginScreen from "@/screens/LoginScreen";
+import UpdateSongScreen from "@/screens/UpdateSongScreen";
+import Navbar from "@/components/Navbar";
 
-import Navbar from "./components/Navbar";
-import { MaterialIcons } from "@expo/vector-icons";
-import LoginScreen from "./screens/LoginScreen";
-import UpdateSongScreen from "./screens/UpdateSongScreen";
-import { Platform, View, useColorScheme } from "react-native";
-import * as SystemUI from "expo-system-ui";
-import * as NavigationBar from "expo-navigation-bar";
-import * as ScreenOrientation from "expo-screen-orientation";
-import { StatusBar, setStatusBarHidden } from "expo-status-bar";
-import { useTheme } from "./components/Hooks";
-import { cacheFontsAndIcons } from "./components/Utils";
-import { orientationAtom } from "./components/State";
-import { useAtom } from "jotai";
+import { orientationAtom } from "@/state/global";
+import { cacheFontsAndIcons } from "@/state/utils";
+
+import { useTheme } from "@/hooks/useTheme";
 
 const Stack = createNativeStackNavigator();
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  // some crazy new feature
-  // other crazy new feature
-  // 3rd new feature
   const colorScheme = useColorScheme();
   const [theme, setTheme] = useTheme();
   const [loading, setLoading] = useState(true);

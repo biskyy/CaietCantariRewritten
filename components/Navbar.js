@@ -1,43 +1,35 @@
-import { memo, useEffect, useState } from "react";
+import { memo, useState } from "react";
 import {
   Keyboard,
-  KeyboardAvoidingView,
-  Modal,
   Platform,
-  Pressable,
-  ScrollView,
   Share,
   StyleSheet,
   Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  // TouchableWithoutFeedbackComponent,
   View,
 } from "react-native";
+import { useAtom } from "jotai";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useNavigation, useRoute } from "@react-navigation/native";
+
+import Separator from "@/components/Separator";
+import Button from "@/components/Button/Button";
+import Input from "@/components/Input";
+import IconButton from "@/components/Button/IconButton";
+import Dialog from "@/components/Dialog/Dialog";
+import DialogTitle from "@/components/Dialog/DialogTitle";
+import DialogText from "@/components/Dialog/DialogText";
+
 import {
   modalVisibleAtom,
   orientationAtom,
   reportsArrayAtom,
-  userAtom,
-} from "./State";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { StatusBar, setStatusBarHidden } from "expo-status-bar";
-import Separator from "./Separator";
-import Button from "./Buttons/Button";
-import { useAtom } from "jotai";
-import { useDisplayedSongInfo, useTheme, useThemeStyle } from "./Hooks";
-import { createReport, fetchReports } from "./Utils";
-import Input from "./Input";
-import IconButton from "./Buttons/IconButton";
-import Dialog from "./Dialog/Dialog";
-import DialogTitle from "./Dialog/DialogTitle";
-import DialogText from "./Dialog/DialogText";
-import DialogSubtitle from "./Dialog/DialogSubtitle";
-import * as ScreenOrientation from "expo-screen-orientation";
-import axios from "axios";
-// import * as NavigationBar from "expo-navigation-bar";
-// import * as SystemUI from "expo-system-ui";
+} from "@/state/global";
+import { userAtom } from "@/state/persistent";
+import { createReport, fetchReports } from "@/state/utils";
+
+import { useTheme } from "@/hooks/useTheme";
+import { useThemeStyle } from "@/hooks/useThemeStyle";
+import { useDisplayedSongInfo } from "@/hooks/useDisplayedSong";
 
 const Navbar = () => {
   const [theme, setTheme] = useTheme();

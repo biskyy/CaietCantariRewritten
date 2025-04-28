@@ -1,6 +1,7 @@
-import { MaterialIcons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
-import { useThemeStyle } from "../Hooks";
+import { MaterialIcons } from "@expo/vector-icons";
+
+import { useThemeStyle } from "@/hooks/useThemeStyle";
 
 const IconButton = (props) => {
   const themeStyle = useThemeStyle();
