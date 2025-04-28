@@ -1,23 +1,20 @@
-import { View, StyleSheet, Text, ScrollView, Platform } from "react-native";
-import {
-  favoriteSongsAtom,
-  fontSizeAtom,
-  orientationAtom,
-  songsAtom,
-} from "../components/State";
-import { useAtom } from "jotai";
-import Separator from "../components/Separator";
-import Button from "../components/Buttons/Button";
 import { useEffect } from "react";
-import BottomBar from "../components/BottomBar";
-import {
-  useDisplayedSongInfo,
-  useTheme,
-  useThemeStyle,
-} from "../components/Hooks";
+import { View, StyleSheet, Text, ScrollView, Platform } from "react-native";
+import { useAtom } from "jotai";
+
 import { useKeepAwake } from "expo-keep-awake";
-import IconButton from "../components/Buttons/IconButton";
 import * as ScreenOrientation from "expo-screen-orientation";
+
+import IconButton from "@/components/Button/IconButton";
+import Separator from "@/components/Separator";
+import BottomBar from "@/components/BottomBar";
+
+import { orientationAtom } from "@/state/global";
+import { favoriteSongsAtom, fontSizeAtom, songsAtom } from "@/state/persistent";
+
+import { useTheme } from "@/hooks/useTheme";
+import { useThemeStyle } from "@/hooks/useThemeStyle";
+import { useDisplayedSongInfo } from "@/hooks/useDisplayedSong";
 
 export default function SongScreen({ route, navigation }) {
   const [theme] = useTheme();

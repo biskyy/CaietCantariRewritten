@@ -1,8 +1,12 @@
 import { forwardRef, memo } from "react";
 import { View, StyleSheet, TextInput } from "react-native";
-import Colors from "./Colors";
-import { useTheme, useThemeStyle } from "./Hooks";
-import IconButton from "./Buttons/IconButton";
+
+import IconButton from "@/components/Button/IconButton";
+
+import Colors from "@/constants/colors";
+
+import { useTheme } from "@/hooks/useTheme";
+import { useThemeStyle } from "@/hooks/useThemeStyle";
 
 const Input = forwardRef(
   /** @param {Object} props */
@@ -40,7 +44,7 @@ const Input = forwardRef(
         )}
       </View>
     );
-  }
+  },
 );
 
 const styles = StyleSheet.create({

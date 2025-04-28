@@ -1,8 +1,11 @@
-import { useAtom } from "jotai";
-import Colors from "../Colors";
-import { userPrefsAtom } from "../State";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
-import { useThemeStyle } from "../Hooks";
+import { useAtom } from "jotai";
+
+import { userPrefsAtom } from "@/state/persistent";
+
+import { useThemeStyle } from "@/hooks/useThemeStyle";
+
+import Colors from "@/constants/colors";
 
 const SongButton = (props) => {
   const themeStyle = useThemeStyle();

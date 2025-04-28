@@ -1,9 +1,12 @@
 import { StyleSheet, View } from "react-native";
-import Button from "../components/Buttons/Button";
 import { useNavigation } from "@react-navigation/native";
-import { useThemeStyle } from "../components/Hooks";
 import { useAtom } from "jotai";
-import { userAtom, userPrefsAtom } from "../components/State";
+
+import Button from "@/components/Button/Button";
+
+import { userAtom, userPrefsAtom } from "@/state/persistent";
+
+import { useThemeStyle } from "@/hooks/useThemeStyle";
 
 export default function SettingsScreen() {
   const themeStyle = useThemeStyle();

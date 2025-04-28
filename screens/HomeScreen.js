@@ -1,7 +1,3 @@
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import SongList from "../components/SongList";
-import Navbar from "../components/Navbar";
-import Button from "../components/Buttons/Button";
 import {
   Alert,
   Platform,
@@ -10,14 +6,23 @@ import {
   Text,
   View,
 } from "react-native";
-import { songsAtom, userAtom } from "../components/State";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Separator from "../components/Separator";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 import { useAtom } from "jotai";
-import { useLoadingScreen, useThemeStyle } from "../components/Hooks";
-import { fetchSongsRequest } from "../components/Utils";
-import IconButton from "../components/Buttons/IconButton";
-import ReportsScreen from "./ReportsScreen";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import ReportsScreen from "@/screens/ReportsScreen";
+
+import SongList from "@/components/SongList";
+import Navbar from "@/components/Navbar";
+import Button from "@/components/Button/Button";
+import Separator from "@/components/Separator";
+import IconButton from "@/components/Button/IconButton";
+
+import { songsAtom, userAtom } from "@/state/persistent";
+import { fetchSongsRequest } from "@/state/utils";
+
+import { useThemeStyle } from "@/hooks/useThemeStyle";
+import { useLoadingScreen } from "@/hooks/useLoadingScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -43,7 +48,7 @@ const CustomDrawerMenu = (props) => {
         callback: () =>
           Alert.alert(
             "S-au actualizat cantarile",
-            "Cantarile au fost actualizate cu succes.",
+            "Cantarile au fost actualizate cu success.",
           ),
       });
     } else {

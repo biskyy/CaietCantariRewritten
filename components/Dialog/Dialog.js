@@ -6,7 +6,8 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import { useThemeStyle } from "../Hooks";
+
+import { useThemeStyle } from "@/hooks/useThemeStyle";
 
 const Dialog = (props) => {
   const themeStyle = useThemeStyle();
