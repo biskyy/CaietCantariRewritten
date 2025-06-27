@@ -1,11 +1,15 @@
 import "react-native-gesture-handler";
 import { Suspense, useEffect, useState } from "react";
-import { Platform, View, useColorScheme } from "react-native";
 import {
-  DarkTheme,
-  DefaultTheme,
-  NavigationContainer,
-} from "@react-navigation/native";
+  Appearance,
+  Platform,
+  Pressable,
+  Text,
+  View,
+  ViewBase,
+  useColorScheme,
+} from "react-native";
+import { NavigationContainer, useTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { useAtom } from "jotai";
@@ -29,16 +33,21 @@ import Navbar from "@/components/Navbar";
 import { orientationAtom } from "@/state/global";
 import { cacheFontsAndIcons } from "@/state/utils";
 
-import { useTheme } from "@/hooks/useTheme";
-import { themeAtom, writeableLoadableThemeAtom } from "@/state/persistent";
+import {
+  themeAtom,
+  userFavoriteSongsAtom,
+  writeableLoadableThemeAtom,
+} from "@/state/persistent";
+import { DarkTheme, LightTheme } from "@/constants/themes";
+import { RootStackParamList } from "@/types/navigator";
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const colorScheme = useColorScheme();
-  const [theme, setTheme] = useAtom(themeAtom); // TODO : use this atom instead of writeable
+  const { colors } = useTheme();
+  const scheme = useColorScheme();
 
   const [loading, setLoading] = useState(true);
   const [, setOrientation] = useAtom(orientationAtom);
@@ -54,70 +63,78 @@ export default function App() {
   }, []);
 
   // set orientation statee
-  ScreenOrientation.addOrientationChangeListener(({ orientationInfo }) => {
-    if (
-      orientationInfo.orientation === 3 ||
-      orientationInfo.orientation === 4
-    ) {
-      setOrientation("landscape");
-      setStatusBarHidden(true);
-    } else {
-      setOrientation("portrait");
-      setStatusBarHidden(false);
-    }
-  });
+  // ScreenOrientation.addOrientationChangeListener(({ orientationInfo }) => {
+  //   if (
+  //     orientationInfo.orientation === 3 ||
+  //     orientationInfo.orientation === 4
+  //   ) {
+  //     setOrientation("landscape");
+  //     setStatusBarHidden(true);
+  //   } else {
+  //     setOrientation("portrait");
+  //     setStatusBarHidden(false);
+  //   }
+  // });
+
+  // useEffect(() => {
+  //   if (theme) {
+  //     if (Platform.OS === "android") {
+  //       NavigationBar.setButtonStyleAsync("light");
+  //       NavigationBar.setBackgroundColorAsync("#0a0d0c");
+  //     }
+  //     SystemUI.setBackgroundColorAsync("#0a0d0c");
+  //   } else {
+  //     if (Platform.OS === "android") {
+  //       NavigationBar.setButtonStyleAsync("dark");
+  //       NavigationBar.setBackgroundColorAsync("#f0f4fa");
+  //     }
+  //     SystemUI.setBackgroundColorAsync("#f0f4fa");
+  //   }
+  // }, [theme]);
+
+  // useEffect(() => {
+  //   if (theme === "not set")
+  //     if (colorScheme === "light") setTheme(false);
+  //     else setTheme(true);
+  //   else if (!loading) SplashScreen.hideAsync();
+  // }, [theme, loading]);
+
+  SplashScreen.hideAsync();
+  const theme = useTheme();
 
   useEffect(() => {
-    if (theme) {
-      if (Platform.OS === "android") {
-        NavigationBar.setButtonStyleAsync("light");
-        NavigationBar.setBackgroundColorAsync("#0a0d0c");
-      }
-      SystemUI.setBackgroundColorAsync("#0a0d0c");
-    } else {
-      if (Platform.OS === "android") {
-        NavigationBar.setButtonStyleAsync("dark");
-        NavigationBar.setBackgroundColorAsync("#f0f4fa");
-      }
-      SystemUI.setBackgroundColorAsync("#f0f4fa");
-    }
-  }, [theme]);
+    console.log(theme.dark);
+    const colorScheme = theme.dark ? "dark" : "light";
 
-  useEffect(() => {
-    if (theme === "not set")
-      if (colorScheme === "light") setTheme(false);
-      else setTheme(true);
-    else if (!loading) SplashScreen.hideAsync();
-  }, [theme, loading]);
+    if (Platform.OS === "web") {
+      document.documentElement.style.colorScheme = colorScheme;
+    } else {
+      Appearance.setColorScheme(colorScheme);
+    }
+  }, [theme.dark]);
 
   return (
-    // <Suspense fallback={<View style={{ backgroundColor: "blue" }}></View>}>
-    // <View style={{ flex: 1, ...themeStyle.bgColor }}>
-    <Suspense
-      fallback={<View style={{ flex: 1, backgroundColor: "blue" }}></View>}
-    >
-      <>
-        <StatusBar style={theme ? "light" : "dark"} />
-        <LoadingScreen />
-        <NavigationContainer theme={theme ? DarkTheme : DefaultTheme}>
-          <Stack.Navigator
-            initialRouteName="Home"
-            screenOptions={{ header: () => <Navbar /> }}
-          >
-            <Stack.Screen
-              name="Home"
-              component={HomeScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen name="Cantare" component={SongScreen} />
-            <Stack.Screen name="Settings" component={SettingsScreen} />
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="UpdateSong" component={UpdateSongScreen} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </>
-    </Suspense>
-    // </View>
-    // </Suspense>
+    <NavigationContainer theme={scheme === "dark" ? DarkTheme : LightTheme}>
+      <StatusBar style={scheme === "light" ? "dark" : "light"} />
+      {/* <LoadingScreen /> */}
+      <Stack.Navigator
+        initialRouteName="Home"
+        screenOptions={{ header: () => <Navbar /> }}
+        // screenOptions={{
+        //   headerTransparent: true,
+        //   headerBlurEffect: "systemChromeMaterial",
+        // }}
+      >
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen name="Song" component={SongScreen} />
+        <Stack.Screen name="Settings" component={SettingsScreen} />
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="UpdateSong" component={UpdateSongScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }

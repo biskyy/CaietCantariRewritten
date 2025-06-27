@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { useAtom } from "jotai";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute, useTheme } from "@react-navigation/native";
 
 import Separator from "@/components/Separator";
 import Button from "@/components/Button/Button";
@@ -27,13 +27,12 @@ import {
 import { userAtom } from "@/state/persistent";
 import { createReport, fetchReports } from "@/state/utils";
 
-import { useTheme } from "@/hooks/useTheme";
-import { useThemeStyle } from "@/hooks/useThemeStyle";
 import { useDisplayedSongInfo } from "@/hooks/useDisplayedSong";
 
 const Navbar = () => {
-  const [theme, setTheme] = useTheme();
-  const themeStyle = useThemeStyle();
+  // const [theme, setTheme] = useTheme();
+  // const themeStyle = useThemeStyle();
+  const { dark: theme, colors } = useTheme();
   const [displayedSongInfo] = useDisplayedSongInfo();
   const [, setReportsArray] = useAtom(reportsArrayAtom);
   const [orientation] = useAtom(orientationAtom);
@@ -58,7 +57,7 @@ const Navbar = () => {
     <>
       <View
         style={{
-          ...themeStyle.bgColor,
+          backgroundColor: colors.background,
           ...styles.navbarDiv,
           paddingTop: insets.top,
           minHeight:
@@ -99,7 +98,7 @@ const Navbar = () => {
         >
           <Text
             numberOfLines={1}
-            style={[styles.navbarTitle, themeStyle.txtColor]}
+            style={[styles.navbarTitle, { color: colors.text }]}
           >
             {route.name}
           </Text>

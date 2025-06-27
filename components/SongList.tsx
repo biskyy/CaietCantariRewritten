@@ -8,41 +8,49 @@ import {
 } from "react-native";
 import { useAtom } from "jotai";
 import { FlashList } from "@shopify/flash-list";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import {
+  Route,
+  useNavigation,
+  useRoute,
+  useTheme,
+} from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import Input from "@/components/Input";
 import SongButton from "@/components/Button/SongButton";
 
-import { favoriteSongsAtom, songsAtom } from "@/state/persistent";
+import { songsAtom, userFavoriteSongsAtom } from "@/state/persistent";
 
-import { useTheme } from "@/hooks/useTheme";
-import { useThemeStyle } from "@/hooks/useThemeStyle";
 import { useDisplayedSongInfo } from "@/hooks/useDisplayedSong";
+import { Song } from "@/types/state";
+import { DrawerParamList, SongListScreenProps } from "@/types/navigator";
 
-const validCategories = ["lauda", "rugaciune", "predare"];
+// const validCategories = ["lauda", "rugaciune", "predare"];
 
-const SongList = () => {
-  const [theme] = useTheme();
-  const themeStyle = useThemeStyle();
+const SongList = <T extends keyof DrawerParamList>({
+  route,
+  navigation,
+}: SongListScreenProps<T>) => {
+  const { dark: theme, colors } = useTheme();
   const [songs, setSongs] = useAtom(songsAtom);
   const [searchQuery, setSearchQuery] = useState("");
-  const [favoriteSongs, setFavoriteSongs] = useAtom(favoriteSongsAtom);
-  const [selectedCategories, setSelectedCategories] = useState([
-    // "Lauda",
-    // "Rugaciune",
-    // "Predare",
-    // "lauda",
-    // "rugaciune",
-    // "predare",
-  ]);
+  const [favoriteSongs, setFavoriteSongs] = useAtom(userFavoriteSongsAtom);
+  // const [selectedCategories, setSelectedCategories] = useState([
+  //   // "Lauda",
+  //   // "Rugaciune",
+  //   // "Predare",
+  //   // "lauda",
+  //   // "rugaciune",
+  //   // "predare",
+  // ]);
+
+  SongList<"Caiet de Cantari">;
 
   const [, setDisplayedSongInfo] = useDisplayedSongInfo();
 
   const insets = useSafeAreaInsets();
 
-  const route = useRoute();
-  const navigation = useNavigation();
+  // const route: Route<""> = useRoute();
+  // const navigation: NavigationTimingType = useNavigation();
 
   // get corresponding book_id for route name
   const bookIDMappings = {
@@ -69,7 +77,7 @@ const SongList = () => {
 
   const [filteredSongs, setFilteredSongs] = useState(data);
 
-  const format = (text) => {
+  const format = (text: string) => {
     return text
       .toLowerCase()
       .normalize("NFKD")
@@ -78,10 +86,10 @@ const SongList = () => {
   };
 
   let formattedQuery;
-  let trimmedFormattedQuery;
-  let prevSearchQuery;
+  let trimmedFormattedQuery: string;
+  // let prevSearchQuery;
 
-  const handleFilteredList = (query) => {
+  const handleFilteredList = (query: string) => {
     formattedQuery = format(query);
     trimmedFormattedQuery = formattedQuery.trim();
 
@@ -121,54 +129,51 @@ const SongList = () => {
     return { height: 794, width: 414 };
   }, [theme]);
 
-  const itemOnPressProp = useCallback((item) => {
+  const itemOnPressProp = useCallback((item: Song) => {
     setDisplayedSongInfo({
       song: item,
-      index: item.index,
-      listFirstIndex: bookIDFilter !== "CF" ? data[0].index : 0,
-      listLastIndex:
+      bookFirstIndex: bookIDFilter !== "CF" ? data[0].index : 0,
+      bookLastIndex:
         bookIDFilter !== "CF" ? data.at(-1).index : songs.at(-1).index,
     });
-    // @ts-ignore
-    navigation.navigate("Cantare");
+    navigation.navigate("Song");
   }, []);
 
   const renderItem = useCallback(
-    ({ item }) => (
+    ({ item }: { item: Song }) => (
       <SongButton song={item} onPress={() => itemOnPressProp(item)} />
     ),
     [theme],
   );
 
   return (
-    <View style={[themeStyle.bgColor, styles.songListDiv]}>
+    <View style={[{ backgroundColor: colors.background }, styles.songListDiv]}>
       <FlashList
         renderItem={renderItem}
         data={data}
         estimatedItemSize={55}
         estimatedListSize={estimatedListSize} // instant render
-        indicatorStyle={theme.data ? "white" : "black"}
+        indicatorStyle={theme ? "white" : "black"}
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{ padding: 10 }}
         contentInsetAdjustmentBehavior="automatic"
       />
       {searchQuery !== "" && (
-        <View style={{ ...themeStyle.bgColor, flex: 9999 }}>
+        <View style={{ backgroundColor: colors.background, flex: 9999 }}>
           <FlashList
             renderItem={renderItem}
             data={filteredSongs}
             extraData={theme}
             estimatedItemSize={55}
             estimatedListSize={estimatedListSize}
-            indicatorStyle={theme.data ? "white" : "black"}
+            indicatorStyle={theme ? "white" : "black"}
             keyboardShouldPersistTaps="handled"
             contentContainerStyle={{ padding: 10 }}
             ListEmptyComponent={
               <Text
                 style={[
-                  themeStyle.txtColor,
-                  themeStyle.text,
-                  { alignSelf: "center" },
+                  // themeStyle.text,
+                  { backgroundColor: colors.background, alignSelf: "center" },
                 ]}
               >
                 Nu s-a gasit nicio cantare
@@ -180,32 +185,32 @@ const SongList = () => {
       <KeyboardAvoidingView
         style={{
           marginBottom: Platform.OS === "ios" ? insets.bottom : 5,
-          ...themeStyle.bgColor,
+          backgroundColor: colors.background,
           ...styles.keyboardAvoidingViewDiv,
         }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={Platform.OS === "ios" ? 110 : 0}
       >
-        <Input
-          scrollEnabled={false}
-          textInputDivStyle={{
-            width: "95%",
-            minHeight: 55,
-            alignSelf: "center",
-          }}
-          placeholder="Cauta o cantare"
-          value={searchQuery}
-          // selectedCategories={selectedCategories}
-          // setSelectedCategories={setSelectedCategories}
-          clearShortcut
-          onChangeText={(str) => {
-            setSearchQuery((prev) => {
-              prevSearchQuery = prev;
-              return str;
-            });
-            handleFilteredList(str);
-          }}
-        />
+        {/* <Input */}
+        {/*   scrollEnabled={false} */}
+        {/*   textInputDivStyle={{ */}
+        {/*     width: "95%", */}
+        {/*     minHeight: 55, */}
+        {/*     alignSelf: "center", */}
+        {/*   }} */}
+        {/*   placeholder="Cauta o cantare" */}
+        {/*   value={searchQuery} */}
+        {/*   // selectedCategories={selectedCategories} */}
+        {/*   // setSelectedCategories={setSelectedCategories} */}
+        {/*   clearShortcut */}
+        {/*   onChangeText={(str) => { */}
+        {/*     setSearchQuery((prev) => { */}
+        {/*       prevSearchQuery = prev; */}
+        {/*       return str; */}
+        {/*     }); */}
+        {/*     handleFilteredList(str); */}
+        {/*   }} */}
+        {/* /> */}
       </KeyboardAvoidingView>
     </View>
   );

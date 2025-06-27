@@ -6,7 +6,10 @@ import {
   Text,
   View,
 } from "react-native";
-import { createDrawerNavigator } from "@react-navigation/drawer";
+import {
+  createDrawerNavigator,
+  DrawerScreenProps,
+} from "@react-navigation/drawer";
 import { useAtom } from "jotai";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -23,8 +26,9 @@ import { fetchSongsRequest } from "@/state/utils";
 
 import { useThemeStyle } from "@/hooks/useThemeStyle";
 import { useLoadingScreen } from "@/hooks/useLoadingScreen";
+import { DrawerParamList, RootStackScreenProps } from "@/types/navigator";
 
-const Drawer = createDrawerNavigator();
+const Drawer = createDrawerNavigator<DrawerParamList>();
 
 const CustomDrawerMenu = (props) => {
   const themeStyle = useThemeStyle();
@@ -36,8 +40,8 @@ const CustomDrawerMenu = (props) => {
 
   const refreshSongs = async () => {
     setLoadingScreen({
-      state: 1,
-      message: "Se actualizeaza cantarile",
+      state: "fading_in",
+      label: "Se actualizeaza cantarile",
     });
 
     const response = await fetchSongsRequest();
@@ -55,7 +59,7 @@ const CustomDrawerMenu = (props) => {
       // we have to reset it otherwise the previous one will get called
       setLoadingScreen({ callback: () => {} });
     }
-    setLoadingScreen({ state: 2 });
+    setLoadingScreen({ state: "fading_out" });
   };
 
   return (
@@ -190,7 +194,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function HomeScreen() {
+export default function HomeScreen({
+  route,
+  navigation,
+}: RootStackScreenProps<"Home">) {
   return (
     <Drawer.Navigator
       screenOptions={{

@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-import Colors from "@/constants/colors";
+import Shades from "@/constants/colors";
 
 import { useTheme } from "@/hooks/useTheme";
 import { useAtom } from "jotai";
@@ -10,22 +10,22 @@ export const useThemeStyle = () => {
   const [theme] = useAtom(themeAtom);
   const themeStyle = StyleSheet.create({
     bgColor: {
-      backgroundColor: theme ? Colors[800] : Colors[100],
+      backgroundColor: theme ? Shades[800] : Shades[100],
     },
     txtColor: {
-      color: theme ? Colors[200] : Colors[800],
+      color: theme ? Shades[200] : Shades[800],
     },
     inverseBgColor: {
-      backgroundColor: theme ? Colors[100] : Colors[800],
+      backgroundColor: theme ? Shades[100] : Shades[800],
     },
     separatorColor: {
-      backgroundColor: theme ? Colors[600] : Colors[300],
+      backgroundColor: theme ? Shades[600] : Shades[300],
     },
     inverseTxtColor: {
-      color: theme ? Colors[800] : Colors[200],
+      color: theme ? Shades[800] : Shades[200],
     },
     borderColor: {
-      borderColor: theme ? Colors[600] : Colors[300],
+      borderColor: theme ? Shades[600] : Shades[300],
     },
     title: {
       fontSize: 28,

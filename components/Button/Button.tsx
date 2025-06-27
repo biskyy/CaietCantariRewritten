@@ -10,13 +10,13 @@ const Button = ({
   textStyle = undefined,
   iconStyle = undefined,
   touchableStyle = undefined,
-  onPress,
+  onPress = () => {},
   iconSize = undefined,
   primary = false,
   secondary = false,
 }) => {
   const themeStyle = useThemeStyle();
-  let prevPageX;
+  let prevPageX: number;
 
   const buttonStyleBasedOnType = primary && themeStyle.inverseTxtColor;
 

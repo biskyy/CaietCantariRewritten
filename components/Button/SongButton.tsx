@@ -5,10 +5,12 @@ import { userPrefsAtom } from "@/state/persistent";
 
 import { useThemeStyle } from "@/hooks/useThemeStyle";
 
-import Colors from "@/constants/colors";
+import Shades from "@/constants/colors";
+import { useTheme } from "@react-navigation/native";
 
 const SongButton = (props) => {
-  const themeStyle = useThemeStyle();
+  const { colors } = useTheme();
+  // const themeStyle = useThemeStyle();
 
   const [userPrefs] = useAtom(userPrefsAtom);
 
@@ -21,16 +23,16 @@ const SongButton = (props) => {
         Math.abs(e.nativeEvent.pageX - prevPageX) >= 50 ? null : props.onPress()
       }
       style={[
-        themeStyle.bgColor,
-        themeStyle.borderColor,
+        { backgroundColor: colors.background },
+        // themeStyle.borderColor,
         styles.touchableStyle,
       ]}
     >
-      <Text style={[themeStyle.txtColor, themeStyle.text]} numberOfLines={1}>
+      <Text style={{ backgroundColor: colors.background }} numberOfLines={1}>
         {props.song.title}
       </Text>
       {props.song.tags.length !== 0 && userPrefs.showCategories && (
-        <Text style={[{ fontSize: 12, color: Colors[500] }]} numberOfLines={1}>
+        <Text style={[{ fontSize: 12, color: Shades[500] }]} numberOfLines={1}>
           {props.song.tags.length > 3
             ? [...props.song.tags.slice(0, 2), "…"].join(" • ")
             : props.song.tags.join(" • ")}

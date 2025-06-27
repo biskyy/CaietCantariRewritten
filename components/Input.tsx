@@ -3,7 +3,7 @@ import { View, StyleSheet, TextInput } from "react-native";
 
 import IconButton from "@/components/Button/IconButton";
 
-import Colors from "@/constants/colors";
+import Shades from "@/constants/colors";
 
 import { useTheme } from "@/hooks/useTheme";
 import { useThemeStyle } from "@/hooks/useThemeStyle";
@@ -29,7 +29,7 @@ const Input = forwardRef(
           {...props}
           ref={ref}
           style={[themeStyle.txtColor, styles.textInput, textInputStyle]}
-          placeholderTextColor={theme.data ? Colors[500] : Colors[500]}
+          placeholderTextColor={theme.data ? Shades[500] : Shades[500]}
           autoCorrect={false}
           autoCapitalize="none"
         />

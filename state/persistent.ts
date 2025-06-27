@@ -45,7 +45,7 @@ export const userPrefsAtom = atomWithStorage<UserPrefs>(
   storage,
 );
 
-export const userFavoriteSongsAtom = atomWithStorage<Song[]>(
+export const userFavoriteSongsAtom = atomWithStorage<number[]>(
   STORAGE_USER_FAVORITE_SONGS,
   [],
   storage,

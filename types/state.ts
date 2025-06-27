@@ -27,13 +27,15 @@ export interface Song {
   book_id: string;
   id: number;
   index: number;
+  favorite: boolean;
   tags: Array<string>;
+  searchable_title: string;
+  searchable_content: string;
 }
 
 export interface DisplayedSong {
-  song?: Song;
-  indexInBook?: number;
-  bookFirstIndex?: number;
-  bookLastIndex?: number;
+  song: Song;
+  bookFirstIndex: number;
+  bookLastIndex: number;
   currentReport?: any;
 }
