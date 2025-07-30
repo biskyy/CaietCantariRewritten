@@ -1,4 +1,4 @@
-import { DisplayedSong, LoadingScreenState } from "@/types/state";
+import { DisplayedSong, LoadingScreenState, Report } from "@/types/state";
 import { atom } from "jotai";
 
 export const loadingScreenAtom = atom<LoadingScreenState>({
@@ -17,6 +17,6 @@ export const dispalyedSongInfoAtom = atom<DisplayedSong>({
   currentReport: undefined,
 });
 
-export const reportsArrayAtom = atom([]);
+export const reportsArrayAtom = atom<Array<Report>>([]);
 
 export const orientationAtom = atom<"portrait" | "landscape">("portrait");

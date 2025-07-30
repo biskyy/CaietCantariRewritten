@@ -1,5 +1,14 @@
 import { forwardRef, memo } from "react";
-import { View, StyleSheet, TextInput } from "react-native";
+import {
+  View,
+  StyleSheet,
+  TextInput,
+  TextInputProps,
+  StyleSheetProperties,
+  StyleProp,
+  ViewStyle,
+  TextStyle,
+} from "react-native";
 
 import IconButton from "@/components/Button/IconButton";
 
@@ -8,44 +17,47 @@ import Shades from "@/constants/colors";
 import { useTheme } from "@/hooks/useTheme";
 import { useThemeStyle } from "@/hooks/useThemeStyle";
 
-const Input = forwardRef(
-  /** @param {Object} props */
-  (props, ref) => {
-    const [theme] = useTheme();
-    const themeStyle = useThemeStyle();
+interface InputProps extends TextInputProps {
+  textInputDivStyle: StyleProp<ViewStyle>;
+  textInputStyle?: StyleProp<TextStyle>;
+  clearShortcut?: boolean;
+}
 
-    const { textInputDivStyle, textInputStyle } = props;
+const Input = forwardRef<TextInput, InputProps>((props: InputProps, ref) => {
+  const theme = useTheme();
+  const themeStyle = useThemeStyle();
 
-    return (
-      <View
-        style={[
-          styles.textInputDiv,
-          themeStyle.borderColor,
-          themeStyle.bgColor,
-          textInputDivStyle,
-        ]}
-      >
-        <TextInput
-          {...props}
-          ref={ref}
-          style={[themeStyle.txtColor, styles.textInput, textInputStyle]}
-          placeholderTextColor={theme.data ? Shades[500] : Shades[500]}
-          autoCorrect={false}
-          autoCapitalize="none"
+  const { textInputDivStyle, textInputStyle, clearShortcut } = props;
+
+  return (
+    <View
+      style={[
+        styles.textInputDiv,
+        themeStyle.borderColor,
+        themeStyle.bgColor,
+        textInputDivStyle,
+      ]}
+    >
+      <TextInput
+        {...props}
+        ref={ref}
+        style={[themeStyle.txtColor, styles.textInput, textInputStyle]}
+        placeholderTextColor={theme.data ? Shades[500] : Shades[500]}
+        autoCorrect={false}
+        autoCapitalize="none"
+      />
+      {props.value != "" && clearShortcut && (
+        <IconButton
+          icon="clear"
+          size={32}
+          touchableStyle={[styles.clearButton]}
+          // @ts-ignore
+          onPress={() => props.onChangeText("")}
         />
-        {props.value != "" && props.clearShortcut && (
-          <IconButton
-            icon="clear"
-            size={32}
-            touchableStyle={[styles.clearButton]}
-            // @ts-ignore
-            onPress={() => props.onChangeText("")}
-          />
-        )}
-      </View>
-    );
-  },
-);
+      )}
+    </View>
+  );
+});
 
 const styles = StyleSheet.create({
   textInputDiv: {

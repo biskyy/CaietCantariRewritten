@@ -17,13 +17,13 @@ const LoadingScreen = () => {
   const opacity = useSharedValue(0);
 
   useEffect(() => {
-    if (loadingScreen.state == 1)
+    if (loadingScreen.state == "fading_in")
       opacity.value = withTiming(1, { duration: 500 });
-    else if (loadingScreen.state == 2)
+    else if (loadingScreen.state == "fading_out")
       opacity.value = withTiming(0, { duration: 500 }, () => {
         runOnJS(setLoadingScreen)({
-          state: 0,
-          message: "",
+          state: "inactive",
+          label: "",
         });
         runOnJS(loadingScreen.callback)();
       });
@@ -45,7 +45,7 @@ const LoadingScreen = () => {
         style={[themeStyle.txtColor, { fontWeight: "normal" }]} // doesnt work, check "not possible" category on trellon
       />
       <Text style={[themeStyle.txtColor, styles.textStyle]}>
-        {loadingScreen.message}
+        {loadingScreen.label}
       </Text>
     </Animated.View>
   );

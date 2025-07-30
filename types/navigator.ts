@@ -1,9 +1,12 @@
 import { DrawerScreenProps } from "@react-navigation/drawer";
-import { CompositeScreenProps } from "@react-navigation/native";
+import {
+  CompositeScreenProps,
+  NavigatorScreenParams,
+} from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 export type RootStackParamList = {
-  Home: undefined;
+  Home: NavigatorScreenParams<DrawerParamList>;
   Song: undefined;
   Settings: undefined;
   Login: undefined;
@@ -20,14 +23,6 @@ export type SongListScreenProps<T extends keyof DrawerParamList> =
     NativeStackScreenProps<RootStackParamList>
   >;
 
-function fun<
-  Type extends keyof RootStackParamList = keyof RootStackParamList,
->(): RootStackScreenProps<Type> {
-  return 2;
-}
-
-fun<"H">();
-
 export type DrawerParamList = {
   "Toate Cantarile": undefined;
   "Caiet de Cantari": undefined;
@@ -38,3 +33,5 @@ export type DrawerParamList = {
   "Cantari favorite": undefined;
   Rapoarte: undefined;
 };
+
+export type DrawerParamListKeys = keyof DrawerParamList;

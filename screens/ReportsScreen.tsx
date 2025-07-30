@@ -18,10 +18,11 @@ import { deleteReport, fetchReports } from "@/state/utils";
 import { useThemeStyle } from "@/hooks/useThemeStyle";
 import { useDisplayedSongInfo } from "@/hooks/useDisplayedSong";
 import { useTheme } from "@/hooks/useTheme";
+import { Report } from "@/types/state";
 
 const ReportsScreen = () => {
   const themeStyle = useThemeStyle();
-  const [theme] = useTheme();
+  const theme = useTheme();
   const [displayedSongInfo, setDisplayedSongInfo] = useDisplayedSongInfo();
   const [songs] = useAtom(songsAtom);
   const [modalVisible, setModalVisible] = useState(false);
@@ -34,7 +35,7 @@ const ReportsScreen = () => {
   useEffect(() => {
     const fetch = async () => {
       const response = await fetchReports();
-      if (response.status === 200) setReportsArray(response.data);
+      if (response.status === 200) setReportsArray(response.data ?? []);
       setFetchState("Empty");
     };
     fetch();
@@ -44,10 +45,9 @@ const ReportsScreen = () => {
     return { height: 794, width: 414 };
   }, [theme]);
 
-  const itemOnPressProp = useCallback((item) => {
+  const itemOnPressProp = useCallback((item: Report) => {
     setDisplayedSongInfo({
       song: songs[item.songIndex],
-      index: item.songIndex,
       currentReport: item,
     });
     // @ts-ignore
@@ -55,10 +55,10 @@ const ReportsScreen = () => {
   }, []);
 
   const renderItem = useCallback(
-    ({ item }) => {
+    ({ item }: { item: Report }) => {
       return (
         <Button
-          secondary
+          type="secondary"
           onPress={() => itemOnPressProp(item)}
           touchableStyle={{ marginVertical: 2.5 }}
           text={songs[item.songIndex].title}
@@ -100,11 +100,15 @@ const ReportsScreen = () => {
         />
       )}
       <Dialog visible={modalVisible} setModalVisible={setModalVisible}>
-        <DialogTitle>{displayedSongInfo.song.title}</DialogTitle>
+        <DialogTitle>
+          {(displayedSongInfo.song && displayedSongInfo.song.title) ?? "N/A"}
+        </DialogTitle>
         <Separator />
         <DialogSubtitle>Detalii suplimentare:</DialogSubtitle>
         <DialogText>
-          {displayedSongInfo.currentReport.additionalDetails || "Nu exista"}
+          {(displayedSongInfo.currentReport &&
+            displayedSongInfo.currentReport.additionalDetails) ??
+            "Nu exista"}
         </DialogText>
         <View
           style={{
@@ -116,7 +120,7 @@ const ReportsScreen = () => {
           <View style={{ flexDirection: "row" }}>
             <Button
               text="Inchide"
-              secondary
+              type="secondary"
               touchableStyle={{ marginRight: 5 }}
               onPress={() => {
                 setDisplayedSongInfo({ currentReport: {} });
@@ -125,14 +129,22 @@ const ReportsScreen = () => {
             />
             <Button
               text="Sterge"
-              secondary
+              type="secondary"
               onPress={() => {
+                if (user.adminToken === undefined) {
+                  console.log("some user got to the reports screen");
+                  return;
+                }
                 deleteReport(displayedSongInfo.currentReport, user.adminToken);
                 setModalVisible(false);
               }}
             />
           </View>
-          <Button text="Corecteaza" primary onPress={() => goToUpdateSong()} />
+          <Button
+            text="Corecteaza"
+            type="primary"
+            onPress={() => goToUpdateSong()}
+          />
         </View>
       </Dialog>
     </View>

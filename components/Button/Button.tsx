@@ -1,8 +1,25 @@
 import { memo } from "react";
-import { Text, TouchableOpacity } from "react-native";
+import {
+  StyleProp,
+  Text,
+  TextStyle,
+  TouchableOpacity,
+  ViewStyle,
+} from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
 import { useThemeStyle } from "@/hooks/useThemeStyle";
+
+interface ButtonProps {
+  text?: string;
+  icon?: keyof typeof MaterialIcons.glyphMap;
+  textStyle?: StyleProp<TextStyle>;
+  touchableStyle?: StyleProp<ViewStyle>;
+  onPress: () => void;
+  iconStyle?: StyleProp<TextStyle>;
+  iconSize?: number;
+  type: "primary" | "secondary";
+}
 
 const Button = ({
   text = undefined,
@@ -10,15 +27,15 @@ const Button = ({
   textStyle = undefined,
   iconStyle = undefined,
   touchableStyle = undefined,
-  onPress = () => {},
+  onPress,
   iconSize = undefined,
-  primary = false,
-  secondary = false,
-}) => {
+  type,
+}: ButtonProps) => {
   const themeStyle = useThemeStyle();
   let prevPageX: number;
 
-  const buttonStyleBasedOnType = primary && themeStyle.inverseTxtColor;
+  const buttonStyleBasedOnType =
+    type === "primary" && themeStyle.inverseTxtColor;
 
   return (
     <TouchableOpacity
@@ -29,8 +46,8 @@ const Button = ({
       style={[
         themeStyle.bgColor,
         touchableStyle,
-        primary && themeStyle.inverseBgColor,
-        secondary && {
+        type === "primary" && themeStyle.inverseBgColor,
+        type === "secondary" && {
           borderWidth: 1,
           ...themeStyle.borderColor,
         },

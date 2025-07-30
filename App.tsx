@@ -116,7 +116,7 @@ export default function App() {
   return (
     <NavigationContainer theme={scheme === "dark" ? DarkTheme : LightTheme}>
       <StatusBar style={scheme === "light" ? "dark" : "light"} />
-      {/* <LoadingScreen /> */}
+      <LoadingScreen />
       <Stack.Navigator
         initialRouteName="Home"
         screenOptions={{ header: () => <Navbar /> }}

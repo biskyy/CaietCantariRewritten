@@ -48,7 +48,7 @@ const Navbar = () => {
   const insets = useSafeAreaInsets();
 
   const reportSong = () => {
-    createReport(displayedSongInfo.index, additionalDetails);
+    createReport(displayedSongInfo.song.index, additionalDetails);
   };
 
   if (orientation === "landscape") return <></>;
@@ -142,7 +142,7 @@ const Navbar = () => {
             touchableStyle={styles.navbarMenuIcon}
             onPress={async () => {
               const response = await fetchReports();
-              setReportsArray(response.data);
+              setReportsArray(response.data ?? []);
             }}
           />
         )}
@@ -151,7 +151,7 @@ const Navbar = () => {
           size={32}
           touchableStyle={styles.navbarMenuIcon}
           onPress={() => {
-            setTheme(!theme.data);
+            // setTheme(!theme.data);
           }}
         />
       </View>
@@ -178,15 +178,15 @@ const Navbar = () => {
             <Button
               onPress={() => setModalVisible(false)}
               text="Anulează"
-              secondary
+              type="secondary"
             />
             <Button
               onPress={() => {
-                createReport(displayedSongInfo.index, additionalDetails);
+                createReport(displayedSongInfo.song.index, additionalDetails);
                 setModalVisible(false);
               }}
               text="Trimite"
-              primary
+              type="primary"
             />
           </View>
         </Dialog>

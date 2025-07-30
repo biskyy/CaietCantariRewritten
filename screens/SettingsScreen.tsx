@@ -23,7 +23,7 @@ export default function SettingsScreen() {
           <Button
             icon="login"
             // primary
-            secondary
+            type="secondary"
             iconSize={20}
             touchableStyle={{ width: "100%", marginVertical: 2.5 }}
             // @ts-ignore
@@ -35,11 +35,12 @@ export default function SettingsScreen() {
             icon="logout"
             iconSize={20}
             touchableStyle={{ width: "100%", marginVertical: 2.5 }}
-            secondary
+            type="secondary"
             // @ts-ignore
             onPress={() =>
               setUser({
                 adminToken: "",
+                ...user,
               })
             }
             text="Logout"
@@ -59,7 +60,7 @@ export default function SettingsScreen() {
               showCategories: !userPrefs.showCategories,
             });
           }}
-          secondary
+          type="secondary"
         />
       </View>
     </>

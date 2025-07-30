@@ -22,11 +22,15 @@ import { songsAtom, userFavoriteSongsAtom } from "@/state/persistent";
 
 import { useDisplayedSongInfo } from "@/hooks/useDisplayedSong";
 import { Song } from "@/types/state";
-import { DrawerParamList, SongListScreenProps } from "@/types/navigator";
+import {
+  DrawerParamList,
+  DrawerParamListKeys,
+  SongListScreenProps,
+} from "@/types/navigator";
 
 // const validCategories = ["lauda", "rugaciune", "predare"];
 
-const SongList = <T extends keyof DrawerParamList>({
+const SongList = <T extends DrawerParamListKeys>({
   route,
   navigation,
 }: SongListScreenProps<T>) => {
@@ -43,7 +47,7 @@ const SongList = <T extends keyof DrawerParamList>({
   //   // "predare",
   // ]);
 
-  SongList<"Caiet de Cantari">;
+  // SongList<"Caiet de Cantari">;
 
   const [, setDisplayedSongInfo] = useDisplayedSongInfo();
 
