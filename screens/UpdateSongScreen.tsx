@@ -96,8 +96,6 @@ const UpdateSongScreen = () => {
     });
   };
 
-  // console.log(song.id);
-
   return (
     <>
       <ScrollView scrollEnabled={true}>
