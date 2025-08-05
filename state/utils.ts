@@ -8,7 +8,7 @@ import { API_URL } from "@/constants";
 import { userAtom } from "@/state/persistent";
 
 import { Font } from "@/types";
-import { Report, Song, User } from "@/types/state";
+import { Report, Song, UpdatedSongProps, User } from "@/types/state";
 import {
   ApiErrorResponse,
   ApiSuccessResponse,
@@ -74,7 +74,7 @@ const getUserToken = async (): Promise<
 };
 
 export const fetchSongs = async (
-  config: AxiosRequestConfig,
+  config?: AxiosRequestConfig,
 ): Promise<ApiSuccessResponse<Song[]>> => {
   if (!(await isInternetConnected())) return { data: undefined, status: 400 };
   const { data: userToken } = await getUserToken();
@@ -123,7 +123,7 @@ export const login = async (
 };
 
 export const updateSong = async (
-  updatedSong: Song,
+  updatedSong: UpdatedSongProps,
   token: string,
 ): Promise<ApiSuccessResponse<DefaultResponse>> => {
   if (!(await isInternetConnected())) return { data: undefined, status: 400 };

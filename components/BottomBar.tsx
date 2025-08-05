@@ -7,11 +7,9 @@ import Separator from "@/components/Separator";
 
 import { modalVisibleAtom, orientationAtom } from "@/state/global";
 
-import { useThemeStyle } from "@/hooks/useThemeStyle";
 import { useTheme } from "@react-navigation/native";
 
 const BottomBar = (props) => {
-  // const themeStyle = useThemeStyle();
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const [orientation] = useAtom(orientationAtom);

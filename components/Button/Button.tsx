@@ -7,8 +7,7 @@ import {
   ViewStyle,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-
-import { useThemeStyle } from "@/hooks/useThemeStyle";
+import { useTheme } from "@react-navigation/native";
 
 interface ButtonProps {
   text?: string;
@@ -31,11 +30,14 @@ const Button = ({
   iconSize = undefined,
   type,
 }: ButtonProps) => {
-  const themeStyle = useThemeStyle();
+  const theme = useTheme();
   let prevPageX: number;
 
-  const buttonStyleBasedOnType =
-    type === "primary" && themeStyle.inverseTxtColor;
+  const buttonStyleBasedOnType = type === "primary" && {
+    color: theme.colors.background,
+  };
+
+  console.log(buttonStyleBasedOnType);
 
   return (
     <TouchableOpacity
@@ -44,12 +46,14 @@ const Button = ({
         Math.abs(e.nativeEvent.pageX - prevPageX) >= 50 ? null : onPress()
       }
       style={[
-        themeStyle.bgColor,
+        { backgroundColor: theme.colors.background },
         touchableStyle,
-        type === "primary" && themeStyle.inverseBgColor,
+        type === "primary" && {
+          backgroundColor: theme.colors.text,
+        },
         type === "secondary" && {
           borderWidth: 1,
-          ...themeStyle.borderColor,
+          borderColor: theme.colors.border,
         },
         icon &&
           text && {
@@ -69,19 +73,25 @@ const Button = ({
             name={icon}
             size={iconSize}
             style={[
-              themeStyle.txtColor,
               iconStyle,
               buttonStyleBasedOnType,
-              { fontWeight: "normal", marginRight: 10 },
+              {
+                color: theme.colors.text,
+                fontWeight: "normal",
+                marginRight: 10,
+              },
             ]}
           />
           <Text
             style={[
-              themeStyle.text,
-              themeStyle.txtColor,
               textStyle,
+              {
+                fontSize: 16,
+                fontWeight: "normal",
+                color: theme.colors.text,
+                flexShrink: 1,
+              },
               buttonStyleBasedOnType,
-              { flexShrink: 1 },
             ]}
           >
             {text}
@@ -90,10 +100,9 @@ const Button = ({
       ) : (
         <Text
           style={[
-            themeStyle.txtColor,
             textStyle,
+            { color: theme.colors.text, flexShrink: 1 },
             buttonStyleBasedOnType,
-            { flexShrink: 1 },
           ]}
         >
           {text}

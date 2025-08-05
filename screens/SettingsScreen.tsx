@@ -1,15 +1,13 @@
 import { StyleSheet, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 import { useAtom } from "jotai";
 
 import Button from "@/components/Button/Button";
 
 import { userAtom, userPrefsAtom } from "@/state/persistent";
 
-import { useThemeStyle } from "@/hooks/useThemeStyle";
-
 export default function SettingsScreen() {
-  const themeStyle = useThemeStyle();
+  const theme = useTheme();
 
   const [userPrefs, setUserPrefs] = useAtom(userPrefsAtom);
   const [user, setUser] = useAtom(userAtom);
@@ -18,7 +16,12 @@ export default function SettingsScreen() {
 
   return (
     <>
-      <View style={[themeStyle.bgColor, styles.settingsDiv]}>
+      <View
+        style={[
+          { backgroundColor: theme.colors.background },
+          styles.settingsDiv,
+        ]}
+      >
         {!user.adminToken ? (
           <Button
             icon="login"

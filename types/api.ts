@@ -2,8 +2,8 @@ export interface ApiErrorResponse {
   message: string;
 }
 
-export interface ApiSuccessResponse<ReturnData> {
-  data: ReturnData | undefined;
+export interface ApiSuccessResponse<ReturnedDataType> {
+  data: ReturnedDataType | undefined;
   status: number | undefined;
 }
 

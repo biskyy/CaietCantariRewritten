@@ -8,7 +8,7 @@ export interface UserPrefs {
   showCategories: boolean;
 }
 
-export type ThemeState = "not set" | true | false;
+export type ThemeState = "not set" | "dark" | "light";
 
 export interface Report {
   songIndex: number;
@@ -39,3 +39,8 @@ export interface DisplayedSong {
   bookLastIndex: number;
   currentReport?: any;
 }
+
+export type UpdatedSongProps = Pick<
+  Song,
+  "book_id" | "id" | "title" | "content" | "tags" | "index"
+>;

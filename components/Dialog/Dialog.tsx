@@ -1,3 +1,4 @@
+import { useTheme } from "@react-navigation/native";
 import {
   Modal,
   TouchableWithoutFeedback,
@@ -7,10 +8,8 @@ import {
   Platform,
 } from "react-native";
 
-import { useThemeStyle } from "@/hooks/useThemeStyle";
-
 const Dialog = (props) => {
-  const themeStyle = useThemeStyle();
+  const theme = useTheme();
 
   return (
     // dont touch this
@@ -41,18 +40,16 @@ const Dialog = (props) => {
                 // keyboardVerticalOffset={-111}
               >
                 <View
-                  style={[
-                    themeStyle.borderColor,
-                    themeStyle.bgColor,
-                    {
-                      borderWidth: 1,
-                      padding: 16,
-                      borderRadius: 6,
-                      flexBasis: 0,
-                      minWidth: "85%",
-                      maxWidth: "85%",
-                    },
-                  ]}
+                  style={{
+                    backgroundColor: theme.colors.background,
+                    borderColor: theme.colors.border,
+                    borderWidth: 1,
+                    padding: 16,
+                    borderRadius: 6,
+                    flexBasis: 0,
+                    minWidth: "85%",
+                    maxWidth: "85%",
+                  }}
                 >
                   <ScrollView
                     scrollEnabled={false}

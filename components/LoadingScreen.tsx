@@ -7,11 +7,12 @@ import Animated, {
 } from "react-native-reanimated";
 import { MaterialIcons } from "@expo/vector-icons";
 
-import { useThemeStyle } from "@/hooks/useThemeStyle";
 import { useLoadingScreen } from "@/hooks/useLoadingScreen";
+import { useTheme } from "@react-navigation/native";
 
 const LoadingScreen = () => {
-  const themeStyle = useThemeStyle();
+  // const themeStyle = useThemeStyle();
+  const theme = useTheme();
   const [loadingScreen, setLoadingScreen] = useLoadingScreen();
 
   const opacity = useSharedValue(0);
@@ -36,15 +37,15 @@ const LoadingScreen = () => {
         zIndex: loadingScreen.state ? 1 : -1,
         elevation: loadingScreen.state ? 1 : -1, // stupid android
         ...styles.loadingScreenDiv,
-        ...themeStyle.bgColor,
+        backgroundColor: theme.colors.background,
       }}
     >
       <MaterialIcons
         name="menu-book"
         size={200}
-        style={[themeStyle.txtColor, { fontWeight: "normal" }]} // doesnt work, check "not possible" category on trellon
+        style={{ fontWeight: "normal", color: theme.colors.text }} // doesnt work, check "not possible" category on trellon
       />
-      <Text style={[themeStyle.txtColor, styles.textStyle]}>
+      <Text style={[{ color: theme.colors.text }, styles.textStyle]}>
         {loadingScreen.label}
       </Text>
     </Animated.View>

@@ -8,7 +8,7 @@ export const LightTheme: Theme = {
     background: Shades["100"],
     card: Colors.light.accent,
     text: Shades["800"],
-    border: Colors.light.secondary,
+    border: Shades["300"],
     notification: Colors.light.accent,
   },
 };
@@ -17,10 +17,11 @@ export const DarkTheme: Theme = {
   dark: true,
   colors: {
     primary: Colors.dark.primary,
-    background: Shades["100"],
+    background: Shades["800"],
     card: Colors.dark.accent,
-    text: Shades["800"],
-    border: Colors.dark.secondary,
+    text: Shades["100"],
+    // border: Colors.dark.secondary,
+    border: Shades["600"],
     notification: Colors.dark.accent,
   },
 };

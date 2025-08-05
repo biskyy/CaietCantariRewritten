@@ -1,13 +1,17 @@
+import { useTheme } from "@react-navigation/native";
 import { Text } from "react-native";
 
-import { useThemeStyle } from "@/hooks/useThemeStyle";
-
 const DialogTitle = (props) => {
-  const themeStyle = useThemeStyle();
+  const theme = useTheme();
 
   return (
     <Text
-      style={[themeStyle.txtColor, themeStyle.title, { marginVertical: 5 }]}
+      style={{
+        marginVertical: 5,
+        color: theme.colors.text,
+        fontSize: 28,
+        fontWeight: "bold",
+      }}
     >
       {props.children}
     </Text>

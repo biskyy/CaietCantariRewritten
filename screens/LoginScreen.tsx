@@ -14,11 +14,11 @@ import Button from "@/components/Button/Button";
 import { userAtom } from "@/state/persistent";
 import { login } from "@/state/utils";
 
-import { useThemeStyle } from "@/hooks/useThemeStyle";
 import { useLoadingScreen } from "@/hooks/useLoadingScreen";
+import { useTheme } from "@react-navigation/native";
 
 const LoginScreen = () => {
-  const themeStyle = useThemeStyle();
+  const theme = useTheme();
   const [user, setUser] = useAtom(userAtom);
   const [, setLoadingScreen] = useLoadingScreen();
 
@@ -52,7 +52,7 @@ const LoginScreen = () => {
 
   return (
     <ScrollView
-      style={[themeStyle.bgColor, styles.loginDiv]}
+      style={[{ backgroundColor: theme.colors.background }, styles.loginDiv]}
       scrollEnabled={false}
       keyboardShouldPersistTaps="handled" // reason for using ScrollView
       contentContainerStyle={{ alignItems: "center" }}

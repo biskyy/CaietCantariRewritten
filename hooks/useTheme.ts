@@ -6,7 +6,7 @@ import { writeableLoadableThemeAtom } from "@/state/persistent";
 // /**
 //  * @returns {[{data?: boolean | string, state: string}, (arg: boolean) => void]}
 //  */
-export const useTheme = async () => {
+const useTheme = async () => {
   const [theme, setTheme] = useAtom(writeableLoadableThemeAtom); // TODO : use this atom instead of writeable
   return [theme, setTheme];
 };

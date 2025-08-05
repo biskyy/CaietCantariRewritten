@@ -1,21 +1,13 @@
 import "react-native-gesture-handler";
-import { Suspense, useEffect, useState } from "react";
-import {
-  Appearance,
-  Platform,
-  Pressable,
-  Text,
-  View,
-  ViewBase,
-  useColorScheme,
-} from "react-native";
+import { useEffect, useState } from "react";
+import { Appearance, Platform, useColorScheme } from "react-native";
 import { NavigationContainer, useTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { useAtom } from "jotai";
 
 import { MaterialIcons } from "@expo/vector-icons";
-import { StatusBar, setStatusBarHidden } from "expo-status-bar";
+import { StatusBar } from "expo-status-bar";
 import * as SplashScreen from "expo-splash-screen";
 import * as ScreenOrientation from "expo-screen-orientation";
 import * as SystemUI from "expo-system-ui";
@@ -46,8 +38,10 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const { colors } = useTheme();
+  const theme = useTheme();
   const scheme = useColorScheme();
+
+  console.log(scheme);
 
   const [loading, setLoading] = useState(true);
   const [, setOrientation] = useAtom(orientationAtom);
@@ -60,9 +54,10 @@ export default function App() {
     };
 
     preloadFontsAndIcons();
+    // theme.dark = false;
   }, []);
 
-  // set orientation statee
+  // set orientation state
   // ScreenOrientation.addOrientationChangeListener(({ orientationInfo }) => {
   //   if (
   //     orientationInfo.orientation === 3 ||
@@ -100,18 +95,18 @@ export default function App() {
   // }, [theme, loading]);
 
   SplashScreen.hideAsync();
-  const theme = useTheme();
+  // const theme = useTheme();
 
-  useEffect(() => {
-    console.log(theme.dark);
-    const colorScheme = theme.dark ? "dark" : "light";
-
-    if (Platform.OS === "web") {
-      document.documentElement.style.colorScheme = colorScheme;
-    } else {
-      Appearance.setColorScheme(colorScheme);
-    }
-  }, [theme.dark]);
+  // useEffect(() => {
+  //   console.log(scheme);
+  //   const colorScheme = theme.dark ? "dark" : "light";
+  //
+  //   if (Platform.OS === "web") {
+  //     document.documentElement.style.colorScheme = colorScheme;
+  //   } else {
+  //     Appearance.setColorScheme(colorScheme);
+  //   }
+  // }, [theme.dark]);
 
   return (
     <NavigationContainer theme={scheme === "dark" ? DarkTheme : LightTheme}>

@@ -7,14 +7,20 @@ import { useThemeStyle } from "@/hooks/useThemeStyle";
 
 import Shades from "@/constants/colors";
 import { useTheme } from "@react-navigation/native";
+import { Song } from "@/types/state";
 
-const SongButton = (props) => {
-  const { colors } = useTheme();
+interface SongButtonProps {
+  song: Song;
+  onPress: () => void;
+}
+
+const SongButton = (props: SongButtonProps) => {
+  const theme = useTheme();
   // const themeStyle = useThemeStyle();
 
   const [userPrefs] = useAtom(userPrefsAtom);
 
-  let prevPageX;
+  let prevPageX: number;
 
   return (
     <TouchableOpacity
@@ -23,12 +29,20 @@ const SongButton = (props) => {
         Math.abs(e.nativeEvent.pageX - prevPageX) >= 50 ? null : props.onPress()
       }
       style={[
-        { backgroundColor: colors.background },
-        // themeStyle.borderColor,
+        {
+          backgroundColor: theme.colors.background,
+          borderColor: theme.colors.border,
+        },
         styles.touchableStyle,
       ]}
     >
-      <Text style={{ backgroundColor: colors.background }} numberOfLines={1}>
+      <Text
+        style={{
+          backgroundColor: theme.colors.background,
+          color: theme.colors.text,
+        }}
+        numberOfLines={1}
+      >
         {props.song.title}
       </Text>
       {props.song.tags.length !== 0 && userPrefs.showCategories && (

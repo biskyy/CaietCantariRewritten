@@ -27,6 +27,7 @@ import {
   DrawerParamListKeys,
   SongListScreenProps,
 } from "@/types/navigator";
+import Input from "./Input";
 
 // const validCategories = ["lauda", "rugaciune", "predare"];
 
@@ -34,7 +35,7 @@ const SongList = <T extends DrawerParamListKeys>({
   route,
   navigation,
 }: SongListScreenProps<T>) => {
-  const { dark: theme, colors } = useTheme();
+  const theme = useTheme();
   const [songs, setSongs] = useAtom(songsAtom);
   const [searchQuery, setSearchQuery] = useState("");
   const [favoriteSongs, setFavoriteSongs] = useAtom(userFavoriteSongsAtom);
@@ -91,7 +92,7 @@ const SongList = <T extends DrawerParamListKeys>({
 
   let formattedQuery;
   let trimmedFormattedQuery: string;
-  // let prevSearchQuery;
+  let prevSearchQuery;
 
   const handleFilteredList = (query: string) => {
     formattedQuery = format(query);
@@ -151,7 +152,9 @@ const SongList = <T extends DrawerParamListKeys>({
   );
 
   return (
-    <View style={[{ backgroundColor: colors.background }, styles.songListDiv]}>
+    <View
+      style={[{ backgroundColor: theme.colors.background }, styles.songListDiv]}
+    >
       <FlashList
         renderItem={renderItem}
         data={data}
@@ -163,7 +166,7 @@ const SongList = <T extends DrawerParamListKeys>({
         contentInsetAdjustmentBehavior="automatic"
       />
       {searchQuery !== "" && (
-        <View style={{ backgroundColor: colors.background, flex: 9999 }}>
+        <View style={{ backgroundColor: theme.colors.background, flex: 9999 }}>
           <FlashList
             renderItem={renderItem}
             data={filteredSongs}
@@ -177,7 +180,10 @@ const SongList = <T extends DrawerParamListKeys>({
               <Text
                 style={[
                   // themeStyle.text,
-                  { backgroundColor: colors.background, alignSelf: "center" },
+                  {
+                    backgroundColor: theme.colors.background,
+                    alignSelf: "center",
+                  },
                 ]}
               >
                 Nu s-a gasit nicio cantare
@@ -189,32 +195,32 @@ const SongList = <T extends DrawerParamListKeys>({
       <KeyboardAvoidingView
         style={{
           marginBottom: Platform.OS === "ios" ? insets.bottom : 5,
-          backgroundColor: colors.background,
+          backgroundColor: theme.colors.background,
           ...styles.keyboardAvoidingViewDiv,
         }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={Platform.OS === "ios" ? 110 : 0}
       >
-        {/* <Input */}
-        {/*   scrollEnabled={false} */}
-        {/*   textInputDivStyle={{ */}
-        {/*     width: "95%", */}
-        {/*     minHeight: 55, */}
-        {/*     alignSelf: "center", */}
-        {/*   }} */}
-        {/*   placeholder="Cauta o cantare" */}
-        {/*   value={searchQuery} */}
-        {/*   // selectedCategories={selectedCategories} */}
-        {/*   // setSelectedCategories={setSelectedCategories} */}
-        {/*   clearShortcut */}
-        {/*   onChangeText={(str) => { */}
-        {/*     setSearchQuery((prev) => { */}
-        {/*       prevSearchQuery = prev; */}
-        {/*       return str; */}
-        {/*     }); */}
-        {/*     handleFilteredList(str); */}
-        {/*   }} */}
-        {/* /> */}
+        <Input
+          scrollEnabled={false}
+          textInputDivStyle={{
+            width: "95%",
+            minHeight: 55,
+            alignSelf: "center",
+          }}
+          placeholder="Cauta o cantare"
+          value={searchQuery}
+          // selectedCategories={selectedCategories}
+          // setSelectedCategories={setSelectedCategories}
+          clearShortcut
+          onChangeText={(str) => {
+            setSearchQuery((prev) => {
+              prevSearchQuery = prev;
+              return str;
+            });
+            handleFilteredList(str);
+          }}
+        />
       </KeyboardAvoidingView>
     </View>
   );

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { View, Text, ScrollView, ActivityIndicator } from "react-native";
 import { useAtom } from "jotai";
 import { FlashList } from "@shopify/flash-list";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 
 import Button from "@/components/Button/Button";
 import Dialog from "@/components/Dialog/Dialog";
@@ -15,13 +15,10 @@ import { reportsArrayAtom } from "@/state/global";
 import { songsAtom, userAtom } from "@/state/persistent";
 import { deleteReport, fetchReports } from "@/state/utils";
 
-import { useThemeStyle } from "@/hooks/useThemeStyle";
 import { useDisplayedSongInfo } from "@/hooks/useDisplayedSong";
-import { useTheme } from "@/hooks/useTheme";
 import { Report } from "@/types/state";
 
 const ReportsScreen = () => {
-  const themeStyle = useThemeStyle();
   const theme = useTheme();
   const [displayedSongInfo, setDisplayedSongInfo] = useDisplayedSongInfo();
   const [songs] = useAtom(songsAtom);
@@ -78,13 +75,13 @@ const ReportsScreen = () => {
     <View
       style={{
         flex: 1,
-        ...themeStyle.bgColor,
+        backgroundColor: theme.colors.background,
         // justifyContent: "center",
         padding: 10,
       }}
     >
       {reportsArray.length === 0 && (
-        <Text style={[themeStyle.txtColor, { alignSelf: "center" }]}>
+        <Text style={{ alignSelf: "center", color: theme.colors.text }}>
           {fetchState}
         </Text>
       )}
@@ -95,7 +92,7 @@ const ReportsScreen = () => {
           extraData={reportsArray}
           estimatedItemSize={55}
           estimatedListSize={estimatedListSize}
-          indicatorStyle={theme.data ? "white" : "black"}
+          indicatorStyle={theme.dark ? "white" : "black"}
           keyboardShouldPersistTaps="handled"
         />
       )}

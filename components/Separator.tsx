@@ -1,13 +1,18 @@
+import { useTheme } from "@react-navigation/native";
 import { memo } from "react";
 import { StyleSheet, View } from "react-native";
 
-import { useThemeStyle } from "@/hooks/useThemeStyle";
-
 function Separator(props) {
-  const themeStyle = useThemeStyle();
+  const theme = useTheme();
 
   return (
-    <View style={[styles.separator, themeStyle.separatorColor, props.style]} />
+    <View
+      style={[
+        styles.separator,
+        { backgroundColor: theme.colors.border },
+        props.style,
+      ]}
+    />
   );
 }
 

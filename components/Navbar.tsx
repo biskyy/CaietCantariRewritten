@@ -30,9 +30,7 @@ import { createReport, fetchReports } from "@/state/utils";
 import { useDisplayedSongInfo } from "@/hooks/useDisplayedSong";
 
 const Navbar = () => {
-  // const [theme, setTheme] = useTheme();
-  // const themeStyle = useThemeStyle();
-  const { dark: theme, colors } = useTheme();
+  const theme = useTheme();
   const [displayedSongInfo] = useDisplayedSongInfo();
   const [, setReportsArray] = useAtom(reportsArrayAtom);
   const [orientation] = useAtom(orientationAtom);
@@ -57,7 +55,7 @@ const Navbar = () => {
     <>
       <View
         style={{
-          backgroundColor: colors.background,
+          backgroundColor: theme.colors.background,
           ...styles.navbarDiv,
           paddingTop: insets.top,
           minHeight:
@@ -98,12 +96,12 @@ const Navbar = () => {
         >
           <Text
             numberOfLines={1}
-            style={[styles.navbarTitle, { color: colors.text }]}
+            style={[styles.navbarTitle, { color: theme.colors.text }]}
           >
             {route.name}
           </Text>
         </View>
-        {route.name === "Cantare" && user.adminToken ? (
+        {route.name === "Song" && user.adminToken ? (
           <IconButton
             icon="edit"
             size={32}
@@ -151,7 +149,7 @@ const Navbar = () => {
           size={32}
           touchableStyle={styles.navbarMenuIcon}
           onPress={() => {
-            // setTheme(!theme.data);
+            console.log(theme);
           }}
         />
       </View>

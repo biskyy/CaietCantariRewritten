@@ -21,7 +21,7 @@ import { DisplayedSong } from "@/types/state";
 import { useDisplayedSongInfo } from "@/hooks/useDisplayedSong";
 
 export default function SongScreen() {
-  const { dark: theme, colors } = useTheme();
+  const theme = useTheme();
   const [fontSize, setFontSize] = useAtom(fontSizeAtom);
   const [songs] = useAtom(songsAtom);
   const [favoriteSongs, setFavoriteSongs] = useAtom(userFavoriteSongsAtom);
@@ -62,7 +62,7 @@ export default function SongScreen() {
       <View
         style={[
           {
-            backgroundColor: colors.background,
+            backgroundColor: theme.colors.background,
             flex: 1,
             // marginTop: headerHeight,
           },
@@ -91,7 +91,7 @@ export default function SongScreen() {
           <Text
             numberOfLines={1}
             style={[
-              { color: colors.text },
+              { color: theme.colors.text, fontSize: 28, fontWeight: "bold" },
               // themeStyle.title,
               styles.title,
               { flexGrow: 5, flexBasis: 0 },
@@ -132,7 +132,7 @@ export default function SongScreen() {
         >
           <Text
             style={{
-              ...{ color: colors.text },
+              ...{ color: theme.colors.text },
               fontSize,
             }}
           >

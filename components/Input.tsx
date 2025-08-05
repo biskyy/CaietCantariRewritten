@@ -13,9 +13,7 @@ import {
 import IconButton from "@/components/Button/IconButton";
 
 import Shades from "@/constants/colors";
-
-import { useTheme } from "@/hooks/useTheme";
-import { useThemeStyle } from "@/hooks/useThemeStyle";
+import { useTheme } from "@react-navigation/native";
 
 interface InputProps extends TextInputProps {
   textInputDivStyle: StyleProp<ViewStyle>;
@@ -25,7 +23,6 @@ interface InputProps extends TextInputProps {
 
 const Input = forwardRef<TextInput, InputProps>((props: InputProps, ref) => {
   const theme = useTheme();
-  const themeStyle = useThemeStyle();
 
   const { textInputDivStyle, textInputStyle, clearShortcut } = props;
 
@@ -33,16 +30,18 @@ const Input = forwardRef<TextInput, InputProps>((props: InputProps, ref) => {
     <View
       style={[
         styles.textInputDiv,
-        themeStyle.borderColor,
-        themeStyle.bgColor,
+        {
+          backgroundColor: theme.colors.background,
+          borderColor: theme.colors.border,
+        },
         textInputDivStyle,
       ]}
     >
       <TextInput
         {...props}
         ref={ref}
-        style={[themeStyle.txtColor, styles.textInput, textInputStyle]}
-        placeholderTextColor={theme.data ? Shades[500] : Shades[500]}
+        style={[{ color: theme.colors.text }, styles.textInput, textInputStyle]}
+        placeholderTextColor={theme.dark ? Shades[500] : Shades[500]}
         autoCorrect={false}
         autoCapitalize="none"
       />
