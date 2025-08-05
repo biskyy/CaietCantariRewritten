@@ -43,18 +43,18 @@ export default function App() {
 
   console.log(scheme);
 
-  const [loading, setLoading] = useState(true);
+  const [loaded, setLoaded] = useState(true);
   const [, setOrientation] = useAtom(orientationAtom);
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
     const preloadFontsAndIcons = async () => {
-      await Promise.all(cacheFontsAndIcons([MaterialIcons.font]));
-      setLoading(false);
+      await Promise.all([...cacheFontsAndIcons([MaterialIcons.font])]);
     };
 
     preloadFontsAndIcons();
-    // theme.dark = false;
+
+    setLoaded(false);
   }, []);
 
   // set orientation state
@@ -87,26 +87,9 @@ export default function App() {
   //   }
   // }, [theme]);
 
-  // useEffect(() => {
-  //   if (theme === "not set")
-  //     if (colorScheme === "light") setTheme(false);
-  //     else setTheme(true);
-  //   else if (!loading) SplashScreen.hideAsync();
-  // }, [theme, loading]);
-
-  SplashScreen.hideAsync();
-  // const theme = useTheme();
-
-  // useEffect(() => {
-  //   console.log(scheme);
-  //   const colorScheme = theme.dark ? "dark" : "light";
-  //
-  //   if (Platform.OS === "web") {
-  //     document.documentElement.style.colorScheme = colorScheme;
-  //   } else {
-  //     Appearance.setColorScheme(colorScheme);
-  //   }
-  // }, [theme.dark]);
+  useEffect(() => {
+    if (loaded) SplashScreen.hideAsync();
+  }, [loaded]);
 
   return (
     <NavigationContainer theme={scheme === "dark" ? DarkTheme : LightTheme}>

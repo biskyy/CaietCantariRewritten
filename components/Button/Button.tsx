@@ -37,8 +37,6 @@ const Button = ({
     color: theme.colors.background,
   };
 
-  console.log(buttonStyleBasedOnType);
-
   return (
     <TouchableOpacity
       onPressIn={(e) => (prevPageX = e.nativeEvent.pageX)}

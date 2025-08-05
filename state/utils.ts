@@ -245,4 +245,4 @@ const handleErrorResponse = (error: AxiosError) => {
 };
 
 export const cacheFontsAndIcons = (fonts: Font[]) =>
-  fonts.map((font) => FontManager.loadAsync(font)); // cache fonts method
+  fonts.map(async (font) => await FontManager.loadAsync(font)); // cache fonts method
