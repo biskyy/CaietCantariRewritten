@@ -1,7 +1,11 @@
 import { useTheme } from "@react-navigation/native";
 import { Text } from "react-native";
 
-const DialogSubtitle = (props) => {
+interface DialogSubtitleProps {
+  children: React.ReactNode;
+}
+
+const DialogSubtitle = (props: DialogSubtitleProps) => {
   const theme = useTheme();
 
   return (

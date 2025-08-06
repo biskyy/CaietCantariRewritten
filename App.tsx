@@ -1,7 +1,7 @@
 import "react-native-gesture-handler";
 import { useEffect, useState } from "react";
 import { Appearance, Platform, useColorScheme } from "react-native";
-import { NavigationContainer, useTheme } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { useAtom } from "jotai";
@@ -25,11 +25,6 @@ import Navbar from "@/components/Navbar";
 import { orientationAtom } from "@/state/global";
 import { cacheFontsAndIcons } from "@/state/utils";
 
-import {
-  themeAtom,
-  userFavoriteSongsAtom,
-  writeableLoadableThemeAtom,
-} from "@/state/persistent";
 import { DarkTheme, LightTheme } from "@/constants/themes";
 import { RootStackParamList } from "@/types/navigator";
 

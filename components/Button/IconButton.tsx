@@ -1,11 +1,22 @@
-import { TouchableOpacity } from "react-native";
+import {
+  StyleProp,
+  TextStyle,
+  TouchableOpacity,
+  ViewStyle,
+} from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
-import { useThemeStyle } from "@/hooks/useThemeStyle";
 import { useTheme } from "@react-navigation/native";
 
-const IconButton = (props) => {
-  // const themeStyle = useThemeStyle();
+interface IconButtonProps {
+  icon?: keyof typeof MaterialIcons.glyphMap;
+  size: number;
+  touchableStyle: StyleProp<ViewStyle>;
+  iconStyle: StyleProp<TextStyle>;
+  onPress: () => void;
+}
+
+const IconButton = (props: IconButtonProps) => {
   const { colors } = useTheme();
 
   return (
@@ -20,7 +31,7 @@ const IconButton = (props) => {
       <MaterialIcons
         name={props.icon}
         size={props.size}
-        style={[{ fontWeight: "normal", color: colors.text }]}
+        style={[props.iconStyle, { fontWeight: "normal", color: colors.text }]}
       />
     </TouchableOpacity>
   );

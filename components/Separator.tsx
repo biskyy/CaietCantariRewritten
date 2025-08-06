@@ -1,15 +1,19 @@
 import { useTheme } from "@react-navigation/native";
 import { memo } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 
-function Separator(props) {
+interface SeparatorProps {
+  style?: StyleProp<ViewStyle>;
+}
+
+function Separator(props: SeparatorProps) {
   const theme = useTheme();
 
   return (
     <View
       style={[
-        styles.separator,
         { backgroundColor: theme.colors.border },
+        styles.separator,
         props.style,
       ]}
     />
@@ -18,7 +22,6 @@ function Separator(props) {
 
 const styles = StyleSheet.create({
   separator: {
-    // width: "100%",
     height: 1,
   },
 });

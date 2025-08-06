@@ -51,45 +51,18 @@ export const userFavoriteSongsAtom = atomWithStorage<number[]>(
   storage,
 );
 
-export const themeAtom = atomWithStorage<ThemeState>(
-  STORAGE_THEME,
-  "not set",
-  storage,
-  {
-    getOnInit: true,
-  },
-);
-
-const readOnlyLoadableThemeAtom = loadable(themeAtom);
-
-export const writeableLoadableThemeAtom = atom(
-  (get) => get(readOnlyLoadableThemeAtom),
-  async (_get, set, arg: ThemeState) => set(themeAtom, arg),
-);
-
-// export function loadableWritableAtom<
-//   Value extends Promise<unknown>,
-//   Args extends unknown[],
-// >(
-//   writableAtom: WritableAtom<null, Args, Value>,
-// ): WritableAtom<Loadable<Value | undefined>, Args, Value> {
-//   const internalPromiseAtom = atom<Value>();
-//   const internalLoadableAtom = loadable(internalPromiseAtom);
+// export const themeAtom = atomWithStorage<ThemeState>(
+//   STORAGE_THEME,
+//   "not set",
+//   storage,
+//   {
+//     getOnInit: true,
+//   },
+// );
 //
-//   return atom(
-//     (get) => {
-//       return get(internalLoadableAtom);
-//     },
-//     (_, set, ...args: Args): Value => {
-//       const promise = set(writableAtom, ...args);
-//       set(internalPromiseAtom, promise);
-//       return promise;
-//     },
-//   );
-// }
+// const readOnlyLoadableThemeAtom = loadable(themeAtom);
 //
-// export const _themeAtom = loadableWritableAtom(
-//   atom(null, async (get, set, newState) => {
-//     return newState;
-//   }),
+// export const writeableLoadableThemeAtom = atom(
+//   (get) => get(readOnlyLoadableThemeAtom),
+//   async (_get, set, arg: ThemeState) => set(themeAtom, arg),
 // );

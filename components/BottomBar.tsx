@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, ReactNode } from "react";
 import { Keyboard, Platform, View } from "react-native";
 import { useAtom } from "jotai";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -9,7 +9,11 @@ import { modalVisibleAtom, orientationAtom } from "@/state/global";
 
 import { useTheme } from "@react-navigation/native";
 
-const BottomBar = (props) => {
+interface BottomBarProps {
+  children: ReactNode;
+}
+
+const BottomBar = (props: BottomBarProps) => {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const [orientation] = useAtom(orientationAtom);

@@ -3,8 +3,6 @@ import { useAtom } from "jotai";
 
 import { userPrefsAtom } from "@/state/persistent";
 
-import { useThemeStyle } from "@/hooks/useThemeStyle";
-
 import Shades from "@/constants/colors";
 import { useTheme } from "@react-navigation/native";
 import { Song } from "@/types/state";

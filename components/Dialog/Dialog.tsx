@@ -1,4 +1,5 @@
 import { useTheme } from "@react-navigation/native";
+import { ReactNode } from "react";
 import {
   Modal,
   TouchableWithoutFeedback,
@@ -8,7 +9,13 @@ import {
   Platform,
 } from "react-native";
 
-const Dialog = (props) => {
+interface DialogProps {
+  visible: boolean;
+  setModalVisible: (visible: boolean) => void;
+  children: ReactNode;
+}
+
+const Dialog = (props: DialogProps) => {
   const theme = useTheme();
 
   return (

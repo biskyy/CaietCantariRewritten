@@ -1,7 +1,12 @@
 import { useTheme } from "@react-navigation/native";
+import { ReactNode } from "react";
 import { Text } from "react-native";
 
-const DialogText = (props) => {
+interface DialogTextProps {
+  children: ReactNode;
+}
+
+const DialogText = (props: DialogTextProps) => {
   const theme = useTheme();
 
   return (

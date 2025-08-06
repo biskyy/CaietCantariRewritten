@@ -4,7 +4,6 @@ import {
   StyleSheet,
   TextInput,
   TextInputProps,
-  StyleSheetProperties,
   StyleProp,
   ViewStyle,
   TextStyle,

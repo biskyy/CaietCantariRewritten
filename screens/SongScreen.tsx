@@ -9,14 +9,14 @@ import IconButton from "@/components/Button/IconButton";
 import Separator from "@/components/Separator";
 import BottomBar from "@/components/BottomBar";
 
-import { dispalyedSongInfoAtom, orientationAtom } from "@/state/global";
+import { displayedSongInfoAtom, orientationAtom } from "@/state/global";
 import {
   userFavoriteSongsAtom,
   songsAtom,
   fontSizeAtom,
 } from "@/state/persistent";
 
-import { useTheme } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 import { DisplayedSong } from "@/types/state";
 import { useDisplayedSongInfo } from "@/hooks/useDisplayedSong";
 
@@ -27,6 +27,7 @@ export default function SongScreen() {
   const [favoriteSongs, setFavoriteSongs] = useAtom(userFavoriteSongsAtom);
   const [orientation] = useAtom(orientationAtom);
   const [displayedSongInfo, setDisplayedSongInfo] = useDisplayedSongInfo();
+  const navigation = useNavigation();
 
   useKeepAwake();
 
@@ -72,11 +73,12 @@ export default function SongScreen() {
         <View style={styles.titleDiv}>
           <IconButton
             icon={
-              displayedSongInfo.song.index > displayedSongInfo.bookFirstIndex &&
-              "keyboard-arrow-left"
+              displayedSongInfo.song.index > displayedSongInfo.bookFirstIndex
+                ? "keyboard-arrow-left"
+                : undefined
             }
             size={32}
-            textStyle={{ marginHorizontal: 15 }}
+            iconStyle={{ marginHorizontal: 15 }}
             touchableStyle={styles.titleArrow}
             onPress={() =>
               displayedSongInfo.song.index > displayedSongInfo.bookFirstIndex &&
@@ -101,11 +103,12 @@ export default function SongScreen() {
           </Text>
           <IconButton
             icon={
-              displayedSongInfo.song.index <
-                displayedSongInfo.bookLastIndex - 1 && "keyboard-arrow-right"
+              displayedSongInfo.song.index < displayedSongInfo.bookLastIndex - 1
+                ? "keyboard-arrow-right"
+                : undefined
             }
             size={32}
-            textStyle={{ marginHorizontal: 15 }}
+            iconStyle={{ marginHorizontal: 15 }}
             touchableStyle={styles.titleArrow}
             onPress={() =>
               displayedSongInfo.song.index <
@@ -166,7 +169,7 @@ export default function SongScreen() {
             icon="arrow-back"
             size={32}
             touchableStyle={styles.bottomBarButtonDiv}
-            // onPress={() => navigation.goBack()}
+            onPress={() => navigation.goBack()}
           />
         </BottomBar>
       </View>

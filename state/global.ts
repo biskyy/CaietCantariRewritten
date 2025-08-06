@@ -1,4 +1,4 @@
-import { DisplayedSong, LoadingScreenState, Report } from "@/types/state";
+import { LoadingScreenState, Report, Song } from "@/types/state";
 import { atom } from "jotai";
 
 export const loadingScreenAtom = atom<LoadingScreenState>({
@@ -9,9 +9,15 @@ export const loadingScreenAtom = atom<LoadingScreenState>({
 
 export const modalVisibleAtom = atom<boolean>(false);
 
-export const dispalyedSongInfoAtom = atom<DisplayedSong>({
+interface DisplayedSong {
+  song: Song;
+  bookFirstIndex: number;
+  bookLastIndex: number;
+  currentReport?: any;
+}
+
+export const displayedSongInfoAtom = atom<DisplayedSong>({
   song: undefined,
-  indexInBook: undefined,
   bookFirstIndex: undefined,
   bookLastIndex: undefined,
   currentReport: undefined,

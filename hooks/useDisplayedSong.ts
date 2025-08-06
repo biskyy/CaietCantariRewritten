@@ -1,6 +1,6 @@
 import { useAtom } from "jotai";
 
-import { dispalyedSongInfoAtom } from "@/state/global";
+import { displayedSongInfoAtom } from "@/state/global";
 import { DisplayedSong } from "@/types/state";
 
 type UseDisplayedSong = [
@@ -10,7 +10,7 @@ type UseDisplayedSong = [
 
 export const useDisplayedSongInfo = (): UseDisplayedSong => {
   const [displayedSongInfo, _setDisplayedSongInfo] = useAtom<DisplayedSong>(
-    dispalyedSongInfoAtom,
+    displayedSongInfoAtom,
   );
 
   const setDisplayedSongInfo = (newState: Partial<DisplayedSong>) => {
