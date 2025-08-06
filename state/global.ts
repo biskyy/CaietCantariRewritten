@@ -1,5 +1,5 @@
-import { LoadingScreenState, Report, Song } from "@/types/state";
-import { atom } from "jotai";
+import { DisplayedSong, LoadingScreenState, Report } from "@/types/state";
+import { atom, PrimitiveAtom } from "jotai";
 
 export const loadingScreenAtom = atom<LoadingScreenState>({
   state: "inactive",
@@ -8,13 +8,6 @@ export const loadingScreenAtom = atom<LoadingScreenState>({
 });
 
 export const modalVisibleAtom = atom<boolean>(false);
-
-interface DisplayedSong {
-  song: Song;
-  bookFirstIndex: number;
-  bookLastIndex: number;
-  currentReport?: any;
-}
 
 export const displayedSongInfoAtom = atom<DisplayedSong>({
   song: undefined,
