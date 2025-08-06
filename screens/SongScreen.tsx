@@ -127,7 +127,7 @@ export default function SongScreen() {
           indicatorStyle={theme ? "white" : "black"}
           contentContainerStyle={{
             alignItems: "center",
-            paddingHorizontal: 30,
+            paddingHorizontal: 20,
             paddingVertical: 30,
             paddingBottom:
               orientation === "landscape" && Platform.OS === "ios" ? 60 : 30,
