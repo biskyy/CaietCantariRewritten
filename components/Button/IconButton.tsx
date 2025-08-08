@@ -12,7 +12,7 @@ interface IconButtonProps {
   icon?: keyof typeof MaterialIcons.glyphMap;
   size: number;
   touchableStyle: StyleProp<ViewStyle>;
-  iconStyle: StyleProp<TextStyle>;
+  iconStyle?: StyleProp<TextStyle>;
   onPress: () => void;
 }
 
