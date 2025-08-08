@@ -7,10 +7,7 @@ import {
   ViewStyle,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-<<<<<<<< HEAD:components/Button/Button.js
 
-import { useThemeStyle } from "@/hooks/useThemeStyle";
-========
 import { useTheme } from "@react-navigation/native";
 
 interface ButtonProps {
@@ -23,7 +20,6 @@ interface ButtonProps {
   iconSize?: number;
   type: "primary" | "secondary";
 }
->>>>>>>> wip-use-typescript:components/Button/Button.tsx
 
 const Button = ({
   text = undefined,

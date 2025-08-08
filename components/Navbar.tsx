@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { useAtom } from "jotai";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute, useTheme } from "@react-navigation/native";
 
 import Separator from "@/components/Separator";
 import Button from "@/components/Button/Button";
@@ -27,13 +27,10 @@ import {
 import { userAtom } from "@/state/persistent";
 import { createReport, fetchReports } from "@/state/utils";
 
-import { useTheme } from "@/hooks/useTheme";
-import { useThemeStyle } from "@/hooks/useThemeStyle";
 import { useDisplayedSongInfo } from "@/hooks/useDisplayedSong";
 
 const Navbar = () => {
-  const [theme, setTheme] = useTheme();
-  const themeStyle = useThemeStyle();
+  const theme = useTheme();
   const [displayedSongInfo] = useDisplayedSongInfo();
   const [, setReportsArray] = useAtom(reportsArrayAtom);
   const [orientation] = useAtom(orientationAtom);
@@ -49,7 +46,7 @@ const Navbar = () => {
   const insets = useSafeAreaInsets();
 
   const reportSong = () => {
-    createReport(displayedSongInfo.index, additionalDetails);
+    createReport(displayedSongInfo.song.index, additionalDetails);
   };
 
   if (orientation === "landscape") return <></>;
@@ -58,7 +55,7 @@ const Navbar = () => {
     <>
       <View
         style={{
-          ...themeStyle.bgColor,
+          backgroundColor: theme.colors.background,
           ...styles.navbarDiv,
           paddingTop: insets.top,
           minHeight:
@@ -99,12 +96,12 @@ const Navbar = () => {
         >
           <Text
             numberOfLines={1}
-            style={[styles.navbarTitle, themeStyle.txtColor]}
+            style={[styles.navbarTitle, { color: theme.colors.text }]}
           >
             {route.name}
           </Text>
         </View>
-        {route.name === "Cantare" && user.adminToken ? (
+        {route.name === "Song" && user.adminToken ? (
           <IconButton
             icon="edit"
             size={32}
@@ -143,7 +140,7 @@ const Navbar = () => {
             touchableStyle={styles.navbarMenuIcon}
             onPress={async () => {
               const response = await fetchReports();
-              setReportsArray(response.data);
+              setReportsArray(response.data ?? []);
             }}
           />
         )}
@@ -152,7 +149,7 @@ const Navbar = () => {
           size={32}
           touchableStyle={styles.navbarMenuIcon}
           onPress={() => {
-            setTheme(!theme.data);
+            console.log(theme);
           }}
         />
       </View>
@@ -179,15 +176,15 @@ const Navbar = () => {
             <Button
               onPress={() => setModalVisible(false)}
               text="Anulează"
-              secondary
+              type="secondary"
             />
             <Button
               onPress={() => {
-                createReport(displayedSongInfo.index, additionalDetails);
+                createReport(displayedSongInfo.song.index, additionalDetails);
                 setModalVisible(false);
               }}
               text="Trimite"
-              primary
+              type="primary"
             />
           </View>
         </Dialog>

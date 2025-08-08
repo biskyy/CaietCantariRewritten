@@ -1,14 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { useAtom } from "jotai";
-<<<<<<<< HEAD:components/Button/SongButton.js
-
-import { userPrefsAtom } from "@/state/persistent";
-
-import { useThemeStyle } from "@/hooks/useThemeStyle";
-
-import Colors from "@/constants/colors";
-========
->>>>>>>> wip-use-typescript:components/Button/SongButton.tsx
 
 import { userPrefsAtom } from "@/state/persistent";
 

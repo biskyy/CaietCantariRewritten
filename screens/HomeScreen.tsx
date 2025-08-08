@@ -6,7 +6,11 @@ import {
   Text,
   View,
 } from "react-native";
-import { createDrawerNavigator } from "@react-navigation/drawer";
+import {
+  createDrawerNavigator,
+  DrawerContentComponentProps,
+  DrawerScreenProps,
+} from "@react-navigation/drawer";
 import { useAtom } from "jotai";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -19,15 +23,16 @@ import Separator from "@/components/Separator";
 import IconButton from "@/components/Button/IconButton";
 
 import { songsAtom, userAtom } from "@/state/persistent";
-import { fetchSongsRequest } from "@/state/utils";
+import { fetchSongs } from "@/state/utils";
 
-import { useThemeStyle } from "@/hooks/useThemeStyle";
 import { useLoadingScreen } from "@/hooks/useLoadingScreen";
+import { DrawerParamList, RootStackScreenProps } from "@/types/navigator";
+import { useTheme } from "@react-navigation/native";
 
-const Drawer = createDrawerNavigator();
+const Drawer = createDrawerNavigator<DrawerParamList>();
 
-const CustomDrawerMenu = (props) => {
-  const themeStyle = useThemeStyle();
+const CustomDrawerMenu = (props: DrawerContentComponentProps) => {
+  const theme = useTheme();
   const [, setLoadingScreen] = useLoadingScreen();
   const [, setSongs] = useAtom(songsAtom);
   const [user] = useAtom(userAtom);
@@ -36,13 +41,13 @@ const CustomDrawerMenu = (props) => {
 
   const refreshSongs = async () => {
     setLoadingScreen({
-      state: 1,
-      message: "Se actualizeaza cantarile",
+      state: "fading_in",
+      label: "Se actualizeaza cantarile",
     });
 
-    const response = await fetchSongsRequest();
+    const response = await fetchSongs();
 
-    if (response.status === 200) {
+    if (response.status === 200 && response.data !== undefined) {
       setSongs(response.data);
       setLoadingScreen({
         callback: () =>
@@ -55,15 +60,15 @@ const CustomDrawerMenu = (props) => {
       // we have to reset it otherwise the previous one will get called
       setLoadingScreen({ callback: () => {} });
     }
-    setLoadingScreen({ state: 2 });
+    setLoadingScreen({ state: "fading_out" });
   };
 
   return (
     <>
       <View
         style={{
-          ...themeStyle.bgColor,
           ...styles.drawerMenuHeaderDiv,
+          backgroundColor: theme.colors.background,
           paddingTop: insets.top,
           minHeight:
             Platform.OS === "ios" // see Navbar.js for details
@@ -73,7 +78,7 @@ const CustomDrawerMenu = (props) => {
       >
         <Text
           numberOfLines={1}
-          style={[styles.drawerMenuTitle, themeStyle.txtColor]}
+          style={[styles.drawerMenuTitle, { color: theme.colors.text }]}
         >
           Meniu
         </Text>
@@ -88,7 +93,10 @@ const CustomDrawerMenu = (props) => {
       </View>
       <Separator />
       <ScrollView
-        style={[themeStyle.bgColor, styles.drawerMenuButtonDiv]}
+        style={[
+          { backgroundColor: theme.colors.background },
+          styles.drawerMenuButtonDiv,
+        ]}
         contentContainerStyle={{ padding: 10 }}
       >
         {props.state.routeNames.slice(0, -2).map((name, index) => (
@@ -98,8 +106,7 @@ const CustomDrawerMenu = (props) => {
             onPress={() => props.navigation.navigate(name)}
             textStyle={[styles.drawerMenuButtonText]}
             touchableStyle={[styles.drawerMenuButton]}
-            primary={props.state.index === index}
-            secondary={props.state.index !== index}
+            type={props.state.index === index ? "primary" : "secondary"}
           />
         ))}
         <Button
@@ -112,10 +119,12 @@ const CustomDrawerMenu = (props) => {
             styles.drawerMenuButton,
             styles.drawerMenuRefreshButton,
           ]}
-          {...(props.state.index ===
-          props.state.routeNames.indexOf("Cantari favorite")
-            ? { primary: true }
-            : { secondary: true })}
+          type={
+            props.state.index ===
+            props.state.routeNames.indexOf("Cantari favorite")
+              ? "primary"
+              : "secondary"
+          }
         />
         {user.adminToken && (
           <Button
@@ -128,10 +137,11 @@ const CustomDrawerMenu = (props) => {
               styles.drawerMenuRefreshButton,
             ]}
             onPress={() => props.navigation.navigate("Rapoarte")}
-            {...(props.state.index ===
-            props.state.routeNames.indexOf("Rapoarte")
-              ? { primary: true }
-              : { secondary: true })}
+            type={
+              props.state.index === props.state.routeNames.indexOf("Rapoarte")
+                ? "primary"
+                : "secondary"
+            }
           />
         )}
         <Button
@@ -144,7 +154,7 @@ const CustomDrawerMenu = (props) => {
             styles.drawerMenuRefreshButton,
           ]}
           onPress={refreshSongs}
-          secondary
+          type="secondary"
         />
       </ScrollView>
     </>
@@ -190,7 +200,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function HomeScreen() {
+export default function HomeScreen({
+  route,
+  navigation,
+}: RootStackScreenProps<"Home">) {
   return (
     <Drawer.Navigator
       screenOptions={{

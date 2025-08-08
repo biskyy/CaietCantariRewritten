@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, ReactNode } from "react";
 import { Keyboard, Platform, View } from "react-native";
 import { useAtom } from "jotai";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -7,10 +7,14 @@ import Separator from "@/components/Separator";
 
 import { modalVisibleAtom, orientationAtom } from "@/state/global";
 
-import { useThemeStyle } from "@/hooks/useThemeStyle";
+import { useTheme } from "@react-navigation/native";
 
-const BottomBar = (props) => {
-  const themeStyle = useThemeStyle();
+interface BottomBarProps {
+  children: ReactNode;
+}
+
+const BottomBar = (props: BottomBarProps) => {
+  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const [orientation] = useAtom(orientationAtom);
   const [modalVisible, setModalVisible] = useAtom(modalVisibleAtom);
@@ -25,7 +29,7 @@ const BottomBar = (props) => {
       <View
         style={{
           paddingBottom: insets.bottom,
-          ...themeStyle.bgColor,
+          backgroundColor: colors.background,
           height: Platform.OS === "ios" ? insets.bottom + 64 : 64,
           flexDirection: "row",
           justifyContent: "space-evenly",

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { View, StyleSheet, Text, ScrollView, Platform } from "react-native";
 import { useAtom } from "jotai";
 
@@ -9,20 +9,25 @@ import IconButton from "@/components/Button/IconButton";
 import Separator from "@/components/Separator";
 import BottomBar from "@/components/BottomBar";
 
-import { orientationAtom } from "@/state/global";
-import { favoriteSongsAtom, fontSizeAtom, songsAtom } from "@/state/persistent";
+import { displayedSongInfoAtom, orientationAtom } from "@/state/global";
+import {
+  userFavoriteSongsAtom,
+  songsAtom,
+  fontSizeAtom,
+} from "@/state/persistent";
 
-import { useTheme } from "@/hooks/useTheme";
-import { useThemeStyle } from "@/hooks/useThemeStyle";
+import { useNavigation, useTheme } from "@react-navigation/native";
+import { DisplayedSong } from "@/types/state";
 import { useDisplayedSongInfo } from "@/hooks/useDisplayedSong";
 
-export default function SongScreen({ route, navigation }) {
-  const [theme] = useTheme();
-  const themeStyle = useThemeStyle();
+export default function SongScreen() {
+  const theme = useTheme();
   const [fontSize, setFontSize] = useAtom(fontSizeAtom);
   const [songs] = useAtom(songsAtom);
-  const [favoriteSongs, setFavoriteSongs] = useAtom(favoriteSongsAtom);
+  const [favoriteSongs, setFavoriteSongs] = useAtom(userFavoriteSongsAtom);
   const [orientation] = useAtom(orientationAtom);
+  const [displayedSongInfo, setDisplayedSongInfo] = useDisplayedSongInfo();
+  const navigation = useNavigation();
 
   useKeepAwake();
 
@@ -35,48 +40,61 @@ export default function SongScreen({ route, navigation }) {
     };
   }, []);
 
-  const [displayedSongInfo, setDisplayedSongInfo] = useDisplayedSongInfo();
-
   useEffect(
-    () => setDisplayedSongInfo({ song: songs[displayedSongInfo.index] }),
-    [songs, displayedSongInfo.index],
+    () => setDisplayedSongInfo({ song: songs[displayedSongInfo.song.index] }),
+    [songs, displayedSongInfo.song.index],
   );
 
-  const handleFontSizeChange = (sign) => {
+  const handleFontSizeChange = (sign: "+" | "-") => {
     if (sign === "+") setFontSize(fontSize + 1);
     else if (fontSize !== 1) setFontSize(fontSize - 1);
   };
 
   function addSongToFavorites() {
-    if (favoriteSongs.includes(displayedSongInfo.index))
+    if (favoriteSongs.includes(displayedSongInfo.song.index))
       setFavoriteSongs(
-        favoriteSongs.filter((song) => song !== displayedSongInfo.index),
+        favoriteSongs.filter((song) => song !== displayedSongInfo.song.index),
       );
-    else setFavoriteSongs([displayedSongInfo.index, ...favoriteSongs]);
+    else setFavoriteSongs([displayedSongInfo.song.index, ...favoriteSongs]);
   }
 
   return (
     <>
-      <View style={[themeStyle.bgColor, styles.songDiv]}>
+      <View
+        style={[
+          {
+            backgroundColor: theme.colors.background,
+            flex: 1,
+            // marginTop: headerHeight,
+          },
+          styles.songDiv,
+        ]}
+      >
         <View style={styles.titleDiv}>
           <IconButton
             icon={
-              displayedSongInfo.index > displayedSongInfo.listFirstIndex &&
-              "keyboard-arrow-left"
+              displayedSongInfo.song.index > displayedSongInfo.bookFirstIndex
+                ? "keyboard-arrow-left"
+                : undefined
             }
             size={32}
-            textStyle={{ marginHorizontal: 15 }}
+            iconStyle={{ marginHorizontal: 15 }}
             touchableStyle={styles.titleArrow}
             onPress={() =>
-              displayedSongInfo.index > displayedSongInfo.listFirstIndex &&
-              setDisplayedSongInfo({ index: displayedSongInfo.index - 1 })
+              displayedSongInfo.song.index > displayedSongInfo.bookFirstIndex &&
+              setDisplayedSongInfo({
+                song: {
+                  ...displayedSongInfo.song,
+                  index: displayedSongInfo.song.index - 1,
+                },
+              })
             }
           />
           <Text
             numberOfLines={1}
             style={[
-              themeStyle.txtColor,
-              themeStyle.title,
+              { color: theme.colors.text, fontSize: 28, fontWeight: "bold" },
+              // themeStyle.title,
               styles.title,
               { flexGrow: 5, flexBasis: 0 },
             ]}
@@ -85,21 +103,28 @@ export default function SongScreen({ route, navigation }) {
           </Text>
           <IconButton
             icon={
-              displayedSongInfo.index < displayedSongInfo.listLastIndex - 1 &&
-              "keyboard-arrow-right"
+              displayedSongInfo.song.index < displayedSongInfo.bookLastIndex - 1
+                ? "keyboard-arrow-right"
+                : undefined
             }
             size={32}
-            textStyle={{ marginHorizontal: 15 }}
+            iconStyle={{ marginHorizontal: 15 }}
             touchableStyle={styles.titleArrow}
             onPress={() =>
-              displayedSongInfo.index < displayedSongInfo.listLastIndex - 1 &&
-              setDisplayedSongInfo({ index: displayedSongInfo.index + 1 })
+              displayedSongInfo.song.index <
+                displayedSongInfo.bookLastIndex - 1 &&
+              setDisplayedSongInfo({
+                song: {
+                  ...displayedSongInfo.song,
+                  index: displayedSongInfo.song.index + 1,
+                },
+              })
             }
           />
         </View>
         <Separator />
         <ScrollView
-          indicatorStyle={theme.data ? "white" : "black"}
+          indicatorStyle={theme ? "white" : "black"}
           contentContainerStyle={{
             alignItems: "center",
             paddingHorizontal: 20,
@@ -110,7 +135,7 @@ export default function SongScreen({ route, navigation }) {
         >
           <Text
             style={{
-              ...themeStyle.txtColor,
+              ...{ color: theme.colors.text },
               fontSize,
             }}
           >
@@ -132,7 +157,7 @@ export default function SongScreen({ route, navigation }) {
           />
           <IconButton
             icon={
-              favoriteSongs.includes(displayedSongInfo.index)
+              favoriteSongs.includes(displayedSongInfo.song.index)
                 ? "star"
                 : "star-border"
             }
