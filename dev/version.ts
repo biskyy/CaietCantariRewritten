@@ -1,6 +1,6 @@
 import { fail } from "node:assert";
 import { $ } from "bun";
-import { inc, valid as isValidVersion } from "semver";
+import { inc, valid as isValidVersion, ReleaseType } from "semver";
 
 const packageJsonPath = "./package.json";
 const appJsonPath = "./app.json";
@@ -19,7 +19,11 @@ const isValidTarget = (subject) => variants.includes(subject);
 
 const isDirty = async () => (await $`git status --porcelain`.quiet()).text();
 
-const target = Bun.argv.pop();
+const target: ReleaseType = Bun.argv.pop() as ReleaseType;
+
+if (!isValidVersion(target)) {
+  throw new Error(`Invalid target version ${target}`);
+}
 
 // Read package.json
 const packageJson = await Bun.file(packageJsonPath).json();
