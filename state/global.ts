@@ -9,12 +9,7 @@ export const loadingScreenAtom = atom<LoadingScreenState>({
 
 export const modalVisibleAtom = atom<boolean>(false);
 
-export const displayedSongInfoAtom = atom<DisplayedSong>({
-  song: undefined,
-  bookFirstIndex: undefined,
-  bookLastIndex: undefined,
-  currentReport: undefined,
-});
+export const displayedSongInfoAtom = atom<DisplayedSong | undefined>();
 
 export const reportsArrayAtom = atom<Array<Report>>([]);
 

@@ -98,12 +98,12 @@ const ReportsScreen = () => {
       )}
       <Dialog visible={modalVisible} setModalVisible={setModalVisible}>
         <DialogTitle>
-          {(displayedSongInfo.song && displayedSongInfo.song.title) ?? "N/A"}
+          {(displayedSongInfo && displayedSongInfo.song.title) ?? "N/A"}
         </DialogTitle>
         <Separator />
         <DialogSubtitle>Detalii suplimentare:</DialogSubtitle>
         <DialogText>
-          {(displayedSongInfo.currentReport &&
+          {(displayedSongInfo &&
             displayedSongInfo.currentReport.additionalDetails) ??
             "Nu exista"}
         </DialogText>
@@ -132,7 +132,12 @@ const ReportsScreen = () => {
                   console.log("some user got to the reports screen");
                   return;
                 }
-                deleteReport(displayedSongInfo.currentReport, user.adminToken);
+                // TODO: implement toast
+                if (displayedSongInfo !== undefined)
+                  deleteReport(
+                    displayedSongInfo.currentReport,
+                    user.adminToken,
+                  );
                 setModalVisible(false);
               }}
             />

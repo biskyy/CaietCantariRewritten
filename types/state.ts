@@ -34,9 +34,9 @@ export interface Song {
 }
 
 export interface DisplayedSong {
-  song?: Song;
-  bookFirstIndex?: number;
-  bookLastIndex?: number;
+  song: Song;
+  bookFirstIndex: number;
+  bookLastIndex: number;
   currentReport?: any;
 }
 

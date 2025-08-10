@@ -46,7 +46,9 @@ const Navbar = () => {
   const insets = useSafeAreaInsets();
 
   const reportSong = () => {
-    createReport(displayedSongInfo.song.index, additionalDetails);
+    // TODO: implement a toast
+    if (displayedSongInfo !== undefined)
+      createReport(displayedSongInfo.song.index, additionalDetails);
   };
 
   if (orientation === "landscape") return <></>;
@@ -120,7 +122,7 @@ const Navbar = () => {
             />
           )
         )}
-        {route.name === "Cantare" && (
+        {route.name === "Cantare" && displayedSongInfo !== undefined && (
           <IconButton
             icon="share"
             size={32}
@@ -180,7 +182,8 @@ const Navbar = () => {
             />
             <Button
               onPress={() => {
-                createReport(displayedSongInfo.song.index, additionalDetails);
+                if (displayedSongInfo !== undefined)
+                  createReport(displayedSongInfo.song.index, additionalDetails);
                 setModalVisible(false);
               }}
               text="Trimite"

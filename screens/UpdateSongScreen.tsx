@@ -1,5 +1,5 @@
-import { useReducer, useState } from "react";
-import { Alert, ScrollView, StyleSheet, View } from "react-native";
+import { useReducer } from "react";
+import { Alert, ScrollView, StyleSheet, View, Text } from "react-native";
 import { useAtom } from "jotai";
 import { useNavigation, useTheme } from "@react-navigation/native";
 
@@ -53,6 +53,10 @@ const UpdateSongScreen = () => {
   const [displayedSongInfo, setDisplayedSongInfo] = useDisplayedSongInfo();
   const [user] = useAtom(userAtom);
   const [, setLoadingScreen] = useLoadingScreen();
+
+  if (displayedSongInfo === undefined) {
+    return <Text>Cum ai reusit vere sa ajungi aici</Text>;
+  }
 
   const [song, dispatch] = useReducer(reducer, {
     ...displayedSongInfo.song,

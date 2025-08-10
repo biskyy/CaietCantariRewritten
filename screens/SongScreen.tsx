@@ -29,6 +29,15 @@ export default function SongScreen() {
   const [displayedSongInfo, setDisplayedSongInfo] = useDisplayedSongInfo();
   const navigation = useNavigation();
 
+  if (displayedSongInfo === undefined) {
+    return (
+      <Text>
+        Uh oh! Se pare ca ai ajuns pe ecranul de vizualizare cantare fara sa fi
+        selectat vreuna
+      </Text>
+    );
+  }
+
   useKeepAwake();
 
   useEffect(() => {
@@ -51,6 +60,11 @@ export default function SongScreen() {
   };
 
   function addSongToFavorites() {
+    if (displayedSongInfo === undefined) {
+      return console.log(
+        "error - SongScreen - displayedSong is undefined but addSongToFavorites got called",
+      );
+    }
     if (favoriteSongs.includes(displayedSongInfo.song.index))
       setFavoriteSongs(
         favoriteSongs.filter((song) => song !== displayedSongInfo.song.index),
