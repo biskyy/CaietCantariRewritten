@@ -6,9 +6,9 @@ export const LightTheme: Theme = {
   colors: {
     primary: Colors.light.primary,
     background: Shades["100"],
-    card: Colors.light.accent,
+    card: Shades["200"], // also color for header background
     text: Shades["800"],
-    border: Shades["300"],
+    border: Shades["200"],
     notification: Colors.light.accent,
   },
 };
@@ -18,9 +18,8 @@ export const DarkTheme: Theme = {
   colors: {
     primary: Colors.dark.primary,
     background: Shades["800"],
-    card: Colors.dark.accent,
+    card: Shades["700"],
     text: Shades["100"],
-    // border: Colors.dark.secondary,
     border: Shades["600"],
     notification: Colors.dark.accent,
   },
