@@ -1,6 +1,13 @@
 import "react-native-gesture-handler";
 import { useEffect, useState } from "react";
-import { Appearance, Platform, Text, useColorScheme, View } from "react-native";
+import {
+  Appearance,
+  Platform,
+  PlatformColor,
+  Text,
+  useColorScheme,
+  View,
+} from "react-native";
 import { NavigationContainer, useTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -91,6 +98,10 @@ export default function App() {
         <Stack.Navigator
           initialRouteName="Home"
           screenOptions={{
+            headerTintColor:
+              Platform.OS === "ios"
+                ? PlatformColor("systemBlueColor").toString()
+                : undefined,
             headerShadowVisible: false,
             headerTransparent: Platform.select({ default: false, ios: true }),
             headerBlurEffect: "systemChromeMaterial",
