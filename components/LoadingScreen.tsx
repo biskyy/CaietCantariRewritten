@@ -34,8 +34,8 @@ const LoadingScreen = () => {
     <Animated.View
       style={{
         opacity,
-        zIndex: loadingScreen.state ? 1 : -1,
-        elevation: loadingScreen.state ? 1 : -1, // stupid android
+        zIndex: loadingScreen.state !== "inactive" ? 1 : -1,
+        elevation: loadingScreen.state !== "inactive" ? 1 : -1, // stupid android
         ...styles.loadingScreenDiv,
         backgroundColor: theme.colors.background,
       }}
