@@ -24,13 +24,13 @@ export type SongListScreenProps<T extends keyof DrawerParamList> =
   >;
 
 export type DrawerParamList = {
-  "Toate Cantarile": undefined;
-  "Caiet de Cantari": undefined;
-  "Cantari BER": undefined;
+  "Toate Cântările": undefined;
+  "Caiet de Cântări": undefined;
+  "Cântări BER": undefined;
   Jubilate: undefined;
   "Cartea de Tineret": undefined;
   Cor: undefined;
-  "Cantari favorite": undefined;
+  "Cântări favorite": undefined;
   Rapoarte: undefined;
 };
 
