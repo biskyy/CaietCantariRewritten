@@ -4,6 +4,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  useColorScheme,
   View,
 } from "react-native";
 import {
@@ -17,7 +18,6 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ReportsScreen from "@/screens/ReportsScreen";
 
 import SongList from "@/components/SongList";
-import Navbar from "@/components/Navbar";
 import Button from "@/components/Button/Button";
 import Separator from "@/components/Separator";
 import IconButton from "@/components/Button/IconButton";
@@ -28,6 +28,7 @@ import { fetchSongs } from "@/state/utils";
 import { useLoadingScreen } from "@/hooks/useLoadingScreen";
 import { DrawerParamList, RootStackScreenProps } from "@/types/navigator";
 import { useTheme } from "@react-navigation/native";
+import { HeaderBackground } from "@/components/ui/HeaderBackground";
 
 const Drawer = createDrawerNavigator<DrawerParamList>();
 
@@ -82,9 +83,9 @@ const CustomDrawerMenu = (props: DrawerContentComponentProps) => {
         >
           Meniu
         </Text>
-        <IconButton
-          icon="settings"
-          size={32}
+        <IconButton.Oct
+          icon="gear"
+          size={24}
           onPress={() => {
             props.navigation.navigate("Settings");
           }}
@@ -110,7 +111,7 @@ const CustomDrawerMenu = (props: DrawerContentComponentProps) => {
           />
         ))}
         <Button
-          text="Cantari favorite"
+          text="Cântări favorite"
           icon="star"
           iconSize={20}
           onPress={() => props.navigation.navigate("Cantari favorite")}
@@ -145,7 +146,7 @@ const CustomDrawerMenu = (props: DrawerContentComponentProps) => {
           />
         )}
         <Button
-          text="Actualizeaza cantarile"
+          text="Actualizează cântările"
           icon="refresh"
           iconSize={20}
           textStyle={[styles.drawerMenuButtonText]}
@@ -204,22 +205,27 @@ export default function HomeScreen({
   route,
   navigation,
 }: RootStackScreenProps<"Home">) {
+  const theme = useTheme();
+
   return (
     <Drawer.Navigator
       screenOptions={{
-        header: () => <Navbar />,
+        headerTintColor: theme.colors.text,
+        headerTransparent: Platform.select({ default: false, ios: true }),
+        headerBackground: HeaderBackground,
         drawerType: "front",
         swipeEdgeWidth: 25,
       }}
       drawerContent={(props) => <CustomDrawerMenu {...props} />}
+      initialRouteName="Toate Cântările"
     >
-      <Drawer.Screen name="Toate Cantarile" component={SongList} />
-      <Drawer.Screen name="Caiet de Cantari" component={SongList} />
-      <Drawer.Screen name="Cantari BER" component={SongList} />
+      <Drawer.Screen name="Toate Cântările" component={SongList} />
+      <Drawer.Screen name="Caiet de Cântări" component={SongList} />
+      <Drawer.Screen name="Cântări BER" component={SongList} />
       <Drawer.Screen name="Jubilate" component={SongList} />
       <Drawer.Screen name="Cartea de Tineret" component={SongList} />
       <Drawer.Screen name="Cor" component={SongList} />
-      <Drawer.Screen name="Cantari favorite" component={SongList} />
+      <Drawer.Screen name="Cântări favorite" component={SongList} />
       <Drawer.Screen name="Rapoarte" component={ReportsScreen} />
     </Drawer.Navigator>
   );

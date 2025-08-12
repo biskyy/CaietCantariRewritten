@@ -1,7 +1,7 @@
 import "react-native-gesture-handler";
 import { useEffect, useState } from "react";
-import { Appearance, Platform, useColorScheme } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
+import { Appearance, Platform, Text, useColorScheme, View } from "react-native";
+import { NavigationContainer, useTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { useAtom } from "jotai";
@@ -20,7 +20,6 @@ import SettingsScreen from "./screens/SettingsScreen";
 import LoadingScreen from "./components/LoadingScreen";
 import LoginScreen from "@/screens/LoginScreen";
 import UpdateSongScreen from "@/screens/UpdateSongScreen";
-import Navbar from "@/components/Navbar";
 
 import { orientationAtom } from "@/state/global";
 import { cacheFontsAndIcons } from "@/state/utils";
@@ -34,6 +33,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const scheme = useColorScheme();
+  const theme = useTheme();
 
   const [loaded, setLoaded] = useState(true);
   const [, setOrientation] = useAtom(orientationAtom);
@@ -84,27 +84,43 @@ export default function App() {
   }, [loaded]);
 
   return (
-    <NavigationContainer theme={scheme === "dark" ? DarkTheme : LightTheme}>
-      <StatusBar style={scheme === "light" ? "dark" : "light"} />
-      <LoadingScreen />
-      <Stack.Navigator
-        initialRouteName="Home"
-        screenOptions={{ header: () => <Navbar /> }}
-        // screenOptions={{
-        //   headerTransparent: true,
-        //   headerBlurEffect: "systemChromeMaterial",
-        // }}
-      >
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen name="Song" component={SongScreen} />
-        <Stack.Screen name="Settings" component={SettingsScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="UpdateSong" component={UpdateSongScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <View style={{ flex: 1, backgroundColor: theme.dark ? "black" : "white" }}>
+      <NavigationContainer theme={scheme === "dark" ? DarkTheme : LightTheme}>
+        <StatusBar style="auto" />
+        <LoadingScreen />
+        <Stack.Navigator
+          initialRouteName="Home"
+          screenOptions={{
+            headerShadowVisible: false,
+            headerTransparent: Platform.select({ default: false, ios: true }),
+            headerBlurEffect: "systemChromeMaterial",
+          }}
+        >
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{ headerShown: false, headerTitle: "Acasă" }}
+          />
+          <Stack.Screen
+            name="Song"
+            component={SongScreen}
+            options={{
+              headerTitle: "Cântare",
+            }}
+          />
+          <Stack.Screen
+            name="Settings"
+            component={SettingsScreen}
+            options={{ headerTitle: "Setări" }}
+          />
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen
+            name="UpdateSong"
+            component={UpdateSongScreen}
+            options={{ headerTitle: "Actualizează o cântare" }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </View>
   );
 }
