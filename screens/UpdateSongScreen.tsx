@@ -102,7 +102,7 @@ const UpdateSongScreen = () => {
 
   return (
     <>
-      <ScrollView scrollEnabled={true}>
+      <ScrollView contentInsetAdjustmentBehavior="always">
         <View
           style={{
             alignItems: "center",
@@ -162,9 +162,9 @@ const UpdateSongScreen = () => {
       </ScrollView>
       <BottomBar>
         <View style={{ flex: 3 }} />
-        <IconButton
+        <IconButton.Mat
           icon="save"
-          size={32}
+          size={24}
           touchableStyle={{ flex: 1 }}
           onPress={() => submitChanges()}
         />

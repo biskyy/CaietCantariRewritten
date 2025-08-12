@@ -53,9 +53,10 @@ const LoginScreen = () => {
   return (
     <ScrollView
       style={[{ backgroundColor: theme.colors.background }, styles.loginDiv]}
-      scrollEnabled={false}
+      // scrollEnabled={false}
       keyboardShouldPersistTaps="handled" // reason for using ScrollView
       contentContainerStyle={{ alignItems: "center" }}
+      contentInsetAdjustmentBehavior="always"
     >
       <Input
         placeholder="Username"

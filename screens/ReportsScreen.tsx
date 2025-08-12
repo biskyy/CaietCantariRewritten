@@ -1,5 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { View, Text, ScrollView, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  ActivityIndicator,
+  Platform,
+} from "react-native";
 import { useAtom } from "jotai";
 import { FlashList } from "@shopify/flash-list";
 import { useNavigation, useTheme } from "@react-navigation/native";
@@ -13,10 +19,19 @@ import Separator from "@/components/Separator";
 
 import { reportsArrayAtom } from "@/state/global";
 import { songsAtom, userAtom } from "@/state/persistent";
-import { deleteReport, fetchReports } from "@/state/utils";
+import {
+  deleteReport,
+  fetchReports,
+  getScrollViewCorrectInsetsForTransparentHeaders,
+} from "@/state/utils";
 
 import { useDisplayedSongInfo } from "@/hooks/useDisplayedSong";
 import { Report } from "@/types/state";
+import { useHeaderHeight } from "@react-navigation/elements";
+import {
+  useSafeAreaFrame,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 
 const ReportsScreen = () => {
   const theme = useTheme();
@@ -71,8 +86,16 @@ const ReportsScreen = () => {
     navigation.navigate("UpdateSong");
   };
 
+  const headerHeight = useHeaderHeight();
+  const insets = useSafeAreaInsets();
+
   return (
-    <View
+    <ScrollView
+      // see SongList on why this mess is needed
+      {...getScrollViewCorrectInsetsForTransparentHeaders(
+        headerHeight,
+        insets.top,
+      )}
       style={{
         flex: 1,
         backgroundColor: theme.colors.background,
@@ -104,6 +127,7 @@ const ReportsScreen = () => {
         <DialogSubtitle>Detalii suplimentare:</DialogSubtitle>
         <DialogText>
           {(displayedSongInfo &&
+            displayedSongInfo.currentReport &&
             displayedSongInfo.currentReport.additionalDetails) ??
             "Nu exista"}
         </DialogText>
@@ -149,7 +173,7 @@ const ReportsScreen = () => {
           />
         </View>
       </Dialog>
-    </View>
+    </ScrollView>
   );
 };
 

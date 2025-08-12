@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { useNavigation, useTheme } from "@react-navigation/native";
 import { useAtom } from "jotai";
 
@@ -16,13 +16,14 @@ export default function SettingsScreen() {
 
   return (
     <>
-      <View
-        style={[
+      <ScrollView
+        contentContainerStyle={[
           { backgroundColor: theme.colors.background },
           styles.settingsDiv,
         ]}
+        contentInsetAdjustmentBehavior="always"
       >
-        {!user.adminToken ? (
+        {user.adminToken === undefined ? (
           <Button
             icon="login"
             // primary
@@ -39,13 +40,12 @@ export default function SettingsScreen() {
             iconSize={20}
             touchableStyle={{ width: "100%", marginVertical: 2.5 }}
             type="secondary"
-            // @ts-ignore
-            onPress={() =>
+            onPress={() => {
               setUser({
-                adminToken: "",
                 ...user,
-              })
-            }
+                adminToken: undefined,
+              });
+            }}
             text="Logout"
           />
         )}
@@ -65,14 +65,14 @@ export default function SettingsScreen() {
           }}
           type="secondary"
         />
-      </View>
+      </ScrollView>
     </>
   );
 }
 
 const styles = StyleSheet.create({
   settingsDiv: {
-    height: "100%",
+    // height: "100%",
     alignItems: "center",
     padding: 20,
   },

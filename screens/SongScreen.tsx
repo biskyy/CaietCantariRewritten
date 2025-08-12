@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { View, StyleSheet, Text, ScrollView, Platform } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  ScrollView,
+  Platform,
+  Share,
+} from "react-native";
 import { useAtom } from "jotai";
 
 import { useKeepAwake } from "expo-keep-awake";
@@ -14,11 +21,21 @@ import {
   userFavoriteSongsAtom,
   songsAtom,
   fontSizeAtom,
+  userAtom,
 } from "@/state/persistent";
 
 import { useNavigation, useTheme } from "@react-navigation/native";
 import { DisplayedSong } from "@/types/state";
 import { useDisplayedSongInfo } from "@/hooks/useDisplayedSong";
+import { useHeaderHeight } from "@react-navigation/elements";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { BlurView } from "expo-blur";
+import { getScrollViewCorrectInsetsForTransparentHeaders } from "@/state/utils";
+import { TitleBlurView } from "@/components/ui/TitleBlurView";
+
+const TITLE_VIEW_HEIGHT = 50;
+const SONG_PADDING_HORIZONTAL = 14;
+const SONG_PADDING_VERTICAL = 30;
 
 export default function SongScreen() {
   const theme = useTheme();
@@ -28,6 +45,7 @@ export default function SongScreen() {
   const [orientation] = useAtom(orientationAtom);
   const [displayedSongInfo, setDisplayedSongInfo] = useDisplayedSongInfo();
   const navigation = useNavigation();
+  const [user] = useAtom(userAtom);
 
   if (displayedSongInfo === undefined) {
     return (
@@ -72,20 +90,64 @@ export default function SongScreen() {
     else setFavoriteSongs([displayedSongInfo.song.index, ...favoriteSongs]);
   }
 
+  const headerHeight = useHeaderHeight();
+  const insets = useSafeAreaInsets();
+
   return (
     <>
       <View
         style={[
           {
             backgroundColor: theme.colors.background,
-            flex: 1,
-            // marginTop: headerHeight,
+            // flex: 1,
+            paddingTop: Platform.select({ default: TITLE_VIEW_HEIGHT, ios: 0 }),
           },
           styles.songDiv,
         ]}
       >
-        <View style={styles.titleDiv}>
-          <IconButton
+        <ScrollView
+          {...getScrollViewCorrectInsetsForTransparentHeaders(
+            TITLE_VIEW_HEIGHT,
+            0,
+          )}
+          indicatorStyle={theme ? "white" : "black"}
+          contentContainerStyle={{
+            alignItems: "center",
+            paddingHorizontal: SONG_PADDING_HORIZONTAL,
+            paddingVertical: SONG_PADDING_VERTICAL,
+            paddingBottom:
+              orientation === "landscape" && Platform.OS === "ios"
+                ? SONG_PADDING_VERTICAL * 2
+                : SONG_PADDING_VERTICAL,
+          }}
+        >
+          <Text
+            style={{
+              ...{ color: theme.colors.text },
+              fontSize,
+            }}
+          >
+            {displayedSongInfo.song.content}
+          </Text>
+        </ScrollView>
+        {/* https://docs.expo.dev/versions/latest/sdk/blur-view/#known-issues  */}
+        <TitleBlurView
+          style={[
+            styles.titleDiv,
+            {
+              position: "absolute",
+              top: Platform.select({ default: 0, ios: headerHeight }),
+              overflow: "hidden",
+              backgroundColor: Platform.select({
+                default: theme.colors.card,
+                ios: undefined,
+              }),
+            },
+          ]}
+          intensity={100}
+          tint="systemChromeMaterial"
+        >
+          <IconButton.Mat
             icon={
               displayedSongInfo.song.index > displayedSongInfo.bookFirstIndex
                 ? "keyboard-arrow-left"
@@ -107,7 +169,7 @@ export default function SongScreen() {
           <Text
             numberOfLines={1}
             style={[
-              { color: theme.colors.text, fontSize: 28, fontWeight: "bold" },
+              { color: theme.colors.text, fontSize: 20, fontWeight: "bold" },
               // themeStyle.title,
               styles.title,
               { flexGrow: 5, flexBasis: 0 },
@@ -115,7 +177,7 @@ export default function SongScreen() {
           >
             {displayedSongInfo.song.title}
           </Text>
-          <IconButton
+          <IconButton.Mat
             icon={
               displayedSongInfo.song.index < displayedSongInfo.bookLastIndex - 1
                 ? "keyboard-arrow-right"
@@ -135,56 +197,62 @@ export default function SongScreen() {
               })
             }
           />
-        </View>
-        <Separator />
-        <ScrollView
-          indicatorStyle={theme ? "white" : "black"}
-          contentContainerStyle={{
-            alignItems: "center",
-            paddingHorizontal: 20,
-            paddingVertical: 30,
-            paddingBottom:
-              orientation === "landscape" && Platform.OS === "ios" ? 60 : 30,
-          }}
-        >
-          <Text
-            style={{
-              ...{ color: theme.colors.text },
-              fontSize,
-            }}
-          >
-            {displayedSongInfo.song.content}
-          </Text>
-        </ScrollView>
+        </TitleBlurView>
         <BottomBar>
-          <IconButton
-            icon="zoom-out"
-            size={32}
+          <IconButton.Oct
+            icon={Platform.select({ android: "share-android", ios: "share" })}
+            size={22}
+            useSystemColor
             touchableStyle={styles.bottomBarButtonDiv}
-            onPress={() => handleFontSizeChange("-")}
+            onPress={() =>
+              Share.share({
+                message: `${displayedSongInfo.song.title}\n\n${displayedSongInfo.song.content}`,
+                title: displayedSongInfo.song.title,
+              })
+            }
           />
-          <IconButton
-            icon="zoom-in"
-            size={32}
-            touchableStyle={styles.bottomBarButtonDiv}
-            onPress={() => handleFontSizeChange("+")}
-          />
-          <IconButton
+          <IconButton.Oct
             icon={
               favoriteSongs.includes(displayedSongInfo.song.index)
-                ? "star"
-                : "star-border"
+                ? Platform.select({ android: "star-fill", ios: "heart-fill" })
+                : Platform.select({ android: "star", ios: "heart" })
             }
-            size={32}
+            size={22}
+            useSystemColor
             touchableStyle={styles.bottomBarButtonDiv}
             onPress={() => addSongToFavorites()}
           />
-          <IconButton
-            icon="arrow-back"
-            size={32}
+          <IconButton.Fe
+            icon="zoom-out"
+            size={22}
+            useSystemColor
             touchableStyle={styles.bottomBarButtonDiv}
-            onPress={() => navigation.goBack()}
+            onPress={() => handleFontSizeChange("-")}
           />
+          <IconButton.Fe
+            icon="zoom-in"
+            size={22}
+            useSystemColor
+            touchableStyle={styles.bottomBarButtonDiv}
+            onPress={() => handleFontSizeChange("+")}
+          />
+          {user.adminToken !== undefined ? (
+            <IconButton.Fe
+              icon={Platform.select({ default: "edit-3", ios: "edit" })}
+              size={22}
+              useSystemColor
+              touchableStyle={styles.bottomBarButtonDiv}
+              onPress={() => navigation.navigate("UpdateSong")}
+            />
+          ) : (
+            <IconButton.MatCo
+              icon="bug-outline"
+              size={24}
+              useSystemColor
+              touchableStyle={styles.bottomBarButtonDiv}
+              onPress={() => {}}
+            />
+          )}
         </BottomBar>
       </View>
     </>
@@ -206,7 +274,7 @@ const styles = StyleSheet.create({
     flexBasis: 0,
   },
   titleDiv: {
-    minHeight: 50,
+    minHeight: TITLE_VIEW_HEIGHT,
     flexDirection: "row",
   },
   title: {

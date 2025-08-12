@@ -2,12 +2,14 @@ import { memo, useCallback, useMemo, useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
+  ScrollViewProps,
+  StyleProp,
   StyleSheet,
   Text,
   View,
 } from "react-native";
 import { useAtom } from "jotai";
-import { FlashList } from "@shopify/flash-list";
+import { ContentStyle, FlashList, FlashListProps } from "@shopify/flash-list";
 import {
   Route,
   useNavigation,
@@ -15,6 +17,7 @@ import {
   useTheme,
 } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useHeaderHeight } from "@react-navigation/elements";
 
 import SongButton from "@/components/Button/SongButton";
 
@@ -28,6 +31,7 @@ import {
   SongListScreenProps,
 } from "@/types/navigator";
 import Input from "./Input";
+import { getScrollViewCorrectInsetsForTransparentHeaders } from "@/state/utils";
 
 // const validCategories = ["lauda", "rugaciune", "predare"];
 
@@ -151,9 +155,20 @@ const SongList = <T extends DrawerParamListKeys>({
     [theme],
   );
 
+  const headerHeight = useHeaderHeight();
+
+  // idk why that type works :`)
+  // const scrollViewRectifyInsets: Partial<FlashListProps<Song>> =
+
+  console.log(headerHeight, insets.top);
   return (
     <View
-      style={[{ backgroundColor: theme.colors.background }, styles.songListDiv]}
+      style={[
+        {
+          backgroundColor: theme.colors.background,
+        },
+        styles.songListDiv,
+      ]}
     >
       <FlashList
         renderItem={renderItem}
@@ -162,8 +177,14 @@ const SongList = <T extends DrawerParamListKeys>({
         estimatedListSize={estimatedListSize} // instant render
         indicatorStyle={theme ? "white" : "black"}
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{ padding: 10 }}
-        contentInsetAdjustmentBehavior="automatic"
+        contentContainerStyle={{
+          padding: 10,
+        }}
+        // see function definition too see why this is needed
+        {...getScrollViewCorrectInsetsForTransparentHeaders<Song>(
+          headerHeight,
+          insets.top,
+        )}
       />
       {searchQuery !== "" && (
         <View style={{ backgroundColor: theme.colors.background, flex: 9999 }}>
@@ -176,6 +197,10 @@ const SongList = <T extends DrawerParamListKeys>({
             indicatorStyle={theme ? "white" : "black"}
             keyboardShouldPersistTaps="handled"
             contentContainerStyle={{ padding: 10 }}
+            {...getScrollViewCorrectInsetsForTransparentHeaders<Song>(
+              headerHeight,
+              insets.top,
+            )}
             ListEmptyComponent={
               <Text
                 style={[
@@ -194,12 +219,12 @@ const SongList = <T extends DrawerParamListKeys>({
       )}
       <KeyboardAvoidingView
         style={{
-          marginBottom: Platform.OS === "ios" ? insets.bottom : 5,
+          marginBottom: Platform.OS === "ios" ? insets.bottom : 10,
           backgroundColor: theme.colors.background,
           ...styles.keyboardAvoidingViewDiv,
         }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 110 : 0}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 10 : 0}
       >
         <Input
           scrollEnabled={false}

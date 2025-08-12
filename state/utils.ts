@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import { getDefaultStore } from "jotai";
-import { Alert } from "react-native";
+import { Alert, Platform, ScrollViewProps } from "react-native";
 import NetInfo, { NetInfoState } from "@react-native-community/netinfo";
 import * as FontManager from "expo-font";
 
@@ -16,6 +16,7 @@ import {
   LoginResponse,
   UserTokenResponse,
 } from "@/types/api";
+import { FlashListProps } from "@shopify/flash-list";
 
 const store = getDefaultStore();
 
@@ -246,3 +247,37 @@ const handleErrorResponse = (error: AxiosError) => {
 
 export const cacheFontsAndIcons = (fonts: Font[]) =>
   fonts.map(async (font) => await FontManager.loadAsync(font)); // cache fonts method
+
+export function getScrollViewCorrectInsetsForTransparentHeaders<T>(
+  headerHeight: number,
+  insetsTop: number,
+): Partial<FlashListProps<T>>;
+
+export function getScrollViewCorrectInsetsForTransparentHeaders(
+  headerHeight: number,
+  insetsTop: number,
+): ScrollViewProps;
+
+export function getScrollViewCorrectInsetsForTransparentHeaders<T>(
+  headerHeight: number,
+  insetsTop: number,
+): Partial<FlashListProps<T>> | ScrollViewProps {
+  return {
+    // apply top insets which will bring the list down from under the header but also cause scroll in the list
+    contentInset: { top: headerHeight - insetsTop },
+    // apply negative offset to counteract the aforementioned scroll
+    contentOffset: {
+      y: Platform.select({
+        default: -headerHeight,
+        ios: -headerHeight - insetsTop,
+      }),
+      x: 0,
+    },
+    // scrollIndicator by default has applied top insets so we need to subtract that
+    scrollIndicatorInsets: { top: headerHeight - insetsTop },
+    // this sets some insets of it's own using header height
+    contentInsetAdjustmentBehavior: "always",
+    // TL;DR: this is needed so that we can have transparentHeader turned on on ios
+    // so that we can have blurry background
+  };
+}
