@@ -73,17 +73,16 @@ const Button = ({
             size={iconSize}
             style={[
               iconStyle,
-              buttonStyleBasedOnType,
               {
                 color: theme.colors.text,
                 fontWeight: "normal",
                 marginRight: 10,
               },
+              buttonStyleBasedOnType,
             ]}
           />
           <Text
             style={[
-              textStyle,
               {
                 fontSize: 16,
                 fontWeight: "normal",
@@ -91,6 +90,7 @@ const Button = ({
                 flexShrink: 1,
               },
               buttonStyleBasedOnType,
+              textStyle,
             ]}
           >
             {text}
