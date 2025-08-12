@@ -33,6 +33,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0a0d0c"
       },
+      "edgeToEdgeEnabled": true,
       "splash": {
         "image": "./assets/light-splash.png",
         "resizeMode": "contain",
