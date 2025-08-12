@@ -1,0 +1,77 @@
+import { useTheme } from "@react-navigation/native";
+import { ReactNode } from "react";
+import {
+  Modal,
+  TouchableWithoutFeedback,
+  View,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
+
+interface DialogProps {
+  visible: boolean;
+  setModalVisible: (visible: boolean) => void;
+  children: ReactNode;
+}
+
+const Dialog = (props: DialogProps) => {
+  const theme = useTheme();
+
+  return (
+    // dont touch this
+    <Modal
+      statusBarTranslucent
+      visible={props.visible}
+      transparent
+      animationType="fade"
+      onRequestClose={() => props.setModalVisible(false)}
+    >
+      <TouchableWithoutFeedback onPress={() => props.setModalVisible(false)}>
+        <View style={{ flex: 1 }}>
+          <ScrollView
+            style={{
+              backgroundColor: "rgba(0,0,0,0.5)",
+            }}
+            scrollEnabled={false}
+            keyboardShouldPersistTaps="handled"
+            contentContainerStyle={{
+              flexGrow: 1,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <TouchableWithoutFeedback>
+              <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "padding"}
+                // keyboardVerticalOffset={-111}
+              >
+                <View
+                  style={{
+                    backgroundColor: theme.colors.background,
+                    borderColor: theme.colors.border,
+                    borderWidth: 1,
+                    padding: 16,
+                    borderRadius: 6,
+                    flexBasis: 0,
+                    minWidth: "85%",
+                    maxWidth: "85%",
+                  }}
+                >
+                  <ScrollView
+                    scrollEnabled={false}
+                    keyboardShouldPersistTaps="handled"
+                  >
+                    {props.children}
+                  </ScrollView>
+                </View>
+              </KeyboardAvoidingView>
+            </TouchableWithoutFeedback>
+          </ScrollView>
+        </View>
+      </TouchableWithoutFeedback>
+    </Modal>
+  );
+};
+
+export default Dialog;
