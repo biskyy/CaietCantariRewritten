@@ -43,7 +43,7 @@ const CustomDrawerMenu = (props: DrawerContentComponentProps) => {
   const refreshSongs = async () => {
     setLoadingScreen({
       state: "fading_in",
-      label: "Se actualizeaza cantarile",
+      label: "Se actualizează cântările",
     });
 
     const response = await fetchSongs();
@@ -53,8 +53,8 @@ const CustomDrawerMenu = (props: DrawerContentComponentProps) => {
       setLoadingScreen({
         callback: () =>
           Alert.alert(
-            "S-au actualizat cantarile",
-            "Cantarile au fost actualizate cu success.",
+            "S-au actualizat cântările",
+            "Cântările au fost actualizate cu success.",
           ),
       });
     } else {
@@ -114,7 +114,7 @@ const CustomDrawerMenu = (props: DrawerContentComponentProps) => {
           text="Cântări favorite"
           icon="star"
           iconSize={20}
-          onPress={() => props.navigation.navigate("Cantari favorite")}
+          onPress={() => props.navigation.navigate("Cântări favorite")}
           textStyle={[styles.drawerMenuButtonText]}
           touchableStyle={[
             styles.drawerMenuButton,
@@ -122,7 +122,7 @@ const CustomDrawerMenu = (props: DrawerContentComponentProps) => {
           ]}
           type={
             props.state.index ===
-            props.state.routeNames.indexOf("Cantari favorite")
+            props.state.routeNames.indexOf("Cântări favorite")
               ? "primary"
               : "secondary"
           }
