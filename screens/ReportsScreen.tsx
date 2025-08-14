@@ -22,7 +22,7 @@ import { songsAtom, userAtom } from "@/state/persistent";
 import {
   deleteReport,
   fetchReports,
-  getScrollViewCorrectInsetsForTransparentHeaders,
+  getCorrectInsetsForScrollViewsCoveredByAbsoluteViews,
 } from "@/state/utils";
 
 import { useDisplayedSongInfo } from "@/hooks/useDisplayedSong";
@@ -92,7 +92,7 @@ const ReportsScreen = () => {
   return (
     <ScrollView
       // see SongList on why this mess is needed
-      {...getScrollViewCorrectInsetsForTransparentHeaders(
+      {...getCorrectInsetsForScrollViewsCoveredByAbsoluteViews(
         headerHeight,
         insets.top,
       )}

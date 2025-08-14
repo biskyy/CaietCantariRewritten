@@ -14,7 +14,6 @@ import * as ScreenOrientation from "expo-screen-orientation";
 
 import IconButton from "@/components/Button/IconButton";
 import Separator from "@/components/Separator";
-import BottomBar from "@/components/BottomBar";
 
 import { displayedSongInfoAtom, orientationAtom } from "@/state/global";
 import {
@@ -28,10 +27,19 @@ import { useNavigation, useTheme } from "@react-navigation/native";
 import { DisplayedSong } from "@/types/state";
 import { useDisplayedSongInfo } from "@/hooks/useDisplayedSong";
 import { useHeaderHeight } from "@react-navigation/elements";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { BlurView } from "expo-blur";
-import { getScrollViewCorrectInsetsForTransparentHeaders } from "@/state/utils";
+import {
+  Edge,
+  EdgeInsets,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
+import {
+  getCorrectInsetsForScrollViewsCoveredByAbsoluteViews,
+  getVerticalPaddingForViewsCoveredByAbsoluteViews,
+} from "@/state/utils";
 import { TitleBlurView } from "@/components/ui/TitleBlurView";
+import { ActionBar } from "@/components/ActionBar";
+import { useActionBarHeight } from "@/hooks/useActionBarHeight";
+import { ACTION_BAR_PREFFERED_HEIGHT } from "@/constants";
 
 const TITLE_VIEW_HEIGHT = 50;
 const SONG_PADDING_HORIZONTAL = 14;
@@ -93,22 +101,29 @@ export default function SongScreen() {
   const headerHeight = useHeaderHeight();
   const insets = useSafeAreaInsets();
 
+  const [actionBarHeight] = useActionBarHeight();
+  // console.log(actionBarHeight);
+
   return (
     <>
       <View
         style={[
           {
             backgroundColor: theme.colors.background,
-            // flex: 1,
-            paddingTop: Platform.select({ default: TITLE_VIEW_HEIGHT, ios: 0 }),
+            ...getVerticalPaddingForViewsCoveredByAbsoluteViews(
+              TITLE_VIEW_HEIGHT,
+              actionBarHeight,
+            ),
           },
           styles.songDiv,
         ]}
       >
         <ScrollView
-          {...getScrollViewCorrectInsetsForTransparentHeaders(
+          {...getCorrectInsetsForScrollViewsCoveredByAbsoluteViews(
             TITLE_VIEW_HEIGHT,
             0,
+            actionBarHeight,
+            insets.bottom,
           )}
           indicatorStyle={theme ? "white" : "black"}
           contentContainerStyle={{
@@ -198,7 +213,7 @@ export default function SongScreen() {
             }
           />
         </TitleBlurView>
-        <BottomBar>
+        <ActionBar horizontal prefferedHeight={ACTION_BAR_PREFFERED_HEIGHT}>
           <IconButton.Oct
             icon={Platform.select({ android: "share-android", ios: "share" })}
             size={22}
@@ -253,7 +268,7 @@ export default function SongScreen() {
               onPress={() => {}}
             />
           )}
-        </BottomBar>
+        </ActionBar>
       </View>
     </>
   );
@@ -264,10 +279,12 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   bottomBarButtonDiv: {
+    // backgroundColor: "red",
+    minHeight: 50,
+    // height: 50,
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    height: "100%",
   },
   titleArrow: {
     flexGrow: 1,

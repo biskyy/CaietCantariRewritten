@@ -3,6 +3,8 @@ export const API_URL =
 
 // export const API_URL = "http://192.168.1.17:3000/caiet-de-cantari";
 
+export const ACTION_BAR_PREFFERED_HEIGHT = 85;
+
 export const STORAGE_USER_FAVORITE_SONGS = "storage/user/favorite-songs";
 export const STORAGE_USER_PREFS = "storage/user/prefs";
 export const STORAGE_SONG_FONT_SIZE = "storage/song-font-size";

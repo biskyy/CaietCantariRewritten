@@ -1,5 +1,12 @@
 import { useReducer } from "react";
-import { Alert, ScrollView, StyleSheet, View, Text } from "react-native";
+import {
+  Alert,
+  ScrollView,
+  StyleSheet,
+  View,
+  Text,
+  KeyboardAvoidingView,
+} from "react-native";
 import { useAtom } from "jotai";
 import { useNavigation, useTheme } from "@react-navigation/native";
 
@@ -8,11 +15,20 @@ import BottomBar from "@/components/BottomBar";
 import IconButton from "@/components/Button/IconButton";
 
 import { userAtom } from "@/state/persistent";
-import { deleteReport, updateSong } from "@/state/utils";
+import {
+  deleteReport,
+  getCorrectInsetsForScrollViewsCoveredByAbsoluteViews,
+  getVerticalPaddingForViewsCoveredByAbsoluteViews,
+  updateSong,
+} from "@/state/utils";
 
 import { useDisplayedSongInfo } from "@/hooks/useDisplayedSong";
 import { useLoadingScreen } from "@/hooks/useLoadingScreen";
 import { Song, UpdatedSongProps } from "@/types/state";
+import { ActionBar } from "@/components/ActionBar";
+import { ACTION_BAR_PREFFERED_HEIGHT } from "@/constants";
+import { useActionBarHeight } from "@/hooks/useActionBarHeight";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type UpdateSongActionType =
   | { type: "book_id"; payload: Song["book_id"] }
@@ -100,13 +116,29 @@ const UpdateSongScreen = () => {
     });
   };
 
+  const insets = useSafeAreaInsets();
+  const [actionBarHeight] = useActionBarHeight();
+
   return (
-    <>
-      <ScrollView contentInsetAdjustmentBehavior="always">
+    <View
+      style={{
+        ...getVerticalPaddingForViewsCoveredByAbsoluteViews(0, actionBarHeight),
+      }}
+    >
+      {/* <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={20}> */}
+      <ScrollView
+        {...getCorrectInsetsForScrollViewsCoveredByAbsoluteViews(
+          0,
+          0,
+          actionBarHeight,
+          insets.bottom,
+        )}
+      >
         <View
           style={{
             alignItems: "center",
             alignSelf: "center",
+            justifyContent: "flex-end",
           }}
         >
           <View style={{ flexDirection: "row", width: 325 }}>
@@ -160,16 +192,22 @@ const UpdateSongScreen = () => {
           <View style={{ height: 1000 }} />
         </View>
       </ScrollView>
-      <BottomBar>
+      {/* </KeyboardAvoidingView> */}
+      <ActionBar
+        horizontal
+        prefferedHeight={ACTION_BAR_PREFFERED_HEIGHT}
+        moveWithKeyboard
+      >
         <View style={{ flex: 3 }} />
         <IconButton.Mat
           icon="save"
           size={24}
-          touchableStyle={{ flex: 1 }}
+          useSystemColor
+          touchableStyle={styles.bottomBarButtonDiv}
           onPress={() => submitChanges()}
         />
-      </BottomBar>
-    </>
+      </ActionBar>
+    </View>
   );
 };
 
@@ -184,7 +222,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    height: "100%",
+    height: 50,
   },
 });
 

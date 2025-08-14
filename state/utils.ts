@@ -1,6 +1,12 @@
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import { getDefaultStore } from "jotai";
-import { Alert, Platform, ScrollViewProps } from "react-native";
+import {
+  Alert,
+  Platform,
+  ScrollViewProps,
+  StyleProp,
+  ViewStyle,
+} from "react-native";
 import NetInfo, { NetInfoState } from "@react-native-community/netinfo";
 import * as FontManager from "expo-font";
 
@@ -17,6 +23,7 @@ import {
   UserTokenResponse,
 } from "@/types/api";
 import { FlashListProps } from "@shopify/flash-list";
+import { Edge, EdgeInsets } from "react-native-safe-area-context";
 
 const store = getDefaultStore();
 
@@ -248,36 +255,64 @@ const handleErrorResponse = (error: AxiosError) => {
 export const cacheFontsAndIcons = (fonts: Font[]) =>
   fonts.map(async (font) => await FontManager.loadAsync(font)); // cache fonts method
 
-export function getScrollViewCorrectInsetsForTransparentHeaders<T>(
+export function getCorrectInsetsForScrollViewsCoveredByAbsoluteViews<T>(
   headerHeight: number,
-  insetsTop: number,
+  topInset: number,
+  actionBarHeight?: number,
+  bottomInset?: number,
 ): Partial<FlashListProps<T>>;
 
-export function getScrollViewCorrectInsetsForTransparentHeaders(
+export function getCorrectInsetsForScrollViewsCoveredByAbsoluteViews(
   headerHeight: number,
-  insetsTop: number,
+  topInset: number,
+  actionBarHeight?: number,
+  bottomInset?: number,
 ): ScrollViewProps;
 
-export function getScrollViewCorrectInsetsForTransparentHeaders<T>(
+export function getCorrectInsetsForScrollViewsCoveredByAbsoluteViews<T>(
   headerHeight: number,
-  insetsTop: number,
+  topInset: number,
+  actionBarHeight?: number,
+  bottomInset?: number,
 ): Partial<FlashListProps<T>> | ScrollViewProps {
+  bottomInset = bottomInset ?? 0;
+
   return {
+    // think of insets like the actual hitbox of the scrollview:
+    // the bounding rect can be bigger than the hitbox
+    //
     // apply top insets which will bring the list down from under the header but also cause scroll in the list
-    contentInset: { top: headerHeight - insetsTop },
+    // apply bottom insets to counteract the action bar
+    contentInset: {
+      top: headerHeight - topInset,
+      bottom: (actionBarHeight ?? bottomInset) - bottomInset,
+    },
     // apply negative offset to counteract the aforementioned scroll
     contentOffset: {
       y: Platform.select({
-        default: -headerHeight,
-        ios: -headerHeight - insetsTop,
+        default: 0,
+        ios: -headerHeight - topInset,
       }),
       x: 0,
     },
     // scrollIndicator by default has applied top insets so we need to subtract that
-    scrollIndicatorInsets: { top: headerHeight - insetsTop },
+    scrollIndicatorInsets: {
+      top: headerHeight - topInset,
+      bottom: (actionBarHeight ?? bottomInset) - bottomInset,
+    },
     // this sets some insets of it's own using header height
     contentInsetAdjustmentBehavior: "always",
-    // TL;DR: this is needed so that we can have transparentHeader turned on on ios
-    // so that we can have blurry background
+    // TL;DR: this is needed so that we can have transparentHeader(or absolute views such as the action bar)
+    // turned on on ios so that we can have blurry background
+  };
+}
+
+export function getVerticalPaddingForViewsCoveredByAbsoluteViews(
+  paddingTop: number,
+  paddingBottom: number,
+): Pick<ViewStyle, "paddingTop" | "paddingBottom"> {
+  return {
+    paddingTop: Platform.select({ default: paddingTop, ios: undefined }),
+    paddingBottom: Platform.select({ default: paddingBottom, ios: undefined }),
   };
 }
