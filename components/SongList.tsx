@@ -1,7 +1,10 @@
 import { memo, useCallback, useMemo, useState } from "react";
 import {
+  Dimensions,
+  FlatList,
   KeyboardAvoidingView,
   Platform,
+  PlatformColor,
   ScrollViewProps,
   StyleProp,
   StyleSheet,
@@ -31,7 +34,13 @@ import {
   SongListScreenProps,
 } from "@/types/navigator";
 import Input from "./Input";
-import { getScrollViewCorrectInsetsForTransparentHeaders } from "@/state/utils";
+import {
+  getCorrectInsetsForScrollViewsCoveredByAbsoluteViews,
+  getVerticalPaddingForViewsCoveredByAbsoluteViews,
+} from "@/state/utils";
+import { ActionBar } from "./ActionBar";
+import { useAnimatedKeyboard, useAnimatedStyle } from "react-native-reanimated";
+import { useActionBarHeight } from "@/hooks/useActionBarHeight";
 
 // const validCategories = ["lauda", "rugaciune", "predare"];
 
@@ -63,13 +72,13 @@ const SongList = <T extends DrawerParamListKeys>({
 
   // get corresponding book_id for route name
   const bookIDMappings = {
-    "Toate Cantarile": null,
-    "Caiet de Cantari": "CC",
-    "Cantari BER": "BER",
+    "Toate Cântările": null,
+    "Caiet de Cântări": "CC",
+    "Cântări BER": "BER",
     Jubilate: "J",
     "Cartea de Tineret": "CT",
     Cor: "Cor",
-    "Cantari favorite": "CF",
+    "Cântări favorite": "CF",
   };
 
   // get the filter
@@ -133,9 +142,14 @@ const SongList = <T extends DrawerParamListKeys>({
     });
   };
 
+  const deviceWidth = Dimensions.get("window").width;
+  const deviceHeight = Dimensions.get("window").height;
+
+  // console.log(Platform.OS, deviceHeight - headerHeight - actionBarHeight);
+
   // everything is memoized to prevent stupid rerenders from occurring
   const estimatedListSize = useMemo(() => {
-    return { height: 794, width: 414 };
+    return { height: deviceHeight, width: deviceWidth };
   }, [theme]);
 
   const itemOnPressProp = useCallback((item: Song) => {
@@ -157,15 +171,25 @@ const SongList = <T extends DrawerParamListKeys>({
 
   const headerHeight = useHeaderHeight();
 
+  const [actionBarHeight] = useActionBarHeight();
+
+  // console.log("android: ", actionBarHeight);
+
+  // console.log(keyboardHeight.height.value);
+
   // idk why that type works :`)
   // const scrollViewRectifyInsets: Partial<FlashListProps<Song>> =
 
-  console.log(headerHeight, insets.top);
+  // console.log(headerHeight, insets.top);
   return (
     <View
       style={[
         {
           backgroundColor: theme.colors.background,
+          ...getVerticalPaddingForViewsCoveredByAbsoluteViews(
+            0, // not needed because the header is not absolute in android
+            actionBarHeight,
+          ),
         },
         styles.songListDiv,
       ]}
@@ -177,17 +201,23 @@ const SongList = <T extends DrawerParamListKeys>({
         estimatedListSize={estimatedListSize} // instant render
         indicatorStyle={theme ? "white" : "black"}
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{
-          padding: 10,
-        }}
+        contentContainerStyle={{ padding: 10 }}
         // see function definition too see why this is needed
-        {...getScrollViewCorrectInsetsForTransparentHeaders<Song>(
+        {...getCorrectInsetsForScrollViewsCoveredByAbsoluteViews<Song>(
           headerHeight,
           insets.top,
+          actionBarHeight,
+          insets.bottom,
         )}
       />
       {searchQuery !== "" && (
-        <View style={{ backgroundColor: theme.colors.background, flex: 9999 }}>
+        <View
+          style={{
+            backgroundColor: theme.colors.background,
+            flex: 9999,
+            // zIndex: 0,
+          }}
+        >
           <FlashList
             renderItem={renderItem}
             data={filteredSongs}
@@ -197,9 +227,11 @@ const SongList = <T extends DrawerParamListKeys>({
             indicatorStyle={theme ? "white" : "black"}
             keyboardShouldPersistTaps="handled"
             contentContainerStyle={{ padding: 10 }}
-            {...getScrollViewCorrectInsetsForTransparentHeaders<Song>(
+            {...getCorrectInsetsForScrollViewsCoveredByAbsoluteViews<Song>(
               headerHeight,
               insets.top,
+              actionBarHeight,
+              insets.bottom,
             )}
             ListEmptyComponent={
               <Text
@@ -217,23 +249,28 @@ const SongList = <T extends DrawerParamListKeys>({
           />
         </View>
       )}
-      <KeyboardAvoidingView
-        style={{
-          marginBottom: Platform.OS === "ios" ? insets.bottom : 10,
-          backgroundColor: theme.colors.background,
-          ...styles.keyboardAvoidingViewDiv,
-        }}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 10 : 0}
-      >
+      {/* <KeyboardAvoidingView */}
+      {/*   style={{ */}
+      {/*     // marginBottom: Platform.OS === "ios" ? insets.bottom : 10, */}
+      {/*     // backgroundColor: theme.colors.background, */}
+      {/*     ...styles.keyboardAvoidingViewDiv, */}
+      {/*   }} */}
+      {/*   behavior={Platform.OS === "ios" ? "padding" : "height"} */}
+      {/*   keyboardVerticalOffset={Platform.OS === "ios" ? 10 : 0} */}
+      {/* > */}
+      <ActionBar moveWithKeyboard>
         <Input
           scrollEnabled={false}
           textInputDivStyle={{
+            marginVertical: 7,
             width: "95%",
-            minHeight: 55,
+            minHeight: 50,
             alignSelf: "center",
+            boxShadow: "0px 0px 10px -2px " + theme.colors.background,
+            backgroundColor: theme.colors.border,
+            borderWidth: 0,
           }}
-          placeholder="Cauta o cantare"
+          placeholder="Caută o cântare"
           value={searchQuery}
           // selectedCategories={selectedCategories}
           // setSelectedCategories={setSelectedCategories}
@@ -246,7 +283,8 @@ const SongList = <T extends DrawerParamListKeys>({
             handleFilteredList(str);
           }}
         />
-      </KeyboardAvoidingView>
+      </ActionBar>
+      {/* </KeyboardAvoidingView> */}
     </View>
   );
 };
