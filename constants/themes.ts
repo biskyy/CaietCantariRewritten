@@ -5,10 +5,10 @@ export const LightTheme: Theme = {
   dark: false,
   colors: {
     primary: Colors.light.primary,
-    background: Shades["100"],
+    background: Shades["50"],
     card: Shades["200"], // also color for header background
-    text: Shades["800"],
-    border: Shades["200"],
+    text: Shades["900"],
+    border: Shades["300"],
     notification: Colors.light.accent,
   },
 };
@@ -17,10 +17,10 @@ export const DarkTheme: Theme = {
   dark: true,
   colors: {
     primary: Colors.dark.primary,
-    background: Shades["800"],
-    card: Shades["700"],
+    background: Shades["950"],
+    card: Shades["900"],
     text: Shades["100"],
-    border: Shades["600"],
+    border: Shades["800"],
     notification: Colors.dark.accent,
   },
 };
