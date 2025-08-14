@@ -40,14 +40,14 @@ const Input = forwardRef<TextInput, InputProps>((props: InputProps, ref) => {
         {...props}
         ref={ref}
         style={[{ color: theme.colors.text }, styles.textInput, textInputStyle]}
-        placeholderTextColor={theme.dark ? Shades[500] : Shades[500]}
+        placeholderTextColor={theme.dark ? Shades[500] : Shades[600]}
         autoCorrect={false}
         autoCapitalize="none"
       />
       {props.value != "" && clearShortcut && (
-        <IconButton
+        <IconButton.Mat
           icon="clear"
-          size={32}
+          size={26}
           touchableStyle={[styles.clearButton]}
           // @ts-ignore
           onPress={() => props.onChangeText("")}
@@ -60,23 +60,26 @@ const Input = forwardRef<TextInput, InputProps>((props: InputProps, ref) => {
 const styles = StyleSheet.create({
   textInputDiv: {
     borderWidth: 1,
-    borderRadius: 6,
+    borderRadius: 10,
     flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    // alignItems: "center",
+    // justifyContent: "flex-end",
   },
   textInput: {
     paddingHorizontal: 16,
-    paddingTop: 12, // paddingVertical doesn't work
-    paddingBottom: 12,
+    paddingVertical: 12, // paddingVertical doesn't work
     height: "100%",
-    flexGrow: 19,
-    flexBasis: 0,
+    flexGrow: 9,
+    // flexBasis: 0,
     fontSize: 16,
+    borderRadius: 10,
+    // boxShadow: "0px 0px 10px 1px red",
   },
   clearButton: {
-    alignItems: "center",
-    justifyContent: "center",
+    // alignItems: "center",
+    // justifyContent: "center",
+    // boxShadow: "0px 0px 10px 1px red",
+    maxWidth: 55,
     flexGrow: 1,
     borderRadius: 10,
   },
