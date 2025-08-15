@@ -5,6 +5,7 @@ import { useAtom } from "jotai";
 import Button from "@/components/Button/Button";
 
 import { userAtom, userPrefsAtom } from "@/state/persistent";
+import Icon from "@/components/Icon";
 
 export default function SettingsScreen() {
   const theme = useTheme();
@@ -25,36 +26,40 @@ export default function SettingsScreen() {
       >
         {user.adminToken === undefined ? (
           <Button
-            icon="login"
+            text="Login"
+            icon={() => <Icon.Mat name="login" size={20} />}
             // primary
             type="secondary"
-            iconSize={20}
             touchableStyle={{ width: "100%", marginVertical: 2.5 }}
             // @ts-ignore
             onPress={() => navigation.navigate("Login")}
-            text="Login"
           />
         ) : (
           <Button
-            icon="logout"
-            iconSize={20}
-            touchableStyle={{ width: "100%", marginVertical: 2.5 }}
+            text="Logout"
+            icon={() => <Icon.Mat name="logout" size={20} />}
             type="secondary"
+            touchableStyle={{ width: "100%", marginVertical: 2.5 }}
             onPress={() => {
               setUser({
                 ...user,
                 adminToken: undefined,
               });
             }}
-            text="Logout"
           />
         )}
         <Button
           text="Arata categoriile pe meniul principal"
-          icon={
-            userPrefs.showCategories ? "check-box" : "check-box-outline-blank"
-          }
-          iconSize={20}
+          icon={() => (
+            <Icon.Mat
+              name={
+                userPrefs.showCategories
+                  ? "check-box"
+                  : "check-box-outline-blank"
+              }
+              size={20}
+            />
+          )}
           touchableStyle={{ width: "100%", marginVertical: 2.5 }}
           // @ts-ignore
           onPress={() => {

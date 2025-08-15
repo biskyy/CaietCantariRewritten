@@ -4,13 +4,11 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  useColorScheme,
   View,
 } from "react-native";
 import {
   createDrawerNavigator,
   DrawerContentComponentProps,
-  DrawerScreenProps,
 } from "@react-navigation/drawer";
 import { useAtom } from "jotai";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -20,16 +18,16 @@ import ReportsScreen from "@/screens/ReportsScreen";
 import SongList from "@/components/SongList";
 import Button from "@/components/Button/Button";
 import Separator from "@/components/Separator";
-import IconButton from "@/components/Button/IconButton";
 
 import { songsAtom, userAtom } from "@/state/persistent";
 import { fetchSongs } from "@/state/utils";
 
 import { useLoadingScreen } from "@/hooks/useLoadingScreen";
 import { DrawerParamList, RootStackScreenProps } from "@/types/navigator";
-import { useNavigation, useTheme } from "@react-navigation/native";
+import { useTheme } from "@react-navigation/native";
 import { HeaderBackground } from "@/components/ui/HeaderBackground";
-import { useEffect, useInsertionEffect, useLayoutEffect } from "react";
+import { useLayoutEffect } from "react";
+import Icon from "@/components/Icon";
 
 const Drawer = createDrawerNavigator<DrawerParamList>();
 
@@ -84,13 +82,15 @@ const CustomDrawerMenu = (props: DrawerContentComponentProps) => {
         >
           Meniu
         </Text>
-        <IconButton.Oct
-          icon="gear"
-          size={24}
+        <Button
+          icon={() => <Icon.Oct name="gear" size={24} />}
           onPress={() => {
             props.navigation.navigate("Settings");
           }}
-          touchableStyle={[styles.drawerMenuSettingsButtonDiv]}
+          touchableStyle={[
+            styles.drawerMenuSettingsButtonDiv,
+            { flexShrink: 0 },
+          ]}
         />
       </View>
       <Separator />
@@ -113,8 +113,17 @@ const CustomDrawerMenu = (props: DrawerContentComponentProps) => {
         ))}
         <Button
           text="Cântări favorite"
-          icon="star"
-          iconSize={20}
+          icon={(props) => (
+            // need props arg in order to be able to pass properties from Button function
+            <Icon.Oct
+              name={Platform.select({
+                default: "star-fill",
+                ios: "heart-fill",
+              })}
+              size={18}
+              {...props}
+            />
+          )}
           onPress={() => props.navigation.navigate("Cântări favorite")}
           textStyle={[styles.drawerMenuButtonText]}
           touchableStyle={[
@@ -131,8 +140,9 @@ const CustomDrawerMenu = (props: DrawerContentComponentProps) => {
         {user.adminToken && (
           <Button
             text="Rapoarte"
-            icon="bug-report"
-            iconSize={20}
+            icon={(props) => (
+              <Icon.MatCo name="bug-outline" size={20} {...props} />
+            )}
             textStyle={[styles.drawerMenuButtonText]}
             touchableStyle={[
               styles.drawerMenuButton,
@@ -148,8 +158,7 @@ const CustomDrawerMenu = (props: DrawerContentComponentProps) => {
         )}
         <Button
           text="Actualizează cântările"
-          icon="refresh"
-          iconSize={20}
+          icon={() => <Icon.Mat name="refresh" size={20} />}
           textStyle={[styles.drawerMenuButtonText]}
           touchableStyle={[
             styles.drawerMenuButton,

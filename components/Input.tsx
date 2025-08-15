@@ -9,10 +9,10 @@ import {
   TextStyle,
 } from "react-native";
 
-import IconButton from "@/components/Button/IconButton";
-
 import Shades from "@/constants/colors";
 import { useTheme } from "@react-navigation/native";
+import Button from "./Button/Button";
+import Icon from "./Icon";
 
 interface InputProps extends TextInputProps {
   textInputDivStyle: StyleProp<ViewStyle>;
@@ -45,12 +45,11 @@ const Input = forwardRef<TextInput, InputProps>((props: InputProps, ref) => {
         autoCapitalize="none"
       />
       {props.value != "" && clearShortcut && (
-        <IconButton.Mat
-          icon="clear"
-          size={26}
+        <Button
           touchableStyle={[styles.clearButton]}
           // @ts-ignore
           onPress={() => props.onChangeText("")}
+          icon={() => <Icon.Mat name="clear" size={26} />}
         />
       )}
     </View>
