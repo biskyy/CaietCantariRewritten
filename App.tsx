@@ -33,6 +33,7 @@ import { cacheFontsAndIcons } from "@/state/utils";
 
 import { DarkTheme, LightTheme } from "@/constants/themes";
 import { RootStackParamList } from "@/types/navigator";
+import { HeaderBackground } from "./components/ui/HeaderBackground";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -102,7 +103,11 @@ export default function App() {
               Platform.OS === "ios"
                 ? PlatformColor("systemBlueColor").toString()
                 : undefined,
-            headerShadowVisible: false,
+            headerBackground: Platform.select({
+              default: HeaderBackground,
+              ios: undefined,
+            }),
+            headerShadowVisible: true,
             headerTransparent: Platform.select({ default: false, ios: true }),
             headerBlurEffect: "systemChromeMaterial",
           }}
