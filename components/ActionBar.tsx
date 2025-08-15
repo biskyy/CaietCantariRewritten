@@ -46,7 +46,7 @@ export const ActionBar = (props: ActionBarProps) => {
     viewRef.current?.measure((x, y, width, height) => {
       // console.log("useLayoutEffect: ", height);
       // console.log("value stored: ", actionBarHeight);
-      setActionBarHeight(height);
+      if (isFocused) setActionBarHeight(height);
       // throttledSetActionBarHeight(height);
     });
   }, [isFocused]);
@@ -101,7 +101,7 @@ export const ActionBar = (props: ActionBarProps) => {
         // or find a better system to prevent the overlapping of normal views with absolute ones(example: ActionBar,
         // transparent headers on ios)
         //
-        setActionBarHeight(nativeEvent.layout.height);
+        if (isFocused) setActionBarHeight(nativeEvent.layout.height);
         // throttledSetActionBarHeight(nativeEvent.layout.height);
       }}
       ref={viewRef}
