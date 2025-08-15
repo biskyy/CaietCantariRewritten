@@ -27,8 +27,9 @@ import { fetchSongs } from "@/state/utils";
 
 import { useLoadingScreen } from "@/hooks/useLoadingScreen";
 import { DrawerParamList, RootStackScreenProps } from "@/types/navigator";
-import { useTheme } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 import { HeaderBackground } from "@/components/ui/HeaderBackground";
+import { useEffect, useInsertionEffect, useLayoutEffect } from "react";
 
 const Drawer = createDrawerNavigator<DrawerParamList>();
 
@@ -207,12 +208,26 @@ export default function HomeScreen({
 }: RootStackScreenProps<"Home">) {
   const theme = useTheme();
 
+  // see https://github.com/react-navigation/react-navigation/issues/11347
+  useLayoutEffect(() => {
+    navigation.setOptions({ headerShown: false, headerBackground: undefined });
+  }, []);
+
   return (
     <Drawer.Navigator
       screenOptions={{
         headerTintColor: theme.colors.text,
         headerTransparent: Platform.select({ default: false, ios: true }),
         headerBackground: HeaderBackground,
+        headerShadowVisible: true,
+        headerBackgroundContainerStyle: {
+          boxShadow: Platform.select({
+            default: undefined, // on android HeaderBackground takes care of this
+            ios: "0px 0px 0px 0.5px " + theme.colors.border,
+          }),
+          // borderColor: theme.colors.border,
+          // borderBottomWidth: 1,
+        },
         drawerType: "front",
         swipeEdgeWidth: 25,
       }}
