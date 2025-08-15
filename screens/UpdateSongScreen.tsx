@@ -11,8 +11,6 @@ import { useAtom } from "jotai";
 import { useNavigation, useTheme } from "@react-navigation/native";
 
 import Input from "@/components/Input";
-import BottomBar from "@/components/BottomBar";
-import IconButton from "@/components/Button/IconButton";
 
 import { userAtom } from "@/state/persistent";
 import {
@@ -29,6 +27,8 @@ import { ActionBar } from "@/components/ActionBar";
 import { ACTION_BAR_PREFFERED_HEIGHT } from "@/constants";
 import { useActionBarHeight } from "@/hooks/useActionBarHeight";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Icon from "@/components/Icon";
+import Button from "@/components/Button/Button";
 
 type UpdateSongActionType =
   | { type: "book_id"; payload: Song["book_id"] }
@@ -199,12 +199,10 @@ const UpdateSongScreen = () => {
         moveWithKeyboard
       >
         <View style={{ flex: 3 }} />
-        <IconButton.Mat
-          icon="save"
-          size={24}
-          useSystemColor
+        <Button
           touchableStyle={styles.bottomBarButtonDiv}
           onPress={() => submitChanges()}
+          icon={() => <Icon.Mat name="save" size={24} useSystemColor />}
         />
       </ActionBar>
     </View>

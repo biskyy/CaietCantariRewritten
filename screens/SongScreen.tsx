@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -12,10 +12,9 @@ import { useAtom } from "jotai";
 import { useKeepAwake } from "expo-keep-awake";
 import * as ScreenOrientation from "expo-screen-orientation";
 
-import IconButton from "@/components/Button/IconButton";
 import Separator from "@/components/Separator";
 
-import { displayedSongInfoAtom, orientationAtom } from "@/state/global";
+import { orientationAtom } from "@/state/global";
 import {
   userFavoriteSongsAtom,
   songsAtom,
@@ -24,14 +23,9 @@ import {
 } from "@/state/persistent";
 
 import { useNavigation, useTheme } from "@react-navigation/native";
-import { DisplayedSong } from "@/types/state";
 import { useDisplayedSongInfo } from "@/hooks/useDisplayedSong";
 import { useHeaderHeight } from "@react-navigation/elements";
-import {
-  Edge,
-  EdgeInsets,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   getCorrectInsetsForScrollViewsCoveredByAbsoluteViews,
   getVerticalPaddingForViewsCoveredByAbsoluteViews,
@@ -40,6 +34,8 @@ import { TitleBlurView } from "@/components/ui/TitleBlurView";
 import { ActionBar } from "@/components/ActionBar";
 import { useActionBarHeight } from "@/hooks/useActionBarHeight";
 import { ACTION_BAR_PREFFERED_HEIGHT } from "@/constants";
+import Button from "@/components/Button/Button";
+import Icon from "@/components/Icon";
 
 const TITLE_VIEW_HEIGHT = 50;
 const SONG_PADDING_HORIZONTAL = 14;
@@ -165,19 +161,13 @@ export default function SongScreen() {
                   default: theme.colors.card,
                   ios: undefined,
                 }),
+                justifyContent: "space-between",
               },
             ]}
             intensity={100}
             tint="systemChromeMaterial"
           >
-            <IconButton.Mat
-              icon={
-                displayedSongInfo.song.index > displayedSongInfo.bookFirstIndex
-                  ? "keyboard-arrow-left"
-                  : undefined
-              }
-              size={32}
-              iconStyle={{ marginHorizontal: 15 }}
+            <Button
               touchableStyle={styles.titleArrow}
               onPress={() =>
                 displayedSongInfo.song.index >
@@ -189,6 +179,18 @@ export default function SongScreen() {
                   },
                 })
               }
+              icon={() => (
+                <Icon.Mat
+                  name={
+                    displayedSongInfo.song.index >
+                    displayedSongInfo.bookFirstIndex
+                      ? "keyboard-arrow-left"
+                      : undefined
+                  }
+                  size={32}
+                  // style={{ marginHorizontal: 15 }}
+                />
+              )}
             />
             <Text
               numberOfLines={1}
@@ -201,15 +203,7 @@ export default function SongScreen() {
             >
               {displayedSongInfo.song.title}
             </Text>
-            <IconButton.Mat
-              icon={
-                displayedSongInfo.song.index <
-                displayedSongInfo.bookLastIndex - 1
-                  ? "keyboard-arrow-right"
-                  : undefined
-              }
-              size={32}
-              iconStyle={{ marginHorizontal: 15 }}
+            <Button
               touchableStyle={styles.titleArrow}
               onPress={() =>
                 displayedSongInfo.song.index <
@@ -221,15 +215,24 @@ export default function SongScreen() {
                   },
                 })
               }
+              icon={() => (
+                <Icon.Mat
+                  name={
+                    displayedSongInfo.song.index <
+                    displayedSongInfo.bookLastIndex - 1
+                      ? "keyboard-arrow-right"
+                      : undefined
+                  }
+                  size={32}
+                  // style={{ marginHorizontal: 15 }}
+                />
+              )}
             />
           </TitleBlurView>
           <Separator />
         </View>
         <ActionBar horizontal prefferedHeight={ACTION_BAR_PREFFERED_HEIGHT}>
-          <IconButton.Oct
-            icon={Platform.select({ android: "share-android", ios: "share" })}
-            size={22}
-            useSystemColor
+          <Button
             touchableStyle={styles.bottomBarButtonDiv}
             onPress={() =>
               Share.share({
@@ -237,47 +240,64 @@ export default function SongScreen() {
                 title: displayedSongInfo.song.title,
               })
             }
+            icon={() => (
+              <Icon.Oct
+                name={Platform.select({
+                  android: "share-android",
+                  ios: "share",
+                })}
+                size={22}
+                useSystemColor
+              />
+            )}
           />
-          <IconButton.Oct
-            icon={
-              favoriteSongs.includes(displayedSongInfo.song.index)
-                ? Platform.select({ android: "star-fill", ios: "heart-fill" })
-                : Platform.select({ android: "star", ios: "heart" })
-            }
-            size={22}
-            useSystemColor
+          <Button
             touchableStyle={styles.bottomBarButtonDiv}
             onPress={() => addSongToFavorites()}
+            icon={() => (
+              <Icon.Oct
+                name={
+                  favoriteSongs.includes(displayedSongInfo.song.index)
+                    ? Platform.select({
+                        android: "star-fill",
+                        ios: "heart-fill",
+                      })
+                    : Platform.select({ android: "star", ios: "heart" })
+                }
+                size={22}
+                useSystemColor
+              />
+            )}
           />
-          <IconButton.Fe
-            icon="zoom-out"
-            size={22}
-            useSystemColor
+          <Button
             touchableStyle={styles.bottomBarButtonDiv}
             onPress={() => handleFontSizeChange("-")}
+            icon={() => <Icon.Fe name="zoom-out" size={22} useSystemColor />}
           />
-          <IconButton.Fe
-            icon="zoom-in"
-            size={22}
-            useSystemColor
+          <Button
             touchableStyle={styles.bottomBarButtonDiv}
             onPress={() => handleFontSizeChange("+")}
+            icon={() => <Icon.Fe name="zoom-in" size={22} useSystemColor />}
           />
           {user.adminToken !== undefined ? (
-            <IconButton.Fe
-              icon={Platform.select({ default: "edit-3", ios: "edit" })}
-              size={22}
-              useSystemColor
+            <Button
               touchableStyle={styles.bottomBarButtonDiv}
               onPress={() => navigation.navigate("UpdateSong")}
+              icon={() => (
+                <Icon.Fe
+                  name={Platform.select({ default: "edit-3", ios: "edit" })}
+                  size={22}
+                  useSystemColor
+                />
+              )}
             />
           ) : (
-            <IconButton.MatCo
-              icon="bug-outline"
-              size={24}
-              useSystemColor
+            <Button
               touchableStyle={styles.bottomBarButtonDiv}
               onPress={() => {}}
+              icon={() => (
+                <Icon.MatCo name="bug-outline" size={24} useSystemColor />
+              )}
             />
           )}
         </ActionBar>
@@ -299,8 +319,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   titleArrow: {
-    flexGrow: 1,
-    flexBasis: 0,
+    paddingHorizontal: 15,
+    flexShrink: 0,
+    // flexGrow: 1,
+    // flexBasis: 0,
   },
   titleDiv: {
     width: "100%",
