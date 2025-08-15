@@ -120,7 +120,7 @@ export default function SongScreen() {
       >
         <ScrollView
           {...getCorrectInsetsForScrollViewsCoveredByAbsoluteViews(
-            TITLE_VIEW_HEIGHT,
+            TITLE_VIEW_HEIGHT + 1, // TODO: + 1 px from the separator at the bottom of the title view
             0,
             actionBarHeight,
             insets.bottom,
@@ -146,73 +146,85 @@ export default function SongScreen() {
           </Text>
         </ScrollView>
         {/* https://docs.expo.dev/versions/latest/sdk/blur-view/#known-issues  */}
-        <TitleBlurView
+        <View
           style={[
-            styles.titleDiv,
             {
               position: "absolute",
               top: Platform.select({ default: 0, ios: headerHeight }),
               overflow: "hidden",
-              backgroundColor: Platform.select({
-                default: theme.colors.card,
-                ios: undefined,
-              }),
+              width: "100%",
             },
           ]}
-          intensity={100}
-          tint="systemChromeMaterial"
         >
-          <IconButton.Mat
-            icon={
-              displayedSongInfo.song.index > displayedSongInfo.bookFirstIndex
-                ? "keyboard-arrow-left"
-                : undefined
-            }
-            size={32}
-            iconStyle={{ marginHorizontal: 15 }}
-            touchableStyle={styles.titleArrow}
-            onPress={() =>
-              displayedSongInfo.song.index > displayedSongInfo.bookFirstIndex &&
-              setDisplayedSongInfo({
-                song: {
-                  ...displayedSongInfo.song,
-                  index: displayedSongInfo.song.index - 1,
-                },
-              })
-            }
-          />
-          <Text
-            numberOfLines={1}
+          {/* <Separator /> */}
+          <TitleBlurView
             style={[
-              { color: theme.colors.text, fontSize: 20, fontWeight: "bold" },
-              // themeStyle.title,
-              styles.title,
-              { flexGrow: 5, flexBasis: 0 },
+              styles.titleDiv,
+              {
+                backgroundColor: Platform.select({
+                  default: theme.colors.card,
+                  ios: undefined,
+                }),
+              },
             ]}
+            intensity={100}
+            tint="systemChromeMaterial"
           >
-            {displayedSongInfo.song.title}
-          </Text>
-          <IconButton.Mat
-            icon={
-              displayedSongInfo.song.index < displayedSongInfo.bookLastIndex - 1
-                ? "keyboard-arrow-right"
-                : undefined
-            }
-            size={32}
-            iconStyle={{ marginHorizontal: 15 }}
-            touchableStyle={styles.titleArrow}
-            onPress={() =>
-              displayedSongInfo.song.index <
-                displayedSongInfo.bookLastIndex - 1 &&
-              setDisplayedSongInfo({
-                song: {
-                  ...displayedSongInfo.song,
-                  index: displayedSongInfo.song.index + 1,
-                },
-              })
-            }
-          />
-        </TitleBlurView>
+            <IconButton.Mat
+              icon={
+                displayedSongInfo.song.index > displayedSongInfo.bookFirstIndex
+                  ? "keyboard-arrow-left"
+                  : undefined
+              }
+              size={32}
+              iconStyle={{ marginHorizontal: 15 }}
+              touchableStyle={styles.titleArrow}
+              onPress={() =>
+                displayedSongInfo.song.index >
+                  displayedSongInfo.bookFirstIndex &&
+                setDisplayedSongInfo({
+                  song: {
+                    ...displayedSongInfo.song,
+                    index: displayedSongInfo.song.index - 1,
+                  },
+                })
+              }
+            />
+            <Text
+              numberOfLines={1}
+              style={[
+                { color: theme.colors.text, fontSize: 20, fontWeight: "bold" },
+                // themeStyle.title,
+                styles.title,
+                { flexGrow: 5, flexBasis: 0 },
+              ]}
+            >
+              {displayedSongInfo.song.title}
+            </Text>
+            <IconButton.Mat
+              icon={
+                displayedSongInfo.song.index <
+                displayedSongInfo.bookLastIndex - 1
+                  ? "keyboard-arrow-right"
+                  : undefined
+              }
+              size={32}
+              iconStyle={{ marginHorizontal: 15 }}
+              touchableStyle={styles.titleArrow}
+              onPress={() =>
+                displayedSongInfo.song.index <
+                  displayedSongInfo.bookLastIndex - 1 &&
+                setDisplayedSongInfo({
+                  song: {
+                    ...displayedSongInfo.song,
+                    index: displayedSongInfo.song.index + 1,
+                  },
+                })
+              }
+            />
+          </TitleBlurView>
+          <Separator />
+        </View>
         <ActionBar horizontal prefferedHeight={ACTION_BAR_PREFFERED_HEIGHT}>
           <IconButton.Oct
             icon={Platform.select({ android: "share-android", ios: "share" })}
@@ -291,6 +303,7 @@ const styles = StyleSheet.create({
     flexBasis: 0,
   },
   titleDiv: {
+    width: "100%",
     minHeight: TITLE_VIEW_HEIGHT,
     flexDirection: "row",
   },
