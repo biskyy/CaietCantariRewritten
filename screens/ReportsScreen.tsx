@@ -32,6 +32,7 @@ import {
   useSafeAreaFrame,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
+import Icon from "@/components/Icon";
 
 const ReportsScreen = () => {
   const theme = useTheme();
@@ -90,46 +91,55 @@ const ReportsScreen = () => {
   const insets = useSafeAreaInsets();
 
   return (
-    <ScrollView
-      // see SongList on why this mess is needed
-      {...getCorrectInsetsForScrollViewsCoveredByAbsoluteViews(
-        headerHeight,
-        insets.top,
-      )}
-      style={{
-        flex: 1,
-        backgroundColor: theme.colors.background,
-        // justifyContent: "center",
-        padding: 10,
-      }}
-    >
-      {reportsArray.length === 0 && (
-        <Text style={{ alignSelf: "center", color: theme.colors.text }}>
-          {fetchState}
-        </Text>
-      )}
-      {reportsArray.length > 0 && (
-        <FlashList
-          renderItem={renderItem}
-          data={reportsArray}
-          extraData={reportsArray}
-          estimatedItemSize={55}
-          estimatedListSize={estimatedListSize}
-          indicatorStyle={theme.dark ? "white" : "black"}
-          keyboardShouldPersistTaps="handled"
-        />
-      )}
+    <>
+      <ScrollView
+        // see SongList on why this mess is needed
+        {...getCorrectInsetsForScrollViewsCoveredByAbsoluteViews(
+          headerHeight,
+          insets.top,
+        )}
+        style={{
+          flex: 1,
+          backgroundColor: theme.colors.background,
+          // justifyContent: "center",
+          padding: 10,
+        }}
+      >
+        {reportsArray.length === 0 && (
+          <Text style={{ alignSelf: "center", color: theme.colors.text }}>
+            {fetchState}
+          </Text>
+        )}
+        {reportsArray.length > 0 && (
+          <FlashList
+            renderItem={renderItem}
+            data={reportsArray}
+            extraData={reportsArray}
+            estimatedItemSize={55}
+            estimatedListSize={estimatedListSize}
+            indicatorStyle={theme.dark ? "white" : "black"}
+            keyboardShouldPersistTaps="handled"
+          />
+        )}
+      </ScrollView>
       <Dialog visible={modalVisible} setModalVisible={setModalVisible}>
         <DialogTitle>
           {(displayedSongInfo && displayedSongInfo.song.title) ?? "N/A"}
         </DialogTitle>
         <Separator />
-        <DialogSubtitle>Detalii suplimentare:</DialogSubtitle>
-        <DialogText>
-          {(displayedSongInfo &&
-            displayedSongInfo.currentReport &&
-            displayedSongInfo.currentReport.additionalDetails) ??
-            "Nu exista"}
+        <Text />
+        <DialogText>Detalii suplimentare:</DialogText>
+        <DialogText
+          style={{
+            padding: 10,
+            borderRadius: 10,
+            borderWidth: 1,
+            borderColor: theme.colors.border,
+          }}
+        >
+          {displayedSongInfo?.currentReport.additionalDetails != ""
+            ? displayedSongInfo?.currentReport.additionalDetails
+            : "Nu există"}
         </DialogText>
         <View
           style={{
@@ -140,7 +150,7 @@ const ReportsScreen = () => {
         >
           <View style={{ flexDirection: "row" }}>
             <Button
-              text="Inchide"
+              text="Închide"
               type="secondary"
               touchableStyle={{ marginRight: 5 }}
               onPress={() => {
@@ -149,7 +159,8 @@ const ReportsScreen = () => {
               }}
             />
             <Button
-              text="Sterge"
+              text="Șterge"
+              icon={() => <Icon.Fe name="trash-2" size={16} />}
               type="secondary"
               onPress={() => {
                 if (user.adminToken === undefined) {
@@ -167,13 +178,13 @@ const ReportsScreen = () => {
             />
           </View>
           <Button
-            text="Corecteaza"
+            text="Corectează"
             type="primary"
             onPress={() => goToUpdateSong()}
           />
         </View>
       </Dialog>
-    </ScrollView>
+    </>
   );
 };
 
