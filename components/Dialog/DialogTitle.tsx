@@ -14,7 +14,7 @@ const DialogTitle = (props: DialogTitleProps) => {
       style={{
         marginVertical: 5,
         color: theme.colors.text,
-        fontSize: 28,
+        fontSize: 24,
         fontWeight: "bold",
       }}
     >
