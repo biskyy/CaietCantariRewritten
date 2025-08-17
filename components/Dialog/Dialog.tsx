@@ -7,6 +7,8 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  Pressable,
+  Keyboard,
 } from "react-native";
 
 interface DialogProps {
@@ -27,49 +29,52 @@ const Dialog = (props: DialogProps) => {
       animationType="fade"
       onRequestClose={() => props.setModalVisible(false)}
     >
-      <TouchableWithoutFeedback onPress={() => props.setModalVisible(false)}>
-        <View style={{ flex: 1 }}>
-          <ScrollView
-            style={{
-              backgroundColor: "rgba(0,0,0,0.5)",
-            }}
-            scrollEnabled={false}
-            keyboardShouldPersistTaps="handled"
-            contentContainerStyle={{
-              flexGrow: 1,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
+      <Pressable
+        style={[
+          {
+            flex: 1,
+            // flexGrow: 1,
+            backgroundColor: "#00000080",
+            // backgroundColor: 'red'
+            alignItems: "center",
+            justifyContent: "center",
+          },
+        ]}
+        onPress={() => {
+          // console.log("dialog outer pressable pressed");
+          Keyboard.dismiss();
+          props.setModalVisible(false);
+        }}
+      >
+        <Pressable
+          // this pressable is needed to cancel the outer's one effect on the children
+          onPress={() => {
+            // console.log("dialog inner pressable pressed");
+            Keyboard.dismiss();
+          }}
+        >
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "padding"}
+            style={{ justifyContent: "center", alignItems: "center" }}
+            // keyboardVerticalOffset={-111}
           >
-            <TouchableWithoutFeedback>
-              <KeyboardAvoidingView
-                behavior={Platform.OS === "ios" ? "padding" : "padding"}
-                // keyboardVerticalOffset={-111}
-              >
-                <View
-                  style={{
-                    backgroundColor: theme.colors.background,
-                    borderColor: theme.colors.border,
-                    borderWidth: 1,
-                    padding: 16,
-                    borderRadius: 6,
-                    flexBasis: 0,
-                    minWidth: "85%",
-                    maxWidth: "85%",
-                  }}
-                >
-                  <ScrollView
-                    scrollEnabled={false}
-                    keyboardShouldPersistTaps="handled"
-                  >
-                    {props.children}
-                  </ScrollView>
-                </View>
-              </KeyboardAvoidingView>
-            </TouchableWithoutFeedback>
-          </ScrollView>
-        </View>
-      </TouchableWithoutFeedback>
+            <View
+              style={{
+                backgroundColor: theme.colors.background,
+                borderColor: theme.colors.border,
+                borderWidth: 1,
+                padding: 16,
+                borderRadius: 10,
+                // flexBasis: 0,
+                minWidth: "90%",
+                maxWidth: "90%",
+              }}
+            >
+              {props.children}
+            </View>
+          </KeyboardAvoidingView>
+        </Pressable>
+      </Pressable>
     </Modal>
   );
 };

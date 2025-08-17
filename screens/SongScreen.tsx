@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -27,6 +27,7 @@ import { useDisplayedSongInfo } from "@/hooks/useDisplayedSong";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
+  createReport,
   getCorrectInsetsForScrollViewsCoveredByAbsoluteViews,
   getVerticalPaddingForViewsCoveredByAbsoluteViews,
 } from "@/state/utils";
@@ -36,6 +37,10 @@ import { useActionBarHeight } from "@/hooks/useActionBarHeight";
 import { ACTION_BAR_PREFFERED_HEIGHT } from "@/constants";
 import Button from "@/components/Button/Button";
 import Icon from "@/components/Icon";
+import Dialog from "@/components/Dialog/Dialog";
+import DialogTitle from "@/components/Dialog/DialogTitle";
+import DialogText from "@/components/Dialog/DialogText";
+import Input from "@/components/Input";
 
 const TITLE_VIEW_HEIGHT = 50;
 const SONG_PADDING_HORIZONTAL = 14;
@@ -50,6 +55,10 @@ export default function SongScreen() {
   const [displayedSongInfo, setDisplayedSongInfo] = useDisplayedSongInfo();
   const navigation = useNavigation();
   const [user] = useAtom(userAtom);
+
+  const [songReportDialogVisible, setSongReportDialogVisible] = useState(false);
+  const [songReportAdditionalDetails, setSongReportAdditionalDetails] =
+    useState("");
 
   if (displayedSongInfo === undefined) {
     return (
@@ -294,7 +303,7 @@ export default function SongScreen() {
           ) : (
             <Button
               touchableStyle={styles.bottomBarButtonDiv}
-              onPress={() => {}}
+              onPress={() => setSongReportDialogVisible(true)}
               icon={() => (
                 <Icon.MatCo name="bug-outline" size={24} useSystemColor />
               )}
@@ -302,6 +311,45 @@ export default function SongScreen() {
           )}
         </ActionBar>
       </View>
+      <Dialog
+        visible={songReportDialogVisible}
+        setModalVisible={setSongReportDialogVisible}
+      >
+        <DialogTitle>Raportează o greșeală</DialogTitle>
+        <Separator />
+        <Text />
+        <DialogText>Adaugă detalii suplimentare (opțional)</DialogText>
+        <Input
+          value={songReportAdditionalDetails}
+          onChangeText={setSongReportAdditionalDetails}
+          textInputDivStyle={{ marginBottom: 10, marginTop: 5, height: 150 }}
+          placeholder="Scrie aici cum ar trebuii să corectăm cântarea..."
+          multiline
+        />
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <Button
+            onPress={() => setSongReportDialogVisible(false)}
+            text="Anulează"
+            type="secondary"
+          />
+          <Button
+            onPress={() => {
+              createReport(
+                displayedSongInfo.song.index,
+                songReportAdditionalDetails,
+              );
+              setSongReportDialogVisible(false);
+            }}
+            text="Trimite"
+            type="primary"
+          />
+        </View>
+      </Dialog>
     </>
   );
 }
