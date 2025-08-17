@@ -46,9 +46,10 @@ const Button = ({
       }
       style={[
         {
-          paddingHorizontal: 16,
+          paddingHorizontal: 12,
           paddingVertical: 12,
-          borderRadius: 6,
+          // padding: 12,
+          borderRadius: 10,
         },
         type === "primary" && {
           backgroundColor: theme.colors.text,
@@ -87,16 +88,17 @@ const Button = ({
           <Text
             style={[
               {
-                fontSize: 16,
+                // fontSize: 16,
                 fontWeight: "normal",
                 color: theme.colors.text,
                 flexShrink: 1,
               },
+              type === "primary" && { fontWeight: "bold" },
               buttonStyleBasedOnType,
               textStyle,
             ]}
           >
-            {"   "}
+            {"  "}
             {text}
           </Text>
         </>
@@ -107,6 +109,7 @@ const Button = ({
           style={[
             textStyle,
             { color: theme.colors.text, flexShrink: 1 },
+            type === "primary" && { fontWeight: "bold" },
             buttonStyleBasedOnType,
           ]}
         >

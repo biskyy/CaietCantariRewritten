@@ -56,14 +56,16 @@ const SongButton = (props: SongButtonProps) => {
 
 const styles = StyleSheet.create({
   touchableStyle: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
     minHeight: 55,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    marginVertical: 2.5,
+
     justifyContent: "space-evenly",
     alignItems: "flex-start",
+
     borderWidth: 1,
-    borderRadius: 6,
-    marginVertical: 2.5,
+    borderRadius: 10,
   },
 });
 

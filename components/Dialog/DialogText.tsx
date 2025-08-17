@@ -1,8 +1,9 @@
 import { useTheme } from "@react-navigation/native";
 import { ReactNode } from "react";
-import { Text } from "react-native";
+import { StyleProp, Text, TextStyle } from "react-native";
 
 interface DialogTextProps {
+  style?: StyleProp<TextStyle>;
   children: ReactNode;
 }
 
@@ -11,12 +12,15 @@ const DialogText = (props: DialogTextProps) => {
 
   return (
     <Text
-      style={{
-        marginVertical: 5,
-        fontSize: 16,
-        fontWeight: "normal",
-        color: theme.colors.text,
-      }}
+      style={[
+        {
+          marginVertical: 5,
+          fontSize: 16,
+          fontWeight: "normal",
+          color: theme.colors.text,
+        },
+        props.style,
+      ]}
     >
       {props.children}
     </Text>

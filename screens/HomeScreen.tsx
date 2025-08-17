@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
   },
   drawerMenuButtonText: {
     fontSize: 16,
-    fontWeight: "500",
+    // fontWeight: "500",
   },
   drawerMenuRefreshButton: {
     flexDirection: "row",
