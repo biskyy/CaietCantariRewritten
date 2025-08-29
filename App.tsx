@@ -28,7 +28,7 @@ import LoadingScreen from "./components/LoadingScreen";
 import LoginScreen from "@/screens/LoginScreen";
 import UpdateSongScreen from "@/screens/UpdateSongScreen";
 
-import { orientationAtom } from "@/state/global";
+import { deviceOrientationAtom } from "@/state/global";
 import { cacheFontsAndIcons } from "@/state/utils";
 
 import { DarkTheme, LightTheme } from "@/constants/themes";
@@ -41,10 +41,12 @@ SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const scheme = useColorScheme();
-  const theme = useTheme();
+  const theme = useTheme(); // doesn't work because its outside of NavigationContainer 😂😂😂😂😂😂😂😂
 
   const [loaded, setLoaded] = useState(true);
-  const [, setOrientation] = useAtom(orientationAtom);
+  const [deviceOrientation, setDeviceOrientation] = useAtom(
+    deviceOrientationAtom,
+  );
 
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
@@ -54,22 +56,25 @@ export default function App() {
 
     preloadFontsAndIcons();
 
-    setLoaded(false);
+    setLoaded(true);
   }, []);
 
   // set orientation state
-  // ScreenOrientation.addOrientationChangeListener(({ orientationInfo }) => {
-  //   if (
-  //     orientationInfo.orientation === 3 ||
-  //     orientationInfo.orientation === 4
-  //   ) {
-  //     setOrientation("landscape");
-  //     setStatusBarHidden(true);
-  //   } else {
-  //     setOrientation("portrait");
-  //     setStatusBarHidden(false);
-  //   }
-  // });
+  ScreenOrientation.addOrientationChangeListener(({ orientationInfo }) => {
+    console.log(ScreenOrientation.Orientation[orientationInfo.orientation]);
+    if (
+      orientationInfo.orientation ===
+        ScreenOrientation.Orientation.LANDSCAPE_LEFT ||
+      orientationInfo.orientation ===
+        ScreenOrientation.Orientation.LANDSCAPE_RIGHT
+    ) {
+      setDeviceOrientation("landscape");
+      // setStatusBarHidden(true);
+    } else {
+      setDeviceOrientation("portrait");
+      // setStatusBarHidden(false);
+    }
+  });
 
   // useEffect(() => {
   //   if (theme) {
@@ -122,6 +127,7 @@ export default function App() {
             component={SongScreen}
             options={{
               headerTitle: "Cântare",
+              headerShown: deviceOrientation === "portrait" ? true : false,
             }}
           />
           <Stack.Screen
