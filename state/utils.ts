@@ -301,7 +301,7 @@ export function getCorrectInsetsForScrollViewsCoveredByAbsoluteViews<T>(
       bottom: (actionBarHeight ?? bottomInset) - bottomInset,
     },
     // this sets some insets of it's own using header height
-    contentInsetAdjustmentBehavior: "always",
+    contentInsetAdjustmentBehavior: "automatic",
     // TL;DR: this is needed so that we can have transparentHeader(or absolute views such as the action bar)
     // turned on on ios so that we can have blurry background
   };
