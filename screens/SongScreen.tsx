@@ -9,12 +9,16 @@ import {
 } from "react-native";
 import { useAtom } from "jotai";
 
-import { useKeepAwake } from "expo-keep-awake";
+import {
+  activateKeepAwakeAsync,
+  deactivateKeepAwake,
+  useKeepAwake,
+} from "expo-keep-awake";
 import * as ScreenOrientation from "expo-screen-orientation";
 
 import Separator from "@/components/Separator";
 
-import { orientationAtom } from "@/state/global";
+import { deviceOrientationAtom } from "@/state/global";
 import {
   userFavoriteSongsAtom,
   songsAtom,
@@ -22,7 +26,11 @@ import {
   userAtom,
 } from "@/state/persistent";
 
-import { useNavigation, useTheme } from "@react-navigation/native";
+import {
+  useIsFocused,
+  useNavigation,
+  useTheme,
+} from "@react-navigation/native";
 import { useDisplayedSongInfo } from "@/hooks/useDisplayedSong";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -47,14 +55,19 @@ const SONG_PADDING_HORIZONTAL = 14;
 const SONG_PADDING_VERTICAL = 30;
 
 export default function SongScreen() {
+  const navigation = useNavigation();
   const theme = useTheme();
-  const [fontSize, setFontSize] = useAtom(fontSizeAtom);
+
   const [songs] = useAtom(songsAtom);
   const [favoriteSongs, setFavoriteSongs] = useAtom(userFavoriteSongsAtom);
-  const [orientation] = useAtom(orientationAtom);
   const [displayedSongInfo, setDisplayedSongInfo] = useDisplayedSongInfo();
-  const navigation = useNavigation();
+
+  const [orientation] = useAtom(deviceOrientationAtom);
+
   const [user] = useAtom(userAtom);
+  const [fontSize, setFontSize] = useAtom(fontSizeAtom);
+
+  const isFocused = useIsFocused();
 
   const [songReportDialogVisible, setSongReportDialogVisible] = useState(false);
   const [songReportAdditionalDetails, setSongReportAdditionalDetails] =
@@ -69,16 +82,19 @@ export default function SongScreen() {
     );
   }
 
-  useKeepAwake();
-
   useEffect(() => {
-    ScreenOrientation.unlockAsync();
-    return () => {
+    if (isFocused) {
+      ScreenOrientation.unlockAsync();
+
+      activateKeepAwakeAsync();
+    } else {
       ScreenOrientation.lockAsync(
         ScreenOrientation.OrientationLock.PORTRAIT_UP,
       );
-    };
-  }, []);
+
+      deactivateKeepAwake();
+    }
+  }, [isFocused]);
 
   useEffect(
     () => setDisplayedSongInfo({ song: songs[displayedSongInfo.song.index] }),
@@ -130,17 +146,22 @@ export default function SongScreen() {
             actionBarHeight,
             insets.bottom,
           )}
+          // contentInsetAdjustmentBehavior="automatic"
           indicatorStyle={theme ? "white" : "black"}
+          showsHorizontalScrollIndicator={false}
           contentContainerStyle={{
             alignItems: "center",
-            paddingHorizontal: SONG_PADDING_HORIZONTAL,
             paddingVertical: SONG_PADDING_VERTICAL,
+            // paddingHorizontal: SONG_PADDING_HORIZONTAL,
+            paddingLeft: SONG_PADDING_HORIZONTAL + insets.left,
+            paddingRight: SONG_PADDING_HORIZONTAL + insets.right,
             paddingBottom:
               orientation === "landscape" && Platform.OS === "ios"
                 ? SONG_PADDING_VERTICAL * 2
                 : SONG_PADDING_VERTICAL,
           }}
         >
+          <Text />
           <Text
             style={{
               ...{ color: theme.colors.text },
@@ -149,6 +170,7 @@ export default function SongScreen() {
           >
             {displayedSongInfo.song.content}
           </Text>
+          <Text />
         </ScrollView>
         {/* https://docs.expo.dev/versions/latest/sdk/blur-view/#known-issues  */}
         <View
@@ -177,7 +199,7 @@ export default function SongScreen() {
             tint="systemChromeMaterial"
           >
             <Button
-              touchableStyle={styles.titleArrow}
+              touchableStyle={[styles.titleArrow, { marginLeft: insets.left }]}
               onPress={() =>
                 displayedSongInfo.song.index >
                   displayedSongInfo.bookFirstIndex &&
@@ -197,7 +219,7 @@ export default function SongScreen() {
                       : undefined
                   }
                   size={32}
-                  // style={{ marginHorizontal: 15 }}
+                  style={{ width: 32, height: 32 }}
                 />
               )}
             />
@@ -213,7 +235,10 @@ export default function SongScreen() {
               {displayedSongInfo.song.title}
             </Text>
             <Button
-              touchableStyle={styles.titleArrow}
+              touchableStyle={[
+                styles.titleArrow,
+                { marginRight: insets.right },
+              ]}
               onPress={() =>
                 displayedSongInfo.song.index <
                   displayedSongInfo.bookLastIndex - 1 &&
@@ -233,7 +258,7 @@ export default function SongScreen() {
                       : undefined
                   }
                   size={32}
-                  // style={{ marginHorizontal: 15 }}
+                  style={{ width: 32, height: 32 }}
                 />
               )}
             />
