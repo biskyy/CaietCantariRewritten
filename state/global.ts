@@ -13,6 +13,6 @@ export const displayedSongInfoAtom = atom<DisplayedSong | undefined>();
 
 export const reportsArrayAtom = atom<Array<Report>>([]);
 
-export const orientationAtom = atom<"portrait" | "landscape">("portrait");
+export const deviceOrientationAtom = atom<"portrait" | "landscape">("portrait");
 
 export const actionBarHeightAtom = atom<number>(0);
