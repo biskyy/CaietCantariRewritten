@@ -14,6 +14,8 @@ import Animated, {
 } from "react-native-reanimated";
 import { useIsFocused } from "@react-navigation/native";
 import { BlurredView } from "@/components/ui/BlurredView";
+import { useAtom } from "jotai";
+import { deviceOrientationAtom } from "@/state/global";
 
 interface ActionBarProps {
   horizontal?: boolean;
@@ -81,6 +83,17 @@ export const ActionBar = (props: ActionBarProps) => {
   }));
 
   // ---- //
+
+  const [deviceOrientation] = useAtom(deviceOrientationAtom);
+
+  if (deviceOrientation === "landscape")
+    return (
+      <View
+        onLayout={({ nativeEvent }) => {
+          if (isFocused) setActionBarHeight(nativeEvent.layout.height);
+        }}
+      />
+    );
 
   return (
     <Animated.View
