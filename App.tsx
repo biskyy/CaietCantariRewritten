@@ -41,7 +41,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const scheme = useColorScheme();
-  const theme = useTheme(); // doesn't work because its outside of NavigationContainer 😂😂😂😂😂😂😂😂
+  // const theme = useTheme(); // doesn't work because its outside of NavigationContainer 😂😂😂😂😂😂😂😂
 
   const [loaded, setLoaded] = useState(true);
   const [deviceOrientation, setDeviceOrientation] = useAtom(
@@ -97,7 +97,7 @@ export default function App() {
   }, [loaded]);
 
   return (
-    <View style={{ flex: 1, backgroundColor: theme.dark ? "black" : "white" }}>
+    <View style={{ flex: 1, backgroundColor: true ? "black" : "white" }}>
       <NavigationContainer theme={scheme === "dark" ? DarkTheme : LightTheme}>
         <StatusBar style="auto" />
         <LoadingScreen />
