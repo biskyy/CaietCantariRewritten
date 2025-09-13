@@ -1,7 +1,8 @@
 import Shades, { Colors } from "@/constants/colors";
-import { Theme } from "@react-navigation/native";
+import { DefaultTheme, Theme } from "@react-navigation/native";
 
 export const LightTheme: Theme = {
+  ...DefaultTheme,
   dark: false,
   colors: {
     primary: Colors.light.primary,
@@ -14,6 +15,7 @@ export const LightTheme: Theme = {
 };
 
 export const DarkTheme: Theme = {
+  ...DefaultTheme,
   dark: true,
   colors: {
     primary: Colors.dark.primary,
