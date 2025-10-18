@@ -197,8 +197,8 @@ const SongList = <T extends DrawerParamListKeys>({
       <FlashList
         renderItem={renderItem}
         data={data}
-        estimatedItemSize={55}
-        estimatedListSize={estimatedListSize} // instant render
+        // estimatedItemSize={55}
+        // estimatedListSize={estimatedListSize} // instant render
         indicatorStyle={theme ? "white" : "black"}
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{ padding: 10 }}
@@ -214,16 +214,22 @@ const SongList = <T extends DrawerParamListKeys>({
         <View
           style={{
             backgroundColor: theme.colors.background,
-            flex: 9999,
-            // zIndex: 0,
+            // backgroundColor: "red",
+            position: "absolute",
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            // flex: 9999,
+            zIndex: 0,
           }}
         >
           <FlashList
             renderItem={renderItem}
             data={filteredSongs}
             extraData={theme}
-            estimatedItemSize={55}
-            estimatedListSize={estimatedListSize}
+            // estimatedItemSize={55}
+            // estimatedListSize={estimatedListSize}
             indicatorStyle={theme ? "white" : "black"}
             keyboardShouldPersistTaps="handled"
             contentContainerStyle={{ padding: 10 }}
