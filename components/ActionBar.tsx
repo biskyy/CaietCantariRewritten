@@ -48,7 +48,8 @@ export const ActionBar = (props: ActionBarProps) => {
     viewRef.current?.measure((x, y, width, height) => {
       // console.log("useLayoutEffect: ", height);
       // console.log("value stored: ", actionBarHeight);
-      if (isFocused) setActionBarHeight(height);
+      setActionBarHeight(height);
+      // if (isFocused) setActionBarHeight(height);
       // throttledSetActionBarHeight(height);
     });
   }, [isFocused]);
@@ -68,23 +69,30 @@ export const ActionBar = (props: ActionBarProps) => {
         currentState === KeyboardState.OPENING ||
         currentState === KeyboardState.OPEN
       ) {
-        bottomInset.value = withTiming(0);
+        // console.log(keyboard.height.value);
+        bottomInset.value = 0;
       } else if (
         currentState === KeyboardState.CLOSING ||
         currentState === KeyboardState.CLOSED
       ) {
-        bottomInset.value = withTiming(insets.bottom);
+        bottomInset.value = insets.bottom;
       }
     },
   );
 
-  const animatedBlurViewPaddingBottom = useAnimatedStyle(() => ({
-    paddingBottom: keyboard.height.value + bottomInset.value,
-  }));
+  const animatedBlurViewPaddingBottom = useAnimatedStyle(() => {
+    console.log(keyboard.height.value);
+    return {
+      paddingBottom: keyboard.height.value + bottomInset.value,
+      // + bottomInset.value,
+    };
+  });
 
   // ---- //
 
   const [deviceOrientation] = useAtom(deviceOrientationAtom);
+
+  // console.log(actionBarHeight);
 
   if (deviceOrientation === "landscape")
     return (
@@ -114,18 +122,21 @@ export const ActionBar = (props: ActionBarProps) => {
         // or find a better system to prevent the overlapping of normal views with absolute ones(example: ActionBar,
         // transparent headers on ios)
         //
-        if (isFocused) setActionBarHeight(nativeEvent.layout.height);
+        setActionBarHeight(nativeEvent.layout.height);
+        // if (isFocused) setActionBarHeight(nativeEvent.layout.height);
         // throttledSetActionBarHeight(nativeEvent.layout.height);
       }}
       ref={viewRef}
-      sharedTransitionTag={props.settag}
+      // sharedTransitionTag={props.settag}
       style={[
         {
+          zIndex: 99,
+          elevation: 99,
           position: "absolute",
           bottom: 0,
           left: 0,
           right: 0,
-          overflow: "hidden",
+          // overflow: "hidden",
         },
         // props.viewStyle,
       ]}
@@ -141,6 +152,9 @@ export const ActionBar = (props: ActionBarProps) => {
                 insets.bottom + Platform.select({ default: 10, ios: 0 }),
             },
             props.moveWithKeyboard ? animatedBlurViewPaddingBottom : undefined,
+            // {
+            //   paddingBottom: keyboard.height,
+            // },
             props.style,
           ]}
         >
