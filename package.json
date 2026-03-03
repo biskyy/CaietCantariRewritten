@@ -1,6 +1,6 @@
 {
   "name": "caiet-de-cantari",
-  "version": "0.7.5",
+  "version": "v0.7.6",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start --go",
