@@ -28,7 +28,7 @@ jobs:
         run: bun install
 
       - name: Create update
-        run: eas update --auto --non-interactive
+        run: eas update --auto --non-interactive --environment production
 
   create-build:
     if: github.ref == 'refs/heads/production'
