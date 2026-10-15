@@ -64,7 +64,9 @@
         {
           "initialOrientation": "DEFAULT"
         }
-      ]
+      ],
+      "expo-splash-screen",
+      "expo-status-bar"
     ],
     "extra": {
       "eas": {
